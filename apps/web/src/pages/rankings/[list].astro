@@ -1,6 +1,9 @@
 ---
 import Base from '../../layouts/Base.astro'
-import { colorSortSnapshot, publishedReviews, rankingDefinition } from '../../lib/site.ts'
+import Icon from '../../components/Icon.astro'
+import { METHODOLOGY_VERSION, colorSortSnapshot, publishedReviews, rankingDefinition } from '../../lib/site.ts'
+import { TAGS, artFor, exclusionCopy, shortDate, storeLabel } from '../../lib/present.ts'
+
 export function getStaticPaths() {
   const snapshot = colorSortSnapshot()
   if (!snapshot.ok) return []
@@ -9,37 +12,130 @@ export function getStaticPaths() {
 const snapshot = colorSortSnapshot()
 if (!snapshot.ok) throw new Error(snapshot.code)
 const reviews = publishedReviews()
+const items = snapshot.snapshot.items
 ---
 <Base title={rankingDefinition.title} description="Games that passed a full review on one platform." path={`/rankings/${rankingDefinition.slug}/`}>
-  <main class="wrap section">
-    <p class="banner">Not a US download chart. Filters dim rows and do not renumber them.</p>
-    <h1>{rankingDefinition.title}</h1>
-    <p class="meta">Qualified {snapshot.snapshot.qualifiedCount} · {snapshot.snapshot.methodologyVersion}</p>
-    <table class="rank-table">
-      <thead><tr><th>Rank</th><th>Game</th><th>Score</th></tr></thead>
-      <tbody>
-        {snapshot.snapshot.items.map((item) => {
-          const review = reviews.find((entry) => entry.gameId === item.gameId)
-          return <tr data-tags={Object.entries(review?.tags ?? {}).filter(([, state]) => state === 'yes').map(([tag]) => tag).join(' ')}><td>{item.rank}</td><td><a href={`/reviews/${review?.slug}/`}>{item.name}</a></td><td>{(item.displayedTenths / 10).toFixed(1)}</td></tr>
-        })}
-      </tbody>
-    </table>
-    <h2>Not on this list</h2>
-    <ul>
-      {snapshot.snapshot.excluded.map((item) => <li>{item.name} — {item.reason.replaceAll('_', ' ')}</li>)}
-    </ul>
-    <button id="offline" type="button">Show offline = yes</button>
+  <main>
+    <section class="wrap page-head list-head">
+      <div>
+        <p class="crumbs"><a href="/">Home</a> / Rankings / Color sort (iPhone)</p>
+        <h1>{rankingDefinition.title}</h1>
+        <p class="count"><strong>{snapshot.snapshot.qualifiedCount} qualified games</strong> <span>· a numbered best-of name waits until 10 games qualify</span></p>
+      </div>
+      <aside class="callout accent">
+        <h2><Icon name="info" size={16} /> This is an editorial ranking</h2>
+        <p>It is not a US App Store download or top-grossing chart. Ranks come only from our five-dimension scores. Sponsors can’t buy a position.</p>
+        <a class="text-link" href="/how-we-test/">How we test →</a>
+      </aside>
+    </section>
+    <section class="rules">
+      <div class="wrap rules-grid">
+        <div><span>HARD FILTERS</span><strong>Full review · color sort · iOS</strong></div>
+        <div><span>SORTED BY</span><strong>Displayed score (1 decimal)</strong></div>
+        <div><span>SNAPSHOT</span><strong>{snapshot.snapshot.generatedAt.slice(0, 10)}</strong></div>
+        <div><span>METHOD</span><strong>{METHODOLOGY_VERSION}</strong></div>
+        <div><span>STALE AFTER</span><strong>90 days or major update</strong></div>
+      </div>
+    </section>
+    <section class="wrap" style="padding: 32px 0 24px">
+      <div class="filters">
+        <span class="label">HIGHLIGHT:</span>
+        {TAGS.map((tag) => <button class="filter" type="button" data-filter={tag.key} data-param={tag.param} id={tag.key === 'plays_offline' ? 'offline' : undefined} aria-pressed="false">{tag.filter}</button>)}
+      </div>
+      <p class="meta">Filters only dim rows. They never re-number the ranking.</p>
+      <div class="table-scroll">
+        <table class="board">
+          <thead>
+            <tr>
+              <th>RANK</th><th>GAME</th><th>SCORE</th>
+              <th>G</th><th>A</th><th>F</th><th>C</th><th>U</th>
+              <th>VERSION</th><th>TESTED</th><th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {items.map((item, index) => {
+              const review = reviews.find((entry) => entry.gameId === item.gameId)
+              const tied = items.some((other, otherIndex) => other.rank === item.rank && otherIndex !== index)
+              const art = artFor(review?.slug ?? '')
+              const yes = Object.entries(review?.tags ?? {}).filter(([, state]) => state === 'yes').map(([tag]) => tag)
+              return (
+                <tr data-tags={yes.join(' ')} data-tied={tied ? 'yes' : undefined}>
+                  <td>{item.rank}</td>
+                  <td>
+                    <div class="game">
+                      {art.icon ? <img src={art.icon} alt="" width="48" height="48" /> : <span class="placeholder"><Icon name="image" size={18} /></span>}
+                      <div>
+                        <a href={`/reviews/${review?.slug}/`}>{item.name}</a>
+                        <small>{review?.developer} · Offline: {review?.tags.plays_offline === 'yes' ? 'yes' : review?.tags.plays_offline === 'no' ? 'no' : 'not verified'}</small>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="pts">{(item.displayedTenths / 10).toFixed(1)}</td>
+                  {(['G', 'A', 'F', 'C', 'U'] as const).map((key) => {
+                    const tenths = review?.dims[key]
+                    return <td class="dim-num" style={`color:var(--d${key})`}>{tenths == null ? '—' : (tenths / 10).toFixed(1)}</td>
+                  })}
+                  <td class="meta">v{review?.appVersion}</td>
+                  <td class="meta">{review ? shortDate(review.testedTo) : ''}</td>
+                  <td>
+                    {review && <a class="store sm" href={review.storeUrl}>{storeLabel(review.platform)} <Icon name="arrow-up-right" size={14} /></a>}
+                    <div><a class="text-link" href={`/reviews/${review?.slug}/`}>Review →</a></div>
+                  </td>
+                </tr>
+              )
+            })}
+          </tbody>
+        </table>
+      </div>
+      <p class="ledger-note">Ties share a rank; the next rank is skipped. Hidden decimals never break ties. Scores are illustrative demo data for fictional games.</p>
+    </section>
+    <section class="wrap" style="padding-bottom: 88px">
+      <h2>Reviewed but not ranked here</h2>
+      <p class="lede">These games have pages on the site but don’t meet this list’s hard filters, so they get no rank.</p>
+      {snapshot.snapshot.excluded.map((item) => {
+        const review = reviews.find((entry) => entry.gameId === item.gameId)
+        const copy = exclusionCopy(item.reason)
+        return (
+          <div class="excluded-row">
+            <a href={review ? `/reviews/${review.slug}/` : '/reviews/'}>{item.name}</a>
+            <span class:list={['pill', copy.tone === 'warn' ? 'warn' : copy.tone === 'no' ? 'no' : 'muted']}>{copy.label}</span>
+          </div>
+        )
+      })}
+    </section>
     <script>
-      const button = document.getElementById('offline')
-      button?.addEventListener('click', () => {
-        const url = new URL(location.href)
-        url.searchParams.set('offline', 'yes')
-        history.replaceState({}, '', url)
-        document.querySelectorAll('tr[data-tags]').forEach((row) => {
-          const tags = row.getAttribute('data-tags') ?? ''
-          row.setAttribute('style', tags.includes('plays_offline') ? '' : 'opacity:.35')
+      const chips = [...document.querySelectorAll<HTMLButtonElement>('[data-filter]')]
+      const rows = [...document.querySelectorAll<HTMLTableRowElement>('tr[data-tags]')]
+      function apply() {
+        const filters = chips.filter((chip) => chip.getAttribute('aria-pressed') === 'true').map((chip) => chip.dataset.filter ?? '')
+        for (const row of rows) {
+          const tags = (row.dataset.tags ?? '').split(' ').filter(Boolean)
+          row.classList.toggle('is-dim', filters.some((filter) => !tags.includes(filter)))
+        }
+      }
+      function syncFromUrl() {
+        const params = new URLSearchParams(location.search)
+        for (const chip of chips) {
+          const key = chip.dataset.param ?? ''
+          const on = params.get(key) === 'yes' || (key === 'offline' && params.get('plays_offline') === 'yes')
+          chip.setAttribute('aria-pressed', on ? 'true' : 'false')
+        }
+        apply()
+      }
+      for (const chip of chips) {
+        chip.addEventListener('click', () => {
+          const on = chip.getAttribute('aria-pressed') !== 'true'
+          chip.setAttribute('aria-pressed', on ? 'true' : 'false')
+          const params = new URLSearchParams(location.search)
+          const key = chip.dataset.param ?? ''
+          if (on) params.set(key, 'yes')
+          else params.delete(key)
+          const query = params.toString()
+          history.replaceState({}, '', query ? `${location.pathname}?${query}` : location.pathname)
+          apply()
         })
-      })
+      }
+      syncFromUrl()
     </script>
   </main>
 </Base>

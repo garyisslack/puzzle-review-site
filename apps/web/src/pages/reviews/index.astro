@@ -1,17 +1,47 @@
 ---
 import Base from '../../layouts/Base.astro'
+import Icon from '../../components/Icon.astro'
 import { publishedReviews } from '../../lib/site.ts'
+import { artFor } from '../../lib/present.ts'
+
 const reviews = publishedReviews()
 ---
 <Base title="Reviews" description="Full reviews and initial notes." path="/reviews/">
   <main class="wrap section">
     <h1>Reviews</h1>
-    <p class="meta">Search on this page adds a query string. That URL is noindex and points back here.</p>
-    {reviews.map((review) => (
-      <article class="card">
-        <h2><a href={`/reviews/${review.slug}/`}>{review.name}</a></h2>
-        <p>{review.platform} · {review.displayed ?? 'No composite score'}</p>
-      </article>
-    ))}
+    <p class="meta" id="search-note">Search adds a query string. That URL is noindex and points back here.</p>
+    {reviews.map((review) => {
+      const art = artFor(review.slug)
+      return (
+        <article class="review-row">
+          {art.key ? <img class="thumb" src={art.key} alt="" width="144" height="88" /> : <span class="thumb placeholder"><Icon name="image" size={22} /></span>}
+          <div>
+            <h3><a href={`/reviews/${review.slug}/`}>{review.name}</a></h3>
+            <p class="version">{review.platform.toUpperCase()} · {review.reviewType === 'full' ? 'Full review' : 'Initial review'} · {review.publishedOn}</p>
+          </div>
+          <span class:list={['pill', review.reviewType === 'full' ? '' : 'muted']}><i class="dot"></i> {review.reviewType === 'full' ? 'FULL REVIEW' : 'INITIAL REVIEW'}</span>
+          <div class="score mid">{review.displayed ?? '—'}</div>
+        </article>
+      )
+    })}
+    <p id="search-empty" class="hidden">No games match that search.</p>
+    <script>
+      const query = new URLSearchParams(location.search).get('q')?.trim() ?? ''
+      if (query) {
+        const robots = document.querySelector('meta[name="robots"]')
+        if (robots) robots.setAttribute('content', 'noindex,follow')
+        const note = document.querySelector('#search-note')
+        if (note) note.textContent = `Results for “${query}”. This URL is noindex and points back here.`
+        const needle = query.toLowerCase()
+        let shown = 0
+        document.querySelectorAll('.review-row').forEach((row) => {
+          const name = row.querySelector('h3')?.textContent?.toLowerCase() ?? ''
+          const match = name.includes(needle)
+          row.toggleAttribute('hidden', !match)
+          if (match) shown += 1
+        })
+        document.querySelector('#search-empty')?.classList.toggle('hidden', shown > 0)
+      }
+    </script>
   </main>
 </Base>

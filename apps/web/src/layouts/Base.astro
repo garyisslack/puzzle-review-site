@@ -2,9 +2,12 @@
 import '@fontsource/nunito/700.css'
 import '@fontsource/nunito/800.css'
 import '@fontsource/nunito-sans/400.css'
+import '@fontsource/nunito-sans/500.css'
 import '@fontsource/nunito-sans/700.css'
+import '@fontsource/nunito-sans/800.css'
 import '../styles/global.css'
-import { SITE_NAME, SITE_URL } from '../lib/site.ts'
+import Icon from '../components/Icon.astro'
+import { SITE_URL } from '../lib/site.ts'
 
 interface Props {
   title: string
@@ -28,27 +31,35 @@ const canonical = new URL(path, SITE_URL).toString()
   </head>
   <body>
     <header class="nav">
-      <div class="wrap nav-row">
-        <a class="brand" href="/">{SITE_NAME}</a>
-        <nav class="nav-links">
+      <div class="nav-row">
+        <a class="brand" href="/">
+          <span class="wordmark">SiteName</span>
+          <span class="brand-tbd">BRAND TBD</span>
+        </a>
+        <nav class="nav-links" id="site-nav">
           <a href="/#needs">Discover</a>
           <a href="/rankings/color-sort-ios/">Rankings</a>
           <a href="/reviews/">Reviews</a>
           <a href="/guides/prism-pocket-sort/">Guides</a>
-          <a href="/how-we-test/">How we test</a>
+          <a href="/#updates">New & Updated</a>
         </nav>
-        <form action="/reviews/" method="get">
-          <input class="search" name="q" type="search" placeholder="Search games" aria-label="Search games" />
+        <form class="search" action="/reviews/" method="get">
+          <Icon name="search" size={16} />
+          <input name="q" type="search" placeholder="Search games" aria-label="Search games" />
         </form>
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
+          <Icon name="menu" size={22} />
+          <span class="hidden">Menu</span>
+        </button>
       </div>
     </header>
     <slot />
     <footer class="footer">
-      <div class="wrap">
+      <div class="footer-inner">
         <div class="footer-row">
           <div>
-            <strong>{SITE_NAME}</strong>
-            <p>Independent editorial scores for US iOS and Android casual and puzzle games.</p>
+            <strong class="footer-brand">SiteName</strong>
+            <p>Independent editorial scores for iOS & Android casual and puzzle games.</p>
           </div>
           <nav>
             <a href="/how-we-test/">How We Test</a>
@@ -58,8 +69,19 @@ const canonical = new URL(path, SITE_URL).toString()
             <a href="/privacy/">Privacy</a>
           </nav>
         </div>
-        <p class="meta">Editorial rankings are not US App Store or Google Play download charts. Ads, affiliates, and sponsorships never change scores or ranks.</p>
+        <hr class="footer-rule" />
+        <p class="footer-note">Editorial rankings are not US App Store or Google Play download charts. Ads, affiliates and sponsorships never change scores or ranks.</p>
       </div>
     </footer>
+    <script>
+      const toggle = document.querySelector('.nav-toggle')
+      const links = document.querySelector('.nav-links')
+      const search = document.querySelector('.search')
+      toggle?.addEventListener('click', () => {
+        const open = links?.classList.toggle('is-open')
+        search?.classList.toggle('is-open', Boolean(open))
+        toggle.setAttribute('aria-expanded', open ? 'true' : 'false')
+      })
+    </script>
   </body>
 </html>

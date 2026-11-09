@@ -314,10 +314,10 @@ export const guides = [
 
 export const needs = [
   { slug: 'no-forced-ads', tag: 'no_forced_ads', title: 'No forced ads', blurb: 'Fewer interruptions' },
-  { slug: 'plays-offline', tag: 'plays_offline', title: 'Plays offline', blurb: 'Car rides and flights' },
+  { slug: 'plays-offline', tag: 'plays_offline', title: 'Plays offline', blurb: 'Car rides & flights' },
   { slug: 'one-handed', tag: 'one_handed', title: 'One-handed', blurb: 'Easy to hold' },
   { slug: 'short-rounds', tag: 'short_rounds', title: 'Short rounds', blurb: 'Under 5 minutes' },
-  { slug: 'no-timers', tag: 'no_timers', title: 'No timers', blurb: 'Relax, no countdown' },
+  { slug: 'no-timers', tag: 'no_timers', title: 'No timers', blurb: 'Relax, no countdowns' },
 ] as const
 
 export const rankingDefinition = {

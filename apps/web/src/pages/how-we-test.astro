@@ -1,15 +1,142 @@
 ---
 import Base from '../layouts/Base.astro'
-import { DIMENSIONS } from '../lib/site.ts'
+import Icon from '../components/Icon.astro'
+import { DIMENSIONS, METHODOLOGY_VERSION } from '../lib/site.ts'
+
+const blurbs: Record<string, { does: string; not: string }> = {
+  G: { does: 'Clear rules, satisfying loop, fair difficulty, meaningful decisions', not: 'Not here: Ads, paywalls, crashes, amount of content' },
+  A: { does: 'How forced ads interrupt, when they appear, whether state survives, whether rewarded ads are truly optional', not: 'Not here: Ad count alone is never converted into points' },
+  F: { does: 'Can you progress without paying? Are IAPs transparent? Any sales-driven difficulty spikes?', not: 'Not here: Ad experience, repetition' },
+  C: { does: 'Do new mechanics or modes change how you solve over time?', not: 'Not here: Raw level count' },
+  U: { does: 'Hit targets, mis-taps, performance, crashes, non-ad resume', not: 'Not here: State lost after an ad (counted under Ads)' },
+}
+const words = [
+  ['Outstanding', '9.0–10'],
+  ['Great', '8.0–8.9'],
+  ['Good', '7.0–7.9'],
+  ['OK', '5.0–6.9'],
+  ['Weak', 'below 5.0'],
+]
+const anchors = [
+  ['0', 'Ads make the game basically unplayable, or break the level mid-solve.'],
+  ['2', 'Frequent forced ads wreck the rhythm, or repeated resume problems.'],
+  ['5', 'Typical casual level: mostly between levels, noticeable but finishable.'],
+  ['8', 'Few forced ads at natural breaks; rewarded ads clearly optional.'],
+  ['10', 'Verified online: no forced ads. Airplane mode never counts.'],
+]
+const toc = [
+  ['01', 'formula', 'The formula'],
+  ['02', 'anchors', 'Score anchors'],
+  ['03', 'missing', 'Missing data'],
+  ['04', 'tags', 'Tags'],
+  ['05', 'rankings', 'Rankings & ties'],
+  ['06', 'limits', 'Limits & independence'],
+]
 ---
 <Base title="How we test" description="The five-dimension score and what a full review includes." path="/how-we-test/">
-  <main class="wrap section">
-    <h1>How we test</h1>
-    <p>S = .30G + .20A + .20F + .15C + .15U. A missing dimension does not become 0 or 10. The displayed score keeps one decimal and rounds half up.</p>
-    {DIMENSIONS.map((dimension) => <article class="card"><h2>{dimension.label} · {dimension.weight}%</h2><p>{dimension.question}</p></article>)}
-    <h2>Rankings and ties</h2>
-    <p>Games with the same displayed score share a rank. The next rank is skipped, so 1, 2, 2, 4. iOS and Android are never combined. A list is not called Top N unless at least N games qualified.</p>
-    <h2>What we don't do</h2>
-    <p>We don't buy things to change a score, and a sponsorship cannot enter a ranking. Store buttons go to the official store.</p>
+  <main class="wrap">
+    <section class="method-hero">
+      <div>
+        <p class="eyebrow">METHODOLOGY · {METHODOLOGY_VERSION} · PUBLISHED NOV 8, 2026</p>
+        <h1>How we test mobile puzzle games</h1>
+        <p class="dek">Every score on this site comes from hands-on play, a written observation log and saved evidence. Here is exactly how a number is produced — and what it can’t tell you.</p>
+      </div>
+      <nav class="toc" aria-label="On this page">
+        <p>ON THIS PAGE</p>
+        {toc.map(([num, id, label]) => <a href={`#${id}`}><span>{num}</span> {label}</a>)}
+      </nav>
+    </section>
+
+    <section class="method-block" id="formula">
+      <p class="num">01</p>
+      <h2>The formula</h2>
+      <div class="formula-box">
+        <strong>S = 0.30G + 0.20A + 0.20F + 0.15C + 0.15U</strong>
+        <p>Weights sum to 100%. Displayed to one decimal, rounding half away from zero: 7.25 → 7.3, 7.24 → 7.2.</p>
+      </div>
+      <div class="dim-cols" style="margin-top:28px">
+        {DIMENSIONS.map((dimension) => (
+          <article class="dim-col">
+            <span class="code" style={`color:var(--d${dimension.key})`}>{dimension.key}</span>
+            <strong>{dimension.label}</strong>
+            <span class="w">{dimension.weight}%</span>
+            <p>{blurbs[dimension.key]?.does}</p>
+            <p>{blurbs[dimension.key]?.not}</p>
+          </article>
+        ))}
+      </div>
+      <h3 style="margin-top:28px">Word labels, for a quick read</h3>
+      <div class="word-row">
+        {words.map(([label, range]) => <div class="word"><b>{label}</b><span class="meta">{range}</span></div>)}
+      </div>
+      <p class="meta" style="margin-top:12px">Labels follow the displayed score and never replace it. Ranks always use the number.</p>
+    </section>
+
+    <section class="method-block" id="anchors">
+      <p class="num">02</p>
+      <h2>Score anchors</h2>
+      <p>Anchors calibrate judgment; they are not a checklist. In-between scores are allowed when the editor can say which anchor it sits closer to. Example: Ads.</p>
+      <div class="anchor-list">
+        {anchors.map(([score, text]) => <div class="anchor"><b>{score}</b><p>{text}</p></div>)}
+      </div>
+    </section>
+
+    <section class="method-block" id="missing">
+      <p class="num">03</p>
+      <h2>Missing data & double counting</h2>
+      <div class="info-grid">
+        <article class="info-card"><h3>Missing is never 0 or 10</h3><p>If a dimension lacks evidence it stays empty. No composite score is calculated, and the game can’t enter numeric rankings.</p></article>
+        <article class="info-card"><h3>One event, one dimension</h3><p>A mid-level ad that resets the board is counted under Ads only — not again under Stability or Gameplay.</p></article>
+        <article class="info-card"><h3>Initial vs. full reviews</h3><p>Initial reviews check genre and playability. Only full reviews (3+ sessions over 2–3 days) get a composite score.</p></article>
+      </div>
+    </section>
+
+    <section class="method-block" id="tags">
+      <p class="num">04</p>
+      <h2>Tags: yes, no, or not verified</h2>
+      <p>Tags describe play conditions. They help filtering but never change the score. Need-based lists accept only “yes” — “not verified” never passes.</p>
+      <div class="chip-row" style="margin-top:16px">
+        <span class="chip yes"><Icon name="check" size={14} /> Offline play <b>YES</b></span>
+        <span class="chip no"><Icon name="x" size={14} /> One-handed <b>NO</b></span>
+        <span class="chip unknown"><Icon name="circle-dashed" size={14} /> No forced ads <b>NOT VERIFIED YET</b></span>
+      </div>
+      <p class="meta" style="margin-top:12px">“No forced ads” ≠ “no ads”. Rewarded ads may exist. Not seeing ads offline only proves you were offline.</p>
+    </section>
+
+    <section class="method-block" id="rankings">
+      <p class="num">05</p>
+      <h2>Rankings & ties</h2>
+      <ul class="rule-list">
+        <li>Filter first, then sort by displayed score. No gaps left behind.</li>
+        <li>Equal displayed scores share a rank; the next rank is skipped (1, 2, 2, 4).</li>
+        <li>A list is called “Top N” only when at least N games qualify.</li>
+        <li>iOS and Android are scored separately and never averaged together.</li>
+        <li>Reviews older than 90 days, or after a major unretested update, leave numeric lists.</li>
+      </ul>
+    </section>
+
+    <section class="method-block" id="limits">
+      <p class="num">06</p>
+      <h2>Limits & independence</h2>
+      <div class="info-grid" style="grid-template-columns: 1fr 1fr">
+        <article class="info-card">
+          <h3>What we can’t verify</h3>
+          <p>We don’t buy in-app purchases. Late-game monetization is listed as a boundary.</p>
+          <p>Ads vary by region, account and network. Tester region is always recorded.</p>
+          <p>We never describe a test as “US IP” unless it was.</p>
+        </article>
+        <article class="info-card">
+          <h3>What money can’t buy</h3>
+          <p>Ads, affiliates and sponsors never change scores, filters or ranks.</p>
+          <p>Sponsored placements are labeled next to the content.</p>
+          <p>Every manual override is logged with a reason.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="end-cta">
+      <h2>See how the rules play out in a real list.</h2>
+      <a class="btn" href="/rankings/color-sort-ios/">Browse current rankings <Icon name="arrow-right" size={16} /></a>
+    </section>
   </main>
 </Base>

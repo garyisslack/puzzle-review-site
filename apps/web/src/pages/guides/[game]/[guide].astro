@@ -1,34 +1,51 @@
 ---
 import Base from '../../../layouts/Base.astro'
+import Icon from '../../../components/Icon.astro'
 import { guideJson, publishedGuides, reviewBySlug } from '../../../lib/site.ts'
+import { artFor, shortDate } from '../../../lib/present.ts'
+
 export function getStaticPaths() {
   return publishedGuides().map((guide) => ({ params: { game: guide.gameSlug, guide: guide.slug } }))
 }
 const guide = publishedGuides().find((item) => item.slug === Astro.params.guide && item.gameSlug === Astro.params.game)
 if (!guide) throw new Error('missing guide')
 const review = reviewBySlug(guide.gameSlug)
+const art = artFor(guide.gameSlug)
+const steps = guide.body.split(/(?<=\.)\s+/).filter(Boolean)
 ---
 <Base title={guide.title} description={`${guide.title} for ${review?.name ?? guide.gameSlug}.`} path={`/guides/${guide.gameSlug}/${guide.slug}/`} jsonLd={[guideJson(guide.slug)].filter(Boolean)}>
-  <main class="wrap section">
-    <p class="kicker">COMMUNITY GUIDE</p>
-    <h1>{guide.title}</h1>
-    <p>Verified by {guide.verifiedBy} on v{guide.verifiedOnVersion} · {guide.modifiedOn} · {guide.platform.toUpperCase()} · {guide.levelRange}</p>
-    <p class="banner">Checked on v{guide.verifiedOnVersion}. If the store build is newer, this guide may be out of date. It does not change the review score.</p>
-    <div class="split">
-      <article><p>{guide.body}</p></article>
-      <aside class="card">
-        <p class="meta">FROM THE REVIEW</p>
-        <h2>{review?.name}</h2>
-        <p>{review?.displayed} · full review</p>
-        <p>This guide is not a score and is not part of the ranking.</p>
-        <p><a href={`/reviews/${guide.gameSlug}/`}>Read the review</a></p>
-      </aside>
-    </div>
-    <div class="shots">
-      <div class="shot">IMG:step-1 · v{guide.verifiedOnVersion}</div>
-      <div class="shot">IMG:step-2 · v{guide.verifiedOnVersion}</div>
-      <div class="shot">IMG:step-3 · v{guide.verifiedOnVersion}</div>
-    </div>
-    <p class="meta">Written by {guide.contributorName}. Edited by {guide.verifiedBy}.</p>
+  <main class="wrap guide-layout">
+    <article>
+      <p class="crumbs"><a href="/">Home</a> / <a href={`/guides/${guide.gameSlug}/`}>Guides</a> / {review?.name} / {guide.title}</p>
+      <p class="kicker">COMMUNITY GUIDE</p>
+      <h1>{guide.title}</h1>
+      <p>Verified by {guide.verifiedBy} on v{guide.verifiedOnVersion} · {shortDate(guide.modifiedOn)} · {guide.platform.toUpperCase()} · {guide.levelRange}</p>
+      <div class="callout">
+        <p class="meta">CHECKED ON v{guide.verifiedOnVersion}</p>
+        <p>If the store build is newer, this guide may be out of date. It does not change the review score.</p>
+      </div>
+      <ol class="steps">
+        {steps.map((step, index) => (
+          <li><span class="step-no">{index + 1}</span><span>{step}</span></li>
+        ))}
+      </ol>
+      <div class="shots" style="margin-top:28px">
+        {['/media/shot-1.jpg', '/media/shot-2.jpg', '/media/shot-3.jpg'].map((src, index) => (
+          <figure class="shot">
+            <img src={src} alt="" width="640" height="360" />
+            <figcaption>IMG:step-{index + 1} · v{guide.verifiedOnVersion}</figcaption>
+          </figure>
+        ))}
+      </div>
+      <p class="meta" style="margin-top:16px">Written by {guide.contributorName}. Edited by {guide.verifiedBy}.</p>
+    </article>
+    <aside class="side-card">
+      {art.icon ? <img class="game-icon" src={art.icon} alt="" width="64" height="64" /> : null}
+      <p class="meta">FROM THE REVIEW</p>
+      <h2>{review?.name}</h2>
+      <p>{review?.displayed ?? '—'} · full review</p>
+      <p>This guide is not a score and is not part of the ranking.</p>
+      <p><a class="text-link" href={`/reviews/${guide.gameSlug}/`}>Read the review <Icon name="arrow-right" size={16} /></a></p>
+    </aside>
   </main>
 </Base>

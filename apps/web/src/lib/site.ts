@@ -1,5 +1,6 @@
 import {
   DIMENSIONS,
+  METHODOLOGY_VERSION,
   buildSnapshot,
   formatScore,
   prepareReviewVersion,
@@ -21,7 +22,7 @@ import {
 } from '@puzzle/seo'
 import { authors, guides, needs, rankingDefinition, reviews } from '../data/catalog.ts'
 
-export const SITE_URL = 'https://dimpuzzle.com'
+export const SITE_URL = 'https://puzzlereviewlab.com'
 export const SITE_NAME = 'DimPuzzle'
 const GENERATED_AT = '2026-11-08T00:00:00.000Z'
 
@@ -240,4 +241,4 @@ export function dimensionRows(dims: CatalogDims, rationales: Partial<Record<stri
 type CatalogDims = { G: number | null; A: number | null; F: number | null; C: number | null; U: number | null }
 
 export { rankingDefinition }
-export { DIMENSIONS }
+export { DIMENSIONS, METHODOLOGY_VERSION }

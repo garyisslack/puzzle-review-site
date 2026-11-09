@@ -4,80 +4,91 @@ import { reviews } from '../../data/catalog.ts'
 const games = [...new Map(reviews.map((review) => [review.slug, review.name])).entries()]
 ---
 <Base title="Submit a guide" description="Send a guide for an editor to check." path="/guides/submit/" robots="noindex,follow">
-  <main class="wrap section form">
-    <p class="kicker">COMMUNITY GUIDES</p>
-    <h1>Submit a guide</h1>
-    <p>No account. An editor plays the steps before anything is published. Guides never change a score.</p>
-    <section class="card" id="age">
-      <h2>What month and year were you born?</h2>
-      <p class="meta">We use this only to decide whether to show the form. It is not sent with the guide.</p>
-      <label>Month <input id="month" type="number" min="1" max="12" value="11" /></label>
-      <label>Year <input id="year" type="number" min="1900" max="2026" value="1998" /></label>
-      <button class="btn" id="continue" type="button">Continue</button>
-    </section>
-    <form id="guide-form" class="hidden" action="/api/guides" method="post">
-      <p class="meta">Shown only after the age answer is 13 or older.</p>
-      <label>Game
-        <select name="gameSlug">{games.map(([slug, name]) => <option value={slug}>{name}</option>)}</select>
-      </label>
-      <label>Platform
-        <select name="platform"><option value="ios">iOS</option><option value="android">Android</option></select>
-      </label>
-      <label>App version <input name="appVersion" required /></label>
-      <label>Level range <input name="levelRange" required /></label>
-      <label>Title <input name="title" required minlength="8" /></label>
-      <label>Nickname <input name="penName" required /></label>
-      <label>Email (optional) <input name="contactEmail" type="email" /></label>
-      <label>Steps <textarea name="body" required minlength="280"></textarea></label>
-      <p>Up to 6 screenshots. Location data is removed before an editor sees them.</p>
-      <label><input type="checkbox" name="licenseAccepted" value="yes" /> I wrote this, and the site may edit it.</label>
-      <label>AI assistance
-        <select name="aiAssisted"><option value="false">No</option><option value="true">Yes</option></select>
-      </label>
-      <button class="btn" type="submit">Submit for review</button>
-      <p id="result" role="status"></p>
-    </form>
-    <section id="blocked" class="banner hidden">
-      <h2>Please ask a parent to send this.</h2>
-      <p>Nothing on this page was sent, and nothing was stored.</p>
-    </section>
-    <script>
-      import { ageGate } from '@puzzle/seo'
-      const month = document.querySelector<HTMLInputElement>('#month')
-      const year = document.querySelector<HTMLInputElement>('#year')
-      const form = document.querySelector<HTMLFormElement>('#guide-form')
-      const blocked = document.querySelector('#blocked')
-      document.querySelector('#continue')?.addEventListener('click', () => {
-        const decision = ageGate(Number(year?.value), Number(month?.value), new Date())
-        document.querySelector('#age')?.classList.add('hidden')
-        if (decision === 'block') {
-          blocked?.classList.remove('hidden')
-          return
-        }
-        form?.classList.remove('hidden')
-      })
-      form?.addEventListener('submit', async (event) => {
-        event.preventDefault()
-        const data = new FormData(form)
-        const payload = {
-          birthYear: Number(year?.value),
-          birthMonth: Number(month?.value),
-          gameSlug: String(data.get('gameSlug') ?? ''),
-          platform: String(data.get('platform') ?? ''),
-          appVersion: String(data.get('appVersion') ?? ''),
-          levelRange: String(data.get('levelRange') ?? ''),
-          title: String(data.get('title') ?? ''),
-          body: String(data.get('body') ?? ''),
-          penName: String(data.get('penName') ?? ''),
-          contactEmail: String(data.get('contactEmail') ?? ''),
-          imageCount: 0,
-          licenseAccepted: data.get('licenseAccepted') === 'yes',
-          aiAssisted: data.get('aiAssisted') === 'true',
-        }
-        const response = await fetch('/api/guides', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(payload) })
-        const result = document.querySelector('#result')
-        if (result) result.textContent = response.ok ? 'Queued for an editor.' : 'Not submitted.'
-      })
-    </script>
+  <main class="wrap submit-layout">
+    <div>
+      <p class="kicker">COMMUNITY GUIDES</p>
+      <h1>Submit a guide</h1>
+      <p class="lede">No account. An editor plays the steps on the current build before anything is published. Guides never change a score.</p>
+      <section class="card" id="age" style="margin-top:28px">
+        <h2>What month and year were you born?</h2>
+        <p class="meta">We use this only to decide whether to show the form. It is not sent to the server.</p>
+        <div class="fields">
+          <label>Month <input id="month" type="number" min="1" max="12" value="11" /></label>
+          <label>Year <input id="year" type="number" min="1900" max="2026" value="1998" /></label>
+        </div>
+        <p><button class="btn" id="continue" type="button">Continue</button></p>
+      </section>
+      <form id="guide-form" class="hidden card" action="/api/guides" method="post">
+        <p class="meta">Shown only after the age answer is 13 or older.</p>
+        <div class="fields">
+          <label class="wide">Game
+            <select name="gameSlug">{games.map(([slug, name]) => <option value={slug}>{name}</option>)}</select>
+          </label>
+          <label>Platform
+            <select name="platform"><option value="ios">iOS</option><option value="android">Android</option></select>
+          </label>
+          <label>App version <input name="appVersion" required /></label>
+          <label>Level range <input name="levelRange" required /></label>
+          <label>Title <input name="title" required minlength="8" /></label>
+          <label class="wide">Nickname <input name="penName" required /></label>
+          <label class="wide">Email (optional) <input name="contactEmail" type="email" /></label>
+          <label class="wide">Steps · no links, no real names, no friend codes <textarea name="body" required minlength="280"></textarea></label>
+        </div>
+        <p class="meta">Up to 6 screenshots. Location data is removed before an editor sees them.</p>
+        <label class="check"><input type="checkbox" name="licenseAccepted" value="yes" /> I wrote this, and the site may edit it.</label>
+        <label>AI assistance
+          <select name="aiAssisted"><option value="false">No</option><option value="true">Yes</option></select>
+        </label>
+        <p><button class="btn" type="submit">Submit for review</button></p>
+        <p id="result" role="status"></p>
+      </form>
+      <section id="blocked" class="banner hidden">
+        <h2>Please ask a parent to send this.</h2>
+        <p>This is the only thing shown when the birth month and year are under 13. The form is not rendered and nothing is stored.</p>
+      </section>
+    </div>
+    <aside class="side-card">
+      <h2>Before you send</h2>
+      <p>An editor plays the steps on the current build. A guide never changes a score or a rank.</p>
+      <p class="meta">13 and under: ask a parent. Nothing from the age question is stored.</p>
+    </aside>
   </main>
+  <script>
+    import { ageGate } from '@puzzle/seo'
+    const month = document.querySelector<HTMLInputElement>('#month')
+    const year = document.querySelector<HTMLInputElement>('#year')
+    const form = document.querySelector<HTMLFormElement>('#guide-form')
+    const blocked = document.querySelector('#blocked')
+    document.querySelector('#continue')?.addEventListener('click', () => {
+      const decision = ageGate(Number(year?.value), Number(month?.value), new Date())
+      document.querySelector('#age')?.classList.add('hidden')
+      if (decision === 'block') {
+        blocked?.classList.remove('hidden')
+        return
+      }
+      form?.classList.remove('hidden')
+    })
+    form?.addEventListener('submit', async (event) => {
+      event.preventDefault()
+      const data = new FormData(form)
+      const payload = {
+        birthYear: Number(year?.value),
+        birthMonth: Number(month?.value),
+        gameSlug: String(data.get('gameSlug') ?? ''),
+        platform: String(data.get('platform') ?? ''),
+        appVersion: String(data.get('appVersion') ?? ''),
+        levelRange: String(data.get('levelRange') ?? ''),
+        title: String(data.get('title') ?? ''),
+        body: String(data.get('body') ?? ''),
+        penName: String(data.get('penName') ?? ''),
+        contactEmail: String(data.get('contactEmail') ?? ''),
+        imageCount: 0,
+        licenseAccepted: data.get('licenseAccepted') === 'yes',
+        aiAssisted: data.get('aiAssisted') === 'true',
+      }
+      const response = await fetch('/api/guides', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(payload) })
+      const result = document.querySelector('#result')
+      if (result) result.textContent = response.ok ? 'Queued for an editor.' : 'Not submitted.'
+    })
+  </script>
 </Base>

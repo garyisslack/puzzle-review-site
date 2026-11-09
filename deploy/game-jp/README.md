@@ -30,13 +30,13 @@ ssh game-jp 'bash -s' < deploy/game-jp/install-remote.sh
 ## Tunnel
 
 1. 在 Cloudflare Zero Trust 新建 Tunnel（建议名 `dimpuzzle-game-jp`），Public Hostname：
-   - `dimpuzzle.com`、`www.dimpuzzle.com` → `http://127.0.0.1:5210`
-   - （可选）`admin.dimpuzzle.com` → `http://127.0.0.1:5211`
+   - `puzzlereviewlab.com`、`www.puzzlereviewlab.com` → `http://127.0.0.1:5210`
+   - （可选）`admin.puzzlereviewlab.com` → `http://127.0.0.1:5211`
 2. 将隧道 **Token** 写入 game-jp：`/etc/dimpuzzle/tunnel.env`  
    `TUNNEL_TOKEN=eyJ...`
 3. `ssh game-jp 'systemctl enable --now dimpuzzle-tunnel'`
 
-账号里若尚无 `dimpuzzle.com` 站点，需先把域名接入 Cloudflare DNS，或改用已接入的 `puzzlereviewlab.com`。
+生产主域：**puzzlereviewlab.com**（Cloudflare DNS + Tunnel CNAME）。
 
 ## 与 Cloudflare Pages
 

@@ -1,6 +1,9 @@
 ---
 import Base from '../../layouts/Base.astro'
+import Icon from '../../components/Icon.astro'
 import { comparePages, dimensionRows, publishedReviews } from '../../lib/site.ts'
+import { TAGS, artFor, storeCta, tagStateLabel } from '../../lib/present.ts'
+
 export function getStaticPaths() {
   return comparePages().map((page) => ({ params: { pair: page.slug }, props: page }))
 }
@@ -8,18 +11,92 @@ const page = Astro.props
 const left = publishedReviews().find((review) => review.slug === page.a)
 const right = publishedReviews().find((review) => review.slug === page.b)
 if (!left || !right) throw new Error('compare pair missing')
-const rows = dimensionRows(left.dims, left.rationales).map((dim, index) => ({ dim, other: dimensionRows(right.dims, right.rationales)[index] }))
+const rows = dimensionRows(left.dims, left.rationales).map((dim, index) => ({
+  dim,
+  other: dimensionRows(right.dims, right.rationales)[index],
+}))
+const pitches = TAGS.flatMap((tag) => {
+  const leftState = left.tags[tag.key]
+  const rightState = right.tags[tag.key]
+  if (leftState === rightState) return []
+  if (leftState !== 'yes' && rightState !== 'yes') return []
+  const winner = leftState === 'yes' ? left : right
+  const other = winner.slug === left.slug ? right : left
+  return [{
+    kicker: tag.label.toUpperCase(),
+    name: winner.name,
+    body: `${winner.name} is verified yes. ${other.name} is ${tagStateLabel(other.tags[tag.key] ?? 'unknown').toLowerCase()}.`,
+  }]
+}).slice(0, 3)
 ---
 <Base title={`${left.name} vs ${right.name}`} description={`Side by side scores for ${left.name} and ${right.name}.`} path={`/compare/${page.slug}/`}>
-  <main class="wrap section">
-    <h1>{left.name} vs {right.name}</h1>
-    <p class="meta">Same mechanic family, same platform, both full reviews. The reverse URL redirects here.</p>
-    <table class="rank-table">
-      <thead><tr><th></th><th>{left.name} {left.displayed}</th><th>{right.name} {right.displayed}</th></tr></thead>
-      <tbody>
-        {rows.map((row) => <tr><td>{row.dim.label}</td><td>{row.dim.displayed}</td><td>{row.other?.displayed}</td></tr>)}
-      </tbody>
-    </table>
-    <p><a class="btn" href={left.storeUrl}>View {left.name}</a> <a class="btn secondary" href={right.storeUrl}>View {right.name}</a></p>
+  <main class="wrap">
+    <header class="page-head compare-head">
+      <p class="crumbs"><a href="/">Home</a> / Compare / {left.name} vs {right.name}</p>
+      <h1>{left.name} vs {right.name}</h1>
+      <p class="lede">Same genre ({left.mechanicFamily}) · both full reviews · both {left.platform === 'ios' ? 'iOS' : 'Android'} · like-for-like comparison</p>
+    </header>
+    <section class="compare-grid">
+      <div></div>
+      {[left, right].map((review) => {
+        const art = artFor(review.slug)
+        return (
+          <div>
+            <div class="title-row">
+              {art.icon ? <img class="game-icon" src={art.icon} alt="" width="64" height="64" /> : <span class="game-icon placeholder"><Icon name="image" size={18} /></span>}
+              <div>
+                <div class="compare-name">{review.name}</div>
+                <span class="fictional">FICTIONAL DEMO</span>
+              </div>
+            </div>
+            <div class="compare-score">{review.displayed ?? '—'}</div>
+            <p class="meta">{review.osVersion} · v{review.appVersion} · tested {review.testedTo}</p>
+          </div>
+        )
+      })}
+      {rows.map((row) => {
+        const leftScore = row.dim.displayed
+        const rightScore = row.other?.displayed
+        const leftLeads = leftScore != null && rightScore != null && Number(leftScore) > Number(rightScore)
+        const rightLeads = leftScore != null && rightScore != null && Number(rightScore) > Number(leftScore)
+        return (
+          <>
+            <div class="cell"><strong>{row.dim.label}</strong><div class="meta">{row.dim.weight}%</div></div>
+            <div class="cell"><strong>{leftScore ?? '—'}</strong> {leftLeads && <span class="lead">LEADS</span>}</div>
+            <div class="cell"><strong>{rightScore ?? '—'}</strong> {rightLeads && <span class="lead">LEADS</span>}</div>
+          </>
+        )
+      })}
+      <div class="cell"><strong>Play conditions</strong><div class="meta">Not part of the score</div></div>
+      {[left, right].map((review) => (
+        <div class="cell">
+          {TAGS.map((tag) => <div>{tag.label} — {tagStateLabel(review.tags[tag.key] ?? 'unknown').toLowerCase()}</div>)}
+        </div>
+      ))}
+      <div class="cell"><strong>Testing boundaries</strong></div>
+      <div class="cell">{left.testingBoundaries}</div>
+      <div class="cell">{right.testingBoundaries}</div>
+      <div class="cell"></div>
+      {[left, right].map((review) => (
+        <div class="cell">
+          <a class="store sm" href={review.storeUrl}>{storeCta(review.platform)} <Icon name="arrow-up-right" size={14} /></a>
+          <div><a class="text-link" href={`/reviews/${review.slug}/`}>Full review →</a></div>
+        </div>
+      ))}
+    </section>
+    {pitches.length > 0 && (
+      <section style="padding: 56px 0 88px">
+        <h2>Which one fits you</h2>
+        <div class="pick-grid">
+          {pitches.map((pitch) => (
+            <article class="pick">
+              <p class="meta">{pitch.kicker}</p>
+              <h3>{pitch.name}</h3>
+              <p>{pitch.body}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+    )}
   </main>
 </Base>
