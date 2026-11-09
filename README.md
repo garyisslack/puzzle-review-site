@@ -10,7 +10,7 @@ pnpm dev:web
 pnpm dev:cms
 ```
 
-`DATABASE_URI` 以 `postgres` 开头时，后台连 PostgreSQL。留空则用本地 SQLite，方便开发。品牌名还没定，页面上沿用设计稿里的 SiteName。
+`DATABASE_URI` 以 `postgres` 开头时，后台连 PostgreSQL。留空则用本地 SQLite，方便开发。页面上的站名与域名一致，是 puzzlereviewlab.com。
 
 设计稿在 `design/review-site-only.pen`，配套图片是同目录的 `generated-22.png` 到 `generated-31.png`。改界面先改这份稿。
 

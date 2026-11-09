@@ -23,7 +23,7 @@ import {
 import { authors, guides, needs, rankingDefinition, reviews } from '../data/catalog.ts'
 
 export const SITE_URL = 'https://puzzlereviewlab.com'
-export const SITE_NAME = 'DimPuzzle'
+export const SITE_NAME = 'puzzlereviewlab.com'
 const GENERATED_AT = '2026-11-08T00:00:00.000Z'
 
 export function authorBySlug(slug: string) {

@@ -7,7 +7,7 @@ import '@fontsource/nunito-sans/700.css'
 import '@fontsource/nunito-sans/800.css'
 import '../styles/global.css'
 import Icon from '../components/Icon.astro'
-import { SITE_URL } from '../lib/site.ts'
+import { SITE_NAME, SITE_URL } from '../lib/site.ts'
 
 interface Props {
   title: string
@@ -33,8 +33,7 @@ const canonical = new URL(path, SITE_URL).toString()
     <header class="nav">
       <div class="nav-row">
         <a class="brand" href="/">
-          <span class="wordmark">SiteName</span>
-          <span class="brand-tbd">BRAND TBD</span>
+          <span class="wordmark">{SITE_NAME}</span>
         </a>
         <nav class="nav-links" id="site-nav">
           <a href="/#needs">Discover</a>
@@ -58,7 +57,7 @@ const canonical = new URL(path, SITE_URL).toString()
       <div class="footer-inner">
         <div class="footer-row">
           <div>
-            <strong class="footer-brand">SiteName</strong>
+            <strong class="footer-brand">{SITE_NAME}</strong>
             <p>Independent editorial scores for iOS & Android casual and puzzle games.</p>
           </div>
           <nav>

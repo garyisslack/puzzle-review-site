@@ -56,7 +56,6 @@ a:hover { text-decoration: underline; }
 .brand { display: flex; align-items: center; gap: 10px; color: var(--ink); text-decoration: none; white-space: nowrap; }
 .brand:hover { text-decoration: none; }
 .wordmark { font-family: var(--display); font-weight: 800; font-size: 24px; letter-spacing: -0.18px; line-height: 1; }
-.brand-tbd { color: var(--muted); font-size: 13px; font-weight: 700; letter-spacing: 0.02em; }
 .nav-links { display: flex; align-items: center; justify-content: center; gap: 36px; }
 @media (min-width: 801px) {
   .nav-row { display: grid; grid-template-columns: 1fr auto 1fr; }
@@ -486,7 +485,8 @@ textarea { min-height: 140px; resize: vertical; }
 @media (max-width: 800px) {
   .nav-row, .footer-inner, .wrap { width: min(100% - 40px, 1312px); }
   .nav-row { flex-wrap: wrap; align-items: center; }
-  .brand { order: 1; }
+  .brand { order: 1; flex-shrink: 0; }
+  .wordmark { font-size: 18px; }
   .nav-toggle { display: grid; order: 2; margin-left: auto; }
   .search { display: none; order: 3; }
   .search.is-open { display: flex; flex: 1 0 100%; width: 100%; margin: 8px 0 4px; }
