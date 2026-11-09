@@ -15,3 +15,5 @@ pnpm dev:cms
 设计稿在 `design/review-site-only.pen`，配套图片是同目录的 `generated-22.png` 到 `generated-31.png`。改界面先改这份稿。
 
 用 AI 测游戏并填评测：见 [`docs/ai-auto-testing.md`](docs/ai-auto-testing.md)（会话 `content/sessions/` → 草稿 `content/drafts/` → `pnpm content:validate`）。填稿 Skill：`.cursor/skills/puzzle-content-autofill/`。
+
+生产静态站发布在 **game-jp**（东京机）：`./deploy/game-jp/sync-web.sh`，说明见 [`deploy/game-jp/README.md`](deploy/game-jp/README.md)。公网经 Cloudflare Tunnel `dimpuzzle-game-jp` → `127.0.0.1:5210`。
