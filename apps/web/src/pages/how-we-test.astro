@@ -1,0 +1,15 @@
+---
+import Base from '../layouts/Base.astro'
+import { DIMENSIONS } from '../lib/site.ts'
+---
+<Base title="How we test" description="The five-dimension score and what a full review includes." path="/how-we-test/">
+  <main class="wrap section">
+    <h1>How we test</h1>
+    <p>S = .30G + .20A + .20F + .15C + .15U. A missing dimension does not become 0 or 10. The displayed score keeps one decimal and rounds half up.</p>
+    {DIMENSIONS.map((dimension) => <article class="card"><h2>{dimension.label} · {dimension.weight}%</h2><p>{dimension.question}</p></article>)}
+    <h2>Rankings and ties</h2>
+    <p>Games with the same displayed score share a rank. The next rank is skipped, so 1, 2, 2, 4. iOS and Android are never combined. A list is not called Top N unless at least N games qualified.</p>
+    <h2>What we don't do</h2>
+    <p>We don't buy things to change a score, and a sponsorship cannot enter a ranking. Store buttons go to the official store.</p>
+  </main>
+</Base>

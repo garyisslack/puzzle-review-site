@@ -1,0 +1,45 @@
+---
+import Base from '../../layouts/Base.astro'
+import { colorSortSnapshot, publishedReviews, rankingDefinition } from '../../lib/site.ts'
+export function getStaticPaths() {
+  const snapshot = colorSortSnapshot()
+  if (!snapshot.ok) return []
+  return [{ params: { list: rankingDefinition.slug } }]
+}
+const snapshot = colorSortSnapshot()
+if (!snapshot.ok) throw new Error(snapshot.code)
+const reviews = publishedReviews()
+---
+<Base title={rankingDefinition.title} description="Games that passed a full review on one platform." path={`/rankings/${rankingDefinition.slug}/`}>
+  <main class="wrap section">
+    <p class="banner">Not a US download chart. Filters dim rows and do not renumber them.</p>
+    <h1>{rankingDefinition.title}</h1>
+    <p class="meta">Qualified {snapshot.snapshot.qualifiedCount} · {snapshot.snapshot.methodologyVersion}</p>
+    <table class="rank-table">
+      <thead><tr><th>Rank</th><th>Game</th><th>Score</th></tr></thead>
+      <tbody>
+        {snapshot.snapshot.items.map((item) => {
+          const review = reviews.find((entry) => entry.gameId === item.gameId)
+          return <tr data-tags={Object.entries(review?.tags ?? {}).filter(([, state]) => state === 'yes').map(([tag]) => tag).join(' ')}><td>{item.rank}</td><td><a href={`/reviews/${review?.slug}/`}>{item.name}</a></td><td>{(item.displayedTenths / 10).toFixed(1)}</td></tr>
+        })}
+      </tbody>
+    </table>
+    <h2>Not on this list</h2>
+    <ul>
+      {snapshot.snapshot.excluded.map((item) => <li>{item.name} — {item.reason.replaceAll('_', ' ')}</li>)}
+    </ul>
+    <button id="offline" type="button">Show offline = yes</button>
+    <script>
+      const button = document.getElementById('offline')
+      button?.addEventListener('click', () => {
+        const url = new URL(location.href)
+        url.searchParams.set('offline', 'yes')
+        history.replaceState({}, '', url)
+        document.querySelectorAll('tr[data-tags]').forEach((row) => {
+          const tags = row.getAttribute('data-tags') ?? ''
+          row.setAttribute('style', tags.includes('plays_offline') ? '' : 'opacity:.35')
+        })
+      })
+    </script>
+  </main>
+</Base>

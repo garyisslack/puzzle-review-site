@@ -1,0 +1,18 @@
+---
+import Base from '../../../layouts/Base.astro'
+import { guideIndexSlugs, publishedGuides, reviewBySlug } from '../../../lib/site.ts'
+export function getStaticPaths() {
+  return guideIndexSlugs().map((game) => ({ params: { game } }))
+}
+const game = Astro.params.game
+const review = reviewBySlug(game)
+const guides = publishedGuides().filter((guide) => guide.gameSlug === game)
+if (!review) throw new Error('guide index without a review')
+---
+<Base title={`${review.name} guides`} description={`Community guides for ${review.name}, checked by an editor.`} path={`/guides/${game}/`}>
+  <main class="wrap section">
+    <h1>{review.name} guides</h1>
+    <p>Community guides. An editor played the steps before publication. Guides do not change the {review.displayed} review score.</p>
+    {guides.map((guide) => <article class="card"><h2><a href={`/guides/${game}/${guide.slug}/`}>{guide.title}</a></h2><p class="meta">{guide.levelRange} · checked on {guide.verifiedOnVersion}</p></article>)}
+  </main>
+</Base>

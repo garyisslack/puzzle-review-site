@@ -1,0 +1,18 @@
+---
+import Base from '../../layouts/Base.astro'
+import { authors } from '../../data/catalog.ts'
+import { publishedReviews } from '../../lib/site.ts'
+export function getStaticPaths() {
+  return authors.map((author) => ({ params: { slug: author.slug } }))
+}
+const author = authors.find((item) => item.slug === Astro.params.slug)
+if (!author) throw new Error('missing author')
+const written = publishedReviews().filter((review) => review.authorSlug === author.slug)
+---
+<Base title={author.name} description={author.bio} path={`/authors/${author.slug}/`}>
+  <main class="wrap section">
+    <h1>{author.name}</h1>
+    <p>{author.role}. {author.bio}</p>
+    <ul>{written.map((review) => <li><a href={`/reviews/${review.slug}/`}>{review.name}</a></li>)}</ul>
+  </main>
+</Base>

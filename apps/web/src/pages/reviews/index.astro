@@ -1,0 +1,17 @@
+---
+import Base from '../../layouts/Base.astro'
+import { publishedReviews } from '../../lib/site.ts'
+const reviews = publishedReviews()
+---
+<Base title="Reviews" description="Full reviews and initial notes." path="/reviews/">
+  <main class="wrap section">
+    <h1>Reviews</h1>
+    <p class="meta">Search on this page adds a query string. That URL is noindex and points back here.</p>
+    {reviews.map((review) => (
+      <article class="card">
+        <h2><a href={`/reviews/${review.slug}/`}>{review.name}</a></h2>
+        <p>{review.platform} · {review.displayed ?? 'No composite score'}</p>
+      </article>
+    ))}
+  </main>
+</Base>

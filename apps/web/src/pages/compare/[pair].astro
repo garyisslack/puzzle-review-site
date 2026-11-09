@@ -1,0 +1,25 @@
+---
+import Base from '../../layouts/Base.astro'
+import { comparePages, dimensionRows, publishedReviews } from '../../lib/site.ts'
+export function getStaticPaths() {
+  return comparePages().map((page) => ({ params: { pair: page.slug }, props: page }))
+}
+const page = Astro.props
+const left = publishedReviews().find((review) => review.slug === page.a)
+const right = publishedReviews().find((review) => review.slug === page.b)
+if (!left || !right) throw new Error('compare pair missing')
+const rows = dimensionRows(left.dims, left.rationales).map((dim, index) => ({ dim, other: dimensionRows(right.dims, right.rationales)[index] }))
+---
+<Base title={`${left.name} vs ${right.name}`} description={`Side by side scores for ${left.name} and ${right.name}.`} path={`/compare/${page.slug}/`}>
+  <main class="wrap section">
+    <h1>{left.name} vs {right.name}</h1>
+    <p class="meta">Same mechanic family, same platform, both full reviews. The reverse URL redirects here.</p>
+    <table class="rank-table">
+      <thead><tr><th></th><th>{left.name} {left.displayed}</th><th>{right.name} {right.displayed}</th></tr></thead>
+      <tbody>
+        {rows.map((row) => <tr><td>{row.dim.label}</td><td>{row.dim.displayed}</td><td>{row.other?.displayed}</td></tr>)}
+      </tbody>
+    </table>
+    <p><a class="btn" href={left.storeUrl}>View {left.name}</a> <a class="btn secondary" href={right.storeUrl}>View {right.name}</a></p>
+  </main>
+</Base>

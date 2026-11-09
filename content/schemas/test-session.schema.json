@@ -1,0 +1,97 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://puzzle-review-site.local/schemas/test-session.json",
+  "title": "TestSessionLog",
+  "description": "第一手实测记录，供 AI 生成 review 草稿；无充分观察不得推导分数。",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "slug",
+    "platform",
+    "reviewType",
+    "appVersion",
+    "osVersion",
+    "testedFrom",
+    "testedTo",
+    "testerRegion",
+    "storeLocale",
+    "testingBoundaries",
+    "observations",
+    "gaps"
+  ],
+  "properties": {
+    "gameName": { "type": "string" },
+    "slug": { "type": "string", "minLength": 1 },
+    "platform": { "enum": ["ios", "android"] },
+    "reviewType": { "enum": ["initial", "full"] },
+    "mechanicFamily": { "type": "string" },
+    "developer": { "type": "string" },
+    "storeUrl": { "type": "string", "format": "uri" },
+    "appVersion": { "type": "string" },
+    "osVersion": { "type": "string" },
+    "testedFrom": { "type": "string", "format": "date" },
+    "testedTo": { "type": "string", "format": "date" },
+    "testerRegion": { "type": "string" },
+    "storeLocale": { "type": "string" },
+    "testingBoundaries": { "type": "string", "minLength": 1 },
+    "testerId": { "type": "string", "description": "内部门控代号，非公开笔名" },
+    "iapPurchased": { "type": "boolean", "default": false },
+    "observations": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["type", "note"],
+        "properties": {
+          "type": {
+            "enum": ["play", "ad", "iap", "crash", "offline", "resume", "other"]
+          },
+          "levelOrScreen": { "type": "string" },
+          "at": { "type": "string", "description": "ISO 8601 或简短时刻" },
+          "note": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["description"],
+        "properties": {
+          "path": { "type": "string" },
+          "description": { "type": "string" },
+          "publicAllowed": { "type": "boolean", "default": false }
+        }
+      }
+    },
+    "proposedDims": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "G": { "type": ["integer", "null"], "minimum": 0, "maximum": 100 },
+        "A": { "type": ["integer", "null"], "minimum": 0, "maximum": 100 },
+        "F": { "type": ["integer", "null"], "minimum": 0, "maximum": 100 },
+        "C": { "type": ["integer", "null"], "minimum": 0, "maximum": 100 },
+        "U": { "type": ["integer", "null"], "minimum": 0, "maximum": 100 }
+      }
+    },
+    "proposedTags": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "no_forced_ads": { "enum": ["yes", "no", "unknown"] },
+        "plays_offline": { "enum": ["yes", "no", "unknown"] },
+        "one_handed": { "enum": ["yes", "no", "unknown"] },
+        "short_rounds": { "enum": ["yes", "no", "unknown"] },
+        "no_timers": { "enum": ["yes", "no", "unknown"] }
+      }
+    },
+    "gaps": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "尚未实测的项，AI 不得据此填分或标 yes"
+    }
+  }
+}

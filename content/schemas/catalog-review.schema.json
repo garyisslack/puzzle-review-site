@@ -1,0 +1,107 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://puzzle-review-site.local/schemas/catalog-review.json",
+  "title": "CatalogReviewDraft",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "gameId",
+    "slug",
+    "name",
+    "developer",
+    "mechanicFamily",
+    "platform",
+    "reviewType",
+    "status",
+    "sponsored",
+    "appVersion",
+    "osVersion",
+    "testedFrom",
+    "testedTo",
+    "publishedOn",
+    "testerRegion",
+    "storeLocale",
+    "dims",
+    "rationales",
+    "testingBoundaries",
+    "storeUrl",
+    "priceUsd",
+    "authorSlug",
+    "publicEvidenceCount",
+    "tags",
+    "verifiedOnline",
+    "summary",
+    "verdict",
+    "familyNotes",
+    "faqs"
+  ],
+  "properties": {
+    "gameId": { "type": "string", "minLength": 1 },
+    "slug": { "type": "string", "minLength": 1 },
+    "name": { "type": "string", "minLength": 1 },
+    "developer": { "type": "string" },
+    "mechanicFamily": { "type": "string" },
+    "platform": { "enum": ["ios", "android"] },
+    "reviewType": { "enum": ["initial", "full"] },
+    "status": { "enum": ["draft", "published", "expired", "withdrawn"] },
+    "sponsored": { "type": "boolean" },
+    "appVersion": { "type": "string" },
+    "osVersion": { "type": "string" },
+    "testedFrom": { "type": "string", "format": "date" },
+    "testedTo": { "type": "string", "format": "date" },
+    "publishedOn": { "type": "string", "format": "date" },
+    "testerRegion": { "type": "string" },
+    "storeLocale": { "type": "string" },
+    "dims": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["G", "A", "F", "C", "U"],
+      "properties": {
+        "G": { "type": ["integer", "null"], "minimum": 0, "maximum": 100 },
+        "A": { "type": ["integer", "null"], "minimum": 0, "maximum": 100 },
+        "F": { "type": ["integer", "null"], "minimum": 0, "maximum": 100 },
+        "C": { "type": ["integer", "null"], "minimum": 0, "maximum": 100 },
+        "U": { "type": ["integer", "null"], "minimum": 0, "maximum": 100 }
+      }
+    },
+    "rationales": {
+      "type": "object",
+      "propertyNames": { "enum": ["G", "A", "F", "C", "U"] },
+      "additionalProperties": { "type": "string" }
+    },
+    "testingBoundaries": { "type": "string", "minLength": 1 },
+    "storeUrl": { "type": "string", "format": "uri" },
+    "priceUsd": { "type": "number", "minimum": 0 },
+    "authorSlug": { "type": "string" },
+    "publicEvidenceCount": { "type": "integer", "minimum": 0 },
+    "tags": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["no_forced_ads", "plays_offline", "one_handed", "short_rounds", "no_timers"],
+      "properties": {
+        "no_forced_ads": { "enum": ["yes", "no", "unknown"] },
+        "plays_offline": { "enum": ["yes", "no", "unknown"] },
+        "one_handed": { "enum": ["yes", "no", "unknown"] },
+        "short_rounds": { "enum": ["yes", "no", "unknown"] },
+        "no_timers": { "enum": ["yes", "no", "unknown"] }
+      }
+    },
+    "verifiedOnline": { "type": "boolean" },
+    "summary": { "type": "string", "minLength": 1 },
+    "verdict": { "type": "string", "minLength": 1 },
+    "familyNotes": { "type": "array", "items": { "type": "string" } },
+    "faqs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["q", "a"],
+        "additionalProperties": false,
+        "properties": {
+          "q": { "type": "string" },
+          "a": { "type": "string" }
+        }
+      }
+    },
+    "aiAssisted": { "type": "boolean" }
+  }
+}

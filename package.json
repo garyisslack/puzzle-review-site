@@ -1,0 +1,19 @@
+{
+  "name": "puzzle-review-site",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@11.25.0",
+  "scripts": {
+    "test": "pnpm -r --if-present test",
+    "typecheck": "pnpm -r --if-present typecheck",
+    "build": "pnpm -r --if-present build",
+    "dev:web": "pnpm --filter @puzzle/web dev",
+    "dev:cms": "pnpm --filter @puzzle/cms dev",
+    "content:validate": "tsx content/validate-review-draft.ts"
+  },
+  "devDependencies": {
+    "@puzzle/scoring": "workspace:*",
+    "tsx": "^4.23.15",
+    "typescript": "^5.9.3"
+  }
+}

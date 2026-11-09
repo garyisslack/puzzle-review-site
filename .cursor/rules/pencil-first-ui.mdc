@@ -1,0 +1,32 @@
+---
+description: puzzle-review-site 的 UI 改动必须先改 Pencil 设计稿，再改代码
+alwaysApply: true
+---
+
+# UI 改动：先 Pencil，后代码
+
+本项目的 UI 设计稿是 `design/review-site-only.pen`。任何涉及 UI 的改动，都必须先改这份设计稿，确认后再改代码。不要另建一套颜色和组件。
+
+只改评测站画面：01 Home、02 Game Review、03 Ranked List、04 How We Test、05 Comparison、06 Mobile Review、07 Guide、08 Submit Guide，以及 Site Nav、Site Footer、Dim Bar、Tag Chip、Store CTA、Status Pill。不要把魔法排序的画面加回来。
+
+## 什么算 UI 改动
+
+- 新增或删除页面、区块、组件、弹窗、表单
+- 布局、间距、尺寸、断点（桌面 / 手机 390）
+- 颜色、字体、圆角、阴影、图标、图片位
+- 页面上可见的文案、按钮、标签、空状态、报错提示
+
+纯逻辑、数据模型、接口、SEO 元数据（不在页面上显示的部分）不受此限制。
+
+## 顺序
+
+1. 用 Pencil MCP（`user-pencil`）修改 `design/review-site.pen`。`.pen` 文件只能通过 MCP 读写，不要用 Read / Grep。
+2. 优先复用已有组件（Site Nav、Site Footer、Dim Bar、Tag Chip、Store CTA、Status Pill）和变量（`$ink`、`$accent` 等），不在代码里另起一套颜色和字号。
+3. 截图检查改动；需要时重新导出到 `design/exports/`，文件名保持 `01-home.png` 这种格式。
+4. 设计稿改好后再改代码，代码以设计稿为准。
+
+## 例外
+
+- 代码与设计稿不一致的 bug：直接改代码对齐设计稿，不用改设计稿。
+- 用户明确要求只改代码时，照做，但提醒设计稿需要同步，并在回复里列出待同步项。
+- 用户直接要求改代码里的 UI，而设计稿还没改：先改设计稿，并告诉用户顺序。

@@ -1,0 +1,34 @@
+---
+import Base from '../../../layouts/Base.astro'
+import { guideJson, publishedGuides, reviewBySlug } from '../../../lib/site.ts'
+export function getStaticPaths() {
+  return publishedGuides().map((guide) => ({ params: { game: guide.gameSlug, guide: guide.slug } }))
+}
+const guide = publishedGuides().find((item) => item.slug === Astro.params.guide && item.gameSlug === Astro.params.game)
+if (!guide) throw new Error('missing guide')
+const review = reviewBySlug(guide.gameSlug)
+---
+<Base title={guide.title} description={`${guide.title} for ${review?.name ?? guide.gameSlug}.`} path={`/guides/${guide.gameSlug}/${guide.slug}/`} jsonLd={[guideJson(guide.slug)].filter(Boolean)}>
+  <main class="wrap section">
+    <p class="kicker">COMMUNITY GUIDE</p>
+    <h1>{guide.title}</h1>
+    <p>Verified by {guide.verifiedBy} on v{guide.verifiedOnVersion} · {guide.modifiedOn} · {guide.platform.toUpperCase()} · {guide.levelRange}</p>
+    <p class="banner">Checked on v{guide.verifiedOnVersion}. If the store build is newer, this guide may be out of date. It does not change the review score.</p>
+    <div class="split">
+      <article><p>{guide.body}</p></article>
+      <aside class="card">
+        <p class="meta">FROM THE REVIEW</p>
+        <h2>{review?.name}</h2>
+        <p>{review?.displayed} · full review</p>
+        <p>This guide is not a score and is not part of the ranking.</p>
+        <p><a href={`/reviews/${guide.gameSlug}/`}>Read the review</a></p>
+      </aside>
+    </div>
+    <div class="shots">
+      <div class="shot">IMG:step-1 · v{guide.verifiedOnVersion}</div>
+      <div class="shot">IMG:step-2 · v{guide.verifiedOnVersion}</div>
+      <div class="shot">IMG:step-3 · v{guide.verifiedOnVersion}</div>
+    </div>
+    <p class="meta">Written by {guide.contributorName}. Edited by {guide.verifiedBy}.</p>
+  </main>
+</Base>

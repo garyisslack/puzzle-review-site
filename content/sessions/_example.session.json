@@ -1,0 +1,62 @@
+{
+  "gameName": "Prism Pocket Sort",
+  "slug": "prism-pocket-sort",
+  "platform": "ios",
+  "reviewType": "full",
+  "mechanicFamily": "color-sort",
+  "developer": "Northwind Games",
+  "storeUrl": "https://apps.apple.com/us/app/prism-pocket-sort/id000000001",
+  "appVersion": "1.4.2",
+  "osVersion": "iOS 18.6",
+  "testedFrom": "2026-09-28",
+  "testedTo": "2026-10-02",
+  "testerRegion": "US",
+  "storeLocale": "en-US",
+  "testingBoundaries": "Levels 1–60. No IAP. US App Store, Wi‑Fi on; offline spot-check at L20.",
+  "testerId": "reviewer-a",
+  "iapPurchased": false,
+  "observations": [
+    {
+      "type": "play",
+      "levelOrScreen": "L1–L10",
+      "note": "Tutorial teaches one rule at a time; taps feel responsive."
+    },
+    {
+      "type": "ad",
+      "levelOrScreen": "L12→L13",
+      "note": "Full-screen interstitial after level complete; skippable ~5s; not on top of a move."
+    },
+    {
+      "type": "offline",
+      "levelOrScreen": "L20–L25",
+      "note": "Airplane mode after initial Wi‑Fi launch; levels continued."
+    },
+    {
+      "type": "resume",
+      "levelOrScreen": "L30",
+      "note": "Backgrounded 30s; board unchanged on return."
+    }
+  ],
+  "evidence": [
+    {
+      "path": "content/evidence/prism-pocket-sort/level-12-ad.png",
+      "description": "Interstitial between levels L12 and L13",
+      "publicAllowed": true
+    }
+  ],
+  "proposedDims": {
+    "G": 80,
+    "A": 70,
+    "F": 80,
+    "C": 60,
+    "U": 80
+  },
+  "proposedTags": {
+    "no_forced_ads": "no",
+    "plays_offline": "yes",
+    "one_handed": "yes",
+    "short_rounds": "yes",
+    "no_timers": "yes"
+  },
+  "gaps": []
+}

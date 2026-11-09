@@ -1,0 +1,19 @@
+---
+import Base from '../../../layouts/Base.astro'
+import { publishedReviews, reviewBySlug, similarSlugs } from '../../../lib/site.ts'
+export function getStaticPaths() {
+  return publishedReviews()
+    .map((review) => ({ review, similar: similarSlugs(review.slug) }))
+    .filter((entry) => entry.similar.length >= 2)
+    .map((entry) => ({ params: { slug: entry.review.slug } }))
+}
+const review = reviewBySlug(Astro.params.slug)
+if (!review) throw new Error('missing review')
+const similar = similarSlugs(review.slug).map((slug) => reviewBySlug(slug)).filter((item): item is NonNullable<typeof item> => item !== undefined)
+---
+<Base title={`Games like ${review.name}`} description={`Other ${review.mechanicFamily} games with a full review.`} path={`/reviews/${review.slug}/similar/`}>
+  <main class="wrap section">
+    <h1>Games like {review.name}</h1>
+    {similar.map((item) => <article class="card"><h2><a href={`/reviews/${item.slug}/`}>{item.name}</a></h2><p>{item.displayed}</p></article>)}
+  </main>
+</Base>

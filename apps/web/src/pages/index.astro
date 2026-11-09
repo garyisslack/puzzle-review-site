@@ -1,0 +1,81 @@
+---
+import Base from '../layouts/Base.astro'
+import { DIMENSIONS, colorSortSnapshot, crumbs, needCards, publishedReviews, rankingDefinition } from '../lib/site.ts'
+const result = colorSortSnapshot()
+if (!result.ok) throw new Error('home ranking failed to build')
+const snapshot = result.snapshot
+const reviews = publishedReviews()
+const jsonLd = [crumbs([{ name: 'Home', path: '/' }])]
+---
+<Base title="Find puzzle games worth playing" description="Independent editorial scores for US iOS and Android puzzle games." path="/" jsonLd={jsonLd}>
+  <main class="wrap">
+    <section class="hero">
+      <div>
+        <p class="kicker">INDEPENDENT EDITORIAL SCORES · iOS & ANDROID</p>
+        <h1>Find puzzle games worth playing — before you download.</h1>
+        <p class="lede">We play every game ourselves and score it on five things that matter from the first session: the ads, whether it is fair without paying, how much there is to do, and how smoothly it runs.</p>
+        <p>
+          <a class="btn" href="/rankings/color-sort-ios/">Browse rankings</a>
+          <a class="btn secondary" href="/how-we-test/">How we test</a>
+        </p>
+      </div>
+      <div class="hero-art" role="img" aria-label="Parent and child playing a puzzle game"></div>
+    </section>
+    <section class="section" id="needs">
+      <h2>What matters to you?</h2>
+      <div class="grid-5">
+        {needCards().map((need) => (
+          <article class="card">
+            <h3>{need.title}</h3>
+            <p>{need.blurb}</p>
+            <p class="meta">{need.ready ? `${need.reviewed} reviewed` : `${need.reviewed} reviewed · list at 5 games`}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+    <section class="section">
+      <h2>{rankingDefinition.title}</h2>
+      <p class="meta">Qualified games {snapshot.qualifiedCount} · Method score-model-v1 · {snapshot.generatedAt.slice(0, 10)}</p>
+      <table class="rank-table">
+        <thead><tr><th>Rank</th><th>Game</th><th>G A F C U</th><th>Score</th></tr></thead>
+        <tbody>
+          {snapshot.items.slice(0, 2).map((item) => {
+            const review = reviews.find((entry) => entry.gameId === item.gameId)
+            return (
+              <tr>
+                <td class="score">{item.rank}</td>
+                <td><a href={`/reviews/${review?.slug}/`}>{item.name}</a><div class="meta">{review?.summary}</div></td>
+                <td><span class="bars" aria-hidden="true"><i style="background:var(--dG)"></i><i style="background:var(--dA)"></i><i style="background:var(--dF)"></i><i style="background:var(--dC)"></i><i style="background:var(--dU)"></i></span></td>
+                <td class="score">{(item.displayedTenths / 10).toFixed(1)}</td>
+              </tr>
+            )
+          })}
+        </tbody>
+      </table>
+      <p><a href="/rankings/color-sort-ios/">See the full ranking</a></p>
+      <p class="meta">This chart is a rank the site scored. Scores are illustrative demo data for fictional games, not real reviews.</p>
+    </section>
+    <section class="section split">
+      <div>
+        <p class="kicker">HOW SCORING WORKS</p>
+        <h2>S = .30G + .20A + .20F + .15C + .15U</h2>
+        <p>Every full review scores five dimensions from 0 to 10. If any one is missing, there is no composite score and the game stays out of numeric rankings. We round to one decimal, half up.</p>
+      </div>
+      <div class="grid-3">
+        {DIMENSIONS.map((dimension) => (
+          <article class="card"><h3>{dimension.key}</h3><p>{dimension.label}</p><p class="meta">{dimension.question} · {dimension.weight}%</p></article>
+        ))}
+      </div>
+    </section>
+    <section class="section">
+      <h2>Latest reviews</h2>
+      {reviews.filter((review) => review.platform === 'ios').slice(0, 3).map((review) => (
+        <article class="card">
+          <h3><a href={`/reviews/${review.slug}/`}>{review.name}</a></h3>
+          <p class="meta">{review.reviewType === 'full' ? 'Full review' : 'Initial review'} · {review.publishedOn}</p>
+          <p class="score">{review.displayed ?? 'No composite score'}</p>
+        </article>
+      ))}
+    </section>
+  </main>
+</Base>
