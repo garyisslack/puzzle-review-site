@@ -5,6 +5,8 @@ export type CatalogReview = {
   gameId: string
   slug: string
   name: string
+  seoTitle?: string
+  seoDescription?: string
   developer: string
   mechanicFamily: string
   platform: Platform
@@ -43,7 +45,7 @@ export type CatalogReview = {
     rationale: string
   }
   defaultScore?: boolean
-  storeShots?: { src: string; label: string }[]
+  storeShots?: { src: string; label: string; alt?: string }[]
 }
 
 const colorDims = {

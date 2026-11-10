@@ -1,0 +1,68 @@
+{
+  "gameId": "app-1193508329",
+  "slug": "sudoku-com-number-games-ios-1193508329",
+  "name": "Sudoku.com - Number Games",
+  "developer": "Easybrain Ltd",
+  "mechanicFamily": "sudoku-logic",
+  "platform": "ios",
+  "reviewType": "full",
+  "status": "published",
+  "sponsored": false,
+  "appVersion": "7.22.0",
+  "osVersion": "iOS 15.0+",
+  "testedFrom": "2026-11-09",
+  "testedTo": "2026-11-09",
+  "publishedOn": "2026-11-09",
+  "testerRegion": "US",
+  "storeLocale": "en-US",
+  "dims": {
+    "G": 70,
+    "A": 45,
+    "F": 70,
+    "C": 70,
+    "U": 70
+  },
+  "rationales": {
+    "G": "Screenshot impression 8.5/10: The 9×9 grid on a spiral notebook is very clean, and the 1–9 entry bar is easy to read. Default score 7.0. This dimension was not playtested, and the default is what the ranking uses.",
+    "C": "Store content note: The store describes it as “daily challenges, level progression, events.” The store page does not clearly state a fail state. Default score 7.0. This dimension was not playtested, and the default is what the ranking uses.",
+    "U": "Stability was not played. Age rating shown on the store is 12+. App version on the listing is 7.22.0. Default score 7.0. This dimension was not playtested, and the default is what the ranking uses.",
+    "A": "The US App Store lists a remove-ads purchase: Sudoku.com No Ads ($14.99). Forced ads were not playtested, so the no-forced-ads tag stays unknown. The store lists a remove-ads purchase, so Ads is drawn from 4.5–6.5. Sampled Ads score 4.5. Not a playtest.",
+    "F": "The US App Store lists in-app purchases: Sudoku.com No Ads ($14.99). Whether any purchase is required to keep playing was not playtested. Default score 7.0. This dimension was not playtested, and the default is what the ranking uses."
+  },
+  "testingBoundaries": "US free Puzzle chart rank 34 on 2026-11-09. NO PLAY SESSION. Official US store description + listing metadata + chart rank only. Minimum OS iOS 15.0.",
+  "storeUrl": "https://apps.apple.com/us/app/sudoku-com-number-games/id1193508329?uo=4",
+  "priceUsd": 0,
+  "authorSlug": "listing-desk",
+  "publicEvidenceCount": 0,
+  "tags": {
+    "no_forced_ads": "unknown",
+    "plays_offline": "unknown",
+    "one_handed": "unknown",
+    "short_rounds": "unknown",
+    "no_timers": "unknown"
+  },
+  "verifiedOnline": false,
+  "summary": "Sudoku.com - Number Games is rank 34 and filed as Sudoku Logic. Have fun and train your brain with one of the most downloaded sudoku apps in the AppStore! The App Store screenshot impression is 8.5/10 (medium confidence). Gameplay, fairness, content, and stability stay at the default 7.0. Ads is sampled from the store-evidence band.",
+  "verdict": "The store pitch for Sudoku.com - Number Games is specific, and the screenshot impression is 8.5/10. No distinctive mechanical twist confidently evidenced beyond genre tropes in the store text. This is not a hands-on session. The ranking number is the default 7.0.",
+  "familyNotes": [
+    "US App Store age rating shown: 12+.",
+    "No parental play observation of ads, spend prompts, chat, or UGC.",
+    "In-app purchases listed: Sudoku.com No Ads ($14.99). Progress without paying was not playtested.",
+    "Ads: The US App Store lists a remove-ads purchase: Sudoku.com No Ads ($14.99). Forced ads were not playtested, so the no-forced-ads tag stays unknown."
+  ],
+  "faqs": [
+    {
+      "q": "Was Sudoku.com - Number Games played for this review?",
+      "a": "No. The note is an AI write-up of the US App Store listing, three screenshots, and the public in-app purchase list. There is no play session."
+    },
+    {
+      "q": "Why is the score 7.0?",
+      "a": "Gameplay, fairness, content, and stability use the default 7.0. Ads is sampled inside a band chosen from the store evidence. Neither number is a playtest measurement."
+    },
+    {
+      "q": "What fail state is mentioned?",
+      "a": "The store page does not clearly state a fail state."
+    }
+  ],
+  "aiAssisted": true
+}

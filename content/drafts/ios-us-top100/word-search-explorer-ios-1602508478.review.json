@@ -1,0 +1,68 @@
+{
+  "gameId": "app-1602508478",
+  "slug": "word-search-explorer-ios-1602508478",
+  "name": "Word Search Explorer®",
+  "developer": "PlaySimple Games Pte Ltd",
+  "mechanicFamily": "word-search",
+  "platform": "ios",
+  "reviewType": "full",
+  "status": "published",
+  "sponsored": false,
+  "appVersion": "1.160",
+  "osVersion": "iOS 13.0+",
+  "testedFrom": "2026-11-09",
+  "testedTo": "2026-11-09",
+  "publishedOn": "2026-11-09",
+  "testerRegion": "US",
+  "storeLocale": "en-US",
+  "dims": {
+    "G": 70,
+    "A": 65,
+    "F": 70,
+    "C": 70,
+    "U": 70
+  },
+  "rationales": {
+    "G": "Screenshot impression 8.0/10: The letter grid, the Nature category, and the marked words are clear on the green leaf background. Default score 7.0. This dimension was not playtested, and the default is what the ranking uses.",
+    "C": "Store content note: The store describes it as “daily challenges, offline claim.” The store page does not clearly state a fail state. Default score 7.0. This dimension was not playtested, and the default is what the ranking uses.",
+    "U": "Stability was not played. Age rating shown on the store is 4+. App version on the listing is 1.160. Default score 7.0. This dimension was not playtested, and the default is what the ranking uses.",
+    "A": "The US App Store lists a remove-ads purchase: Remove Ads ($5.99). Forced ads were not playtested, so the no-forced-ads tag stays unknown. The store lists a remove-ads purchase, so Ads is drawn from 4.5–6.5. Sampled Ads score 6.5. Not a playtest.",
+    "F": "The US App Store lists in-app purchases: Remove Ads ($5.99); 250 coins ($0.99); 750 coins ($2.99); 3600 coins ($9.99); plus 6 more. Whether any purchase is required to keep playing was not playtested. Default score 7.0. This dimension was not playtested, and the default is what the ranking uses."
+  },
+  "testingBoundaries": "US free Puzzle chart rank 49 on 2026-11-09. NO PLAY SESSION. Official US store description + listing metadata + chart rank only. Minimum OS iOS 13.0.",
+  "storeUrl": "https://apps.apple.com/us/app/word-search-explorer/id1602508478?uo=4",
+  "priceUsd": 0,
+  "authorSlug": "listing-desk",
+  "publicEvidenceCount": 0,
+  "tags": {
+    "no_forced_ads": "unknown",
+    "plays_offline": "unknown",
+    "one_handed": "unknown",
+    "short_rounds": "unknown",
+    "no_timers": "unknown"
+  },
+  "verifiedOnline": false,
+  "summary": "Word Search Explorer® is rank 49 and filed as Word Search. Flex your brain, connect the letters and swipe your way through hundreds of word puzzles, while steadily growing your vocabulary and confidence for t… The App Store screenshot impression is 8.0/10 (medium confidence). Gameplay, fairness, content, and stability stay at the default 7.0. Ads is sampled from the store-evidence band.",
+  "verdict": "The store pitch for Word Search Explorer® is specific, and the screenshot impression is 8.0/10. No distinctive mechanical twist confidently evidenced beyond genre tropes in the store text. This is not a hands-on session. The ranking number is the default 7.0.",
+  "familyNotes": [
+    "US App Store age rating shown: 4+.",
+    "No parental play observation of ads, spend prompts, chat, or UGC.",
+    "In-app purchases listed: Remove Ads ($5.99); 250 coins ($0.99); 750 coins ($2.99); 3600 coins ($9.99); plus 6 more. Progress without paying was not playtested.",
+    "Ads: The US App Store lists a remove-ads purchase: Remove Ads ($5.99). Forced ads were not playtested, so the no-forced-ads tag stays unknown."
+  ],
+  "faqs": [
+    {
+      "q": "Was Word Search Explorer® played for this review?",
+      "a": "No. The note is an AI write-up of the US App Store listing, three screenshots, and the public in-app purchase list. There is no play session."
+    },
+    {
+      "q": "Why is the score 7.0?",
+      "a": "Gameplay, fairness, content, and stability use the default 7.0. Ads is sampled inside a band chosen from the store evidence. Neither number is a playtest measurement."
+    },
+    {
+      "q": "What fail state is mentioned?",
+      "a": "The store page does not clearly state a fail state."
+    }
+  ],
+  "aiAssisted": true
+}

@@ -1,0 +1,68 @@
+{
+  "gameId": "app-6793924927",
+  "slug": "rotate-rings-ios-6793924927",
+  "name": "Rotate Rings",
+  "developer": "Nebula Studio",
+  "mechanicFamily": "ring-unlink",
+  "platform": "ios",
+  "reviewType": "full",
+  "status": "published",
+  "sponsored": false,
+  "appVersion": "1.0.8",
+  "osVersion": "iOS 15.0+",
+  "testedFrom": "2026-11-09",
+  "testedTo": "2026-11-09",
+  "publishedOn": "2026-11-09",
+  "testerRegion": "US",
+  "storeLocale": "en-US",
+  "dims": {
+    "G": 70,
+    "A": 80,
+    "F": 70,
+    "C": 70,
+    "U": 70
+  },
+  "rationales": {
+    "G": "Screenshot impression 8.0/10: Overlapping colored rings on white make the rotate-to-align goal obvious. The bear badge does not compete with the puzzle. Default score 7.0. This dimension was not playtested, and the default is what the ranking uses.",
+    "C": "Store content note: The store describes it as “level progression.” The store page does not clearly state a fail state. Default score 7.0. This dimension was not playtested, and the default is what the ranking uses.",
+    "U": "Stability was not played. Age rating shown on the store is 12+. App version on the listing is 1.0.8. Default score 7.0. This dimension was not playtested, and the default is what the ranking uses.",
+    "A": "No remove-ads purchase or ad button was found on the store page or the three screenshots. Forced ads were not playtested, so the no-forced-ads tag stays unknown. No ad control or no-ads claim was found, so Ads is drawn from 6.0–8.0. Sampled Ads score 8.0. Not a playtest.",
+    "F": "The US App Store page checked on 2026-11-09 did not show an in-app purchase list. Whether purchases exist was not playtested. Default score 7.0. This dimension was not playtested, and the default is what the ranking uses."
+  },
+  "testingBoundaries": "US free Puzzle chart rank 15 on 2026-11-09. NO PLAY SESSION. Official US store description + listing metadata + chart rank only. Minimum OS iOS 15.0.",
+  "storeUrl": "https://apps.apple.com/us/app/rotate-rings/id6793924927?uo=4",
+  "priceUsd": 0,
+  "authorSlug": "listing-desk",
+  "publicEvidenceCount": 0,
+  "tags": {
+    "no_forced_ads": "unknown",
+    "plays_offline": "unknown",
+    "one_handed": "unknown",
+    "short_rounds": "unknown",
+    "no_timers": "unknown"
+  },
+  "verifiedOnline": false,
+  "summary": "Rotate Rings, from Nebula Studio, is the Ring Unlink game at US free Puzzle rank 15. Align: Match the open gaps across multiple layers. This AI review uses the store page and screenshots. Gameplay, fairness, content, and stability stay at the default 7.0. Ads is sampled from the store-evidence band.",
+  "verdict": "Rotate Rings stays a store-listing review. The store page does not clearly state a fail state. The 7.0 on the genre list is the default, not a measured playtest score.",
+  "familyNotes": [
+    "US App Store age rating shown: 12+.",
+    "No parental play observation of ads, spend prompts, chat, or UGC.",
+    "In-app purchases: none listed on the US App Store page checked on 2026-11-09.",
+    "Ads: No remove-ads purchase or ad button was found on the store page or the three screenshots. Forced ads were not playtested, so the no-forced-ads tag stays unknown."
+  ],
+  "faqs": [
+    {
+      "q": "Was Rotate Rings played for this review?",
+      "a": "No. The note is an AI write-up of the US App Store listing, three screenshots, and the public in-app purchase list. There is no play session."
+    },
+    {
+      "q": "Why is the score 7.0?",
+      "a": "Gameplay, fairness, content, and stability use the default 7.0. Ads is sampled inside a band chosen from the store evidence. Neither number is a playtest measurement."
+    },
+    {
+      "q": "What does the store say you do?",
+      "a": "Welcome to Rotate Rings — the ultimate spatial logic puzzle designed to relax your mind and sharpen your brain."
+    }
+  ],
+  "aiAssisted": true
+}

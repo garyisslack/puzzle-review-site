@@ -1,0 +1,68 @@
+{
+  "gameId": "app-6761760135",
+  "slug": "meowdoku-ios-6761760135",
+  "name": "Meowdoku!",
+  "developer": "Oakever Games",
+  "mechanicFamily": "sudoku-logic",
+  "platform": "ios",
+  "reviewType": "full",
+  "status": "published",
+  "sponsored": false,
+  "appVersion": "1.24.0",
+  "osVersion": "iOS 15.0+",
+  "testedFrom": "2026-11-09",
+  "testedTo": "2026-11-09",
+  "publishedOn": "2026-11-09",
+  "testerRegion": "US",
+  "storeLocale": "en-US",
+  "dims": {
+    "G": 70,
+    "A": 80,
+    "F": 70,
+    "C": 70,
+    "U": 70
+  },
+  "rationales": {
+    "G": "Screenshot impression 8.0/10: The 5×5 board, draggable cat, “Find the Cats,” and three hearts are easy to read. The pastel screenshot looks clean. Default score 7.0. This dimension was not playtested, and the default is what the ranking uses.",
+    "C": "Store content note: daily challenges, endless/high-score mode, offline claim, leaderboards. The store describes it as “lives/hearts resource.” Default score 7.0. This dimension was not playtested, and the default is what the ranking uses.",
+    "U": "Stability was not played. Age rating shown on the store is 12+. App version on the listing is 1.24.0. Default score 7.0. This dimension was not playtested, and the default is what the ranking uses.",
+    "A": "No remove-ads purchase or ad button was found on the store page or the three screenshots. Forced ads were not playtested, so the no-forced-ads tag stays unknown. No ad control or no-ads claim was found, so Ads is drawn from 6.0–8.0. Sampled Ads score 8.0. Not a playtest.",
+    "F": "The US App Store lists in-app purchases: Meowdoku Premium Plus–Weekly(1Week) ($6.99); Meowdoku Premium – Weekly(1 Week) ($3.99); Meowdoku Premium Plus–Monthly ($14.99); Meowdoku Premium – Monthly(1 Month) ($7.99); plus 2 more. Whether any purchase is required to keep playing was not playtested. Default score 7.0. This dimension was not playtested, and the default is what the ranking uses."
+  },
+  "testingBoundaries": "US free Puzzle chart rank 1 on 2026-11-09. NO PLAY SESSION. Official US store description + listing metadata + chart rank only. Minimum OS iOS 15.0.",
+  "storeUrl": "https://apps.apple.com/us/app/meowdoku/id6761760135?uo=4",
+  "priceUsd": 0,
+  "authorSlug": "listing-desk",
+  "publicEvidenceCount": 0,
+  "tags": {
+    "no_forced_ads": "unknown",
+    "plays_offline": "unknown",
+    "one_handed": "unknown",
+    "short_rounds": "unknown",
+    "no_timers": "unknown"
+  },
+  "verifiedOnline": false,
+  "summary": "Meowdoku! is rank 1 and filed as Sudoku Logic. You must place exactly one cat in each section. The App Store screenshot impression is 8.0/10 (medium confidence). Gameplay, fairness, content, and stability stay at the default 7.0. Ads is sampled from the store-evidence band.",
+  "verdict": "The store pitch for Meowdoku! is specific, and the screenshot impression is 8.0/10. Hybrid Sudoku-style placement with Minesweeper-like deduction (store claim). This is not a hands-on session. The ranking number is the default 7.0.",
+  "familyNotes": [
+    "US App Store age rating shown: 12+.",
+    "No parental play observation of ads, spend prompts, chat, or UGC.",
+    "In-app purchases listed: Meowdoku Premium Plus–Weekly(1Week) ($6.99); Meowdoku Premium – Weekly(1 Week) ($3.99); Meowdoku Premium Plus–Monthly ($14.99); Meowdoku Premium – Monthly(1 Month) ($7.99); plus 2 more. Progress without paying was not playtested.",
+    "Ads: No remove-ads purchase or ad button was found on the store page or the three screenshots. Forced ads were not playtested, so the no-forced-ads tag stays unknown."
+  ],
+  "faqs": [
+    {
+      "q": "Was Meowdoku! played for this review?",
+      "a": "No. The note is an AI write-up of the US App Store listing, three screenshots, and the public in-app purchase list. There is no play session."
+    },
+    {
+      "q": "Why is the score 7.0?",
+      "a": "Gameplay, fairness, content, and stability use the default 7.0. Ads is sampled inside a band chosen from the store evidence. Neither number is a playtest measurement."
+    },
+    {
+      "q": "What fail state is mentioned?",
+      "a": "The store describes it as “lives/hearts resource.”"
+    }
+  ],
+  "aiAssisted": true
+}

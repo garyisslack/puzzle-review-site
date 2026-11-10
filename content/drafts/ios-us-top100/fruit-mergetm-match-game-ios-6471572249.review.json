@@ -1,0 +1,68 @@
+{
+  "gameId": "app-6471572249",
+  "slug": "fruit-mergetm-match-game-ios-6471572249",
+  "name": "Fruit Merge™: Match Game",
+  "developer": "Brave HK Limited",
+  "mechanicFamily": "puzzle-general",
+  "platform": "ios",
+  "reviewType": "full",
+  "status": "published",
+  "sponsored": false,
+  "appVersion": "10.6",
+  "osVersion": "iOS 15.0+",
+  "testedFrom": "2026-11-09",
+  "testedTo": "2026-11-09",
+  "publishedOn": "2026-11-09",
+  "testerRegion": "US",
+  "storeLocale": "en-US",
+  "dims": {
+    "G": 70,
+    "A": 55,
+    "F": 70,
+    "C": 70,
+    "U": 70
+  },
+  "rationales": {
+    "G": "Screenshot impression 8.0/10: The fruit-merge ladder inside the jar is clear, in a cute Suika-style screenshot. Default score 7.0. This dimension was not playtested, and the default is what the ranking uses.",
+    "C": "Store content note: The store describes it as “endless/high-score mode, level progression.” The store page does not clearly state a fail state. Default score 7.0. This dimension was not playtested, and the default is what the ranking uses.",
+    "U": "Stability was not played. Age rating shown on the store is 12+. App version on the listing is 10.6. Default score 7.0. This dimension was not playtested, and the default is what the ranking uses.",
+    "A": "The US App Store lists a remove-ads purchase: Remove Ads Pack ($8.99). Official screenshot_2 shows AD-strikethrough button (remove-ads UI entry). No ad playback frame; not playtested. Forced ads were not playtested, so the no-forced-ads tag stays unknown. A store screenshot shows an ad or remove-ads control, so Ads is drawn from 4.0–5.5. Sampled Ads score 5.5. Not a playtest.",
+    "F": "The US App Store lists in-app purchases: Remove Ads Pack ($8.99); Basic Ticket Bundle ($2.99); Super Ticket Bundle ($8.49); Combo Bundle ($5.99); plus 6 more. Whether any purchase is required to keep playing was not playtested. Default score 7.0. This dimension was not playtested, and the default is what the ranking uses."
+  },
+  "testingBoundaries": "US free Puzzle chart rank 77 on 2026-11-09. NO PLAY SESSION. Official US store description + listing metadata + chart rank only. Minimum OS iOS 15.0.",
+  "storeUrl": "https://apps.apple.com/us/app/fruit-merge-match-game/id6471572249?uo=4",
+  "priceUsd": 0,
+  "authorSlug": "listing-desk",
+  "publicEvidenceCount": 0,
+  "tags": {
+    "no_forced_ads": "unknown",
+    "plays_offline": "unknown",
+    "one_handed": "unknown",
+    "short_rounds": "unknown",
+    "no_timers": "unknown"
+  },
+  "verifiedOnline": false,
+  "summary": "Fruit Merge™: Match Game, from Brave HK Limited, is the Puzzle General game at US free Puzzle rank 77. Dive into the colorful and exciting world of fruit matching! This AI review uses the store page and screenshots. Gameplay, fairness, content, and stability stay at the default 7.0. Ads is sampled from the store-evidence band.",
+  "verdict": "Fruit Merge™: Match Game stays a store-listing review. The store page does not clearly state a fail state. The 7.0 on the genre list is the default, not a measured playtest score.",
+  "familyNotes": [
+    "US App Store age rating shown: 12+.",
+    "No parental play observation of ads, spend prompts, chat, or UGC.",
+    "In-app purchases listed: Remove Ads Pack ($8.99); Basic Ticket Bundle ($2.99); Super Ticket Bundle ($8.49); Combo Bundle ($5.99); plus 6 more. Progress without paying was not playtested.",
+    "Ads: The US App Store lists a remove-ads purchase: Remove Ads Pack ($8.99). Official screenshot_2 shows AD-strikethrough button (remove-ads UI entry). No ad playback frame; not playtested. Forced ads were not playtested, so the no-forced-ads tag stays unknown."
+  ],
+  "faqs": [
+    {
+      "q": "Was Fruit Merge™: Match Game played for this review?",
+      "a": "No. The note is an AI write-up of the US App Store listing, three screenshots, and the public in-app purchase list. There is no play session."
+    },
+    {
+      "q": "Why is the score 7.0?",
+      "a": "Gameplay, fairness, content, and stability use the default 7.0. Ads is sampled inside a band chosen from the store evidence. Neither number is a playtest measurement."
+    },
+    {
+      "q": "What does the store say you do?",
+      "a": "Dive into the colorful and exciting world of fruit matching!"
+    }
+  ],
+  "aiAssisted": true
+}

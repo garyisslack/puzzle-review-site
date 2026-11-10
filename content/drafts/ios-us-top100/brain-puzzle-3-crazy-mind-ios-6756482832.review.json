@@ -1,0 +1,68 @@
+{
+  "gameId": "app-6756482832",
+  "slug": "brain-puzzle-3-crazy-mind-ios-6756482832",
+  "name": "Brain Puzzle 3: Crazy Mind",
+  "developer": "SmallStep Dev Team",
+  "mechanicFamily": "brain-riddle",
+  "platform": "ios",
+  "reviewType": "full",
+  "status": "published",
+  "sponsored": false,
+  "appVersion": "1.1.3",
+  "osVersion": "iOS 15.0+",
+  "testedFrom": "2026-11-09",
+  "testedTo": "2026-11-09",
+  "publishedOn": "2026-11-09",
+  "testerRegion": "US",
+  "storeLocale": "en-US",
+  "dims": {
+    "G": 70,
+    "A": 60,
+    "F": 70,
+    "C": 70,
+    "U": 70
+  },
+  "rationales": {
+    "G": "Screenshot impression 6.5/10: The messy cartoon room implies a hidden-object search. A timer and tips are visible, and the scene is busier than a sort puzzle. Default score 7.0. This dimension was not playtested, and the default is what the ranking uses.",
+    "C": "Store content note: The store describes it as “endless/high-score mode, level progression.” The store page does not clearly state a fail state. Default score 7.0. This dimension was not playtested, and the default is what the ranking uses.",
+    "U": "Stability was not played. Age rating shown on the store is 12+. App version on the listing is 1.1.3. Default score 7.0. This dimension was not playtested, and the default is what the ranking uses.",
+    "A": "The US App Store lists a remove-ads purchase: Remove ads ($5.99). Forced ads were not playtested, so the no-forced-ads tag stays unknown. The store lists a remove-ads purchase, so Ads is drawn from 4.5–6.5. Sampled Ads score 6.0. Not a playtest.",
+    "F": "The US App Store lists in-app purchases: Remove ads ($5.99). Whether any purchase is required to keep playing was not playtested. Default score 7.0. This dimension was not playtested, and the default is what the ranking uses."
+  },
+  "testingBoundaries": "US free Puzzle chart rank 6 on 2026-11-09. NO PLAY SESSION. Official US store description + listing metadata + chart rank only. Minimum OS iOS 15.0.",
+  "storeUrl": "https://apps.apple.com/us/app/brain-puzzle-3-crazy-mind/id6756482832?uo=4",
+  "priceUsd": 0,
+  "authorSlug": "listing-desk",
+  "publicEvidenceCount": 0,
+  "tags": {
+    "no_forced_ads": "unknown",
+    "plays_offline": "unknown",
+    "one_handed": "unknown",
+    "short_rounds": "unknown",
+    "no_timers": "unknown"
+  },
+  "verifiedOnline": false,
+  "summary": "Brain Puzzle 3: Crazy Mind, from SmallStep Dev Team, is the Brain Riddle game at US free Puzzle rank 6. Brain Puzzle 3 brings you a collection of fun brain puzzle challenges, clever brain puzzle levels, and unique brain puzzle adventures designed to tes… This AI review uses the store page and screenshots. Gameplay, fairness, content, and stability stay at the default 7.0. Ads is sampled from the store-evidence band.",
+  "verdict": "Brain Puzzle 3: Crazy Mind stays a store-listing review. The store page does not clearly state a fail state. The 7.0 on the genre list is the default, not a measured playtest score.",
+  "familyNotes": [
+    "US App Store age rating shown: 12+.",
+    "No parental play observation of ads, spend prompts, chat, or UGC.",
+    "In-app purchases listed: Remove ads ($5.99). Progress without paying was not playtested.",
+    "Ads: The US App Store lists a remove-ads purchase: Remove ads ($5.99). Forced ads were not playtested, so the no-forced-ads tag stays unknown."
+  ],
+  "faqs": [
+    {
+      "q": "Was Brain Puzzle 3: Crazy Mind played for this review?",
+      "a": "No. The note is an AI write-up of the US App Store listing, three screenshots, and the public in-app purchase list. There is no play session."
+    },
+    {
+      "q": "Why is the score 7.0?",
+      "a": "Gameplay, fairness, content, and stability use the default 7.0. Ads is sampled inside a band chosen from the store evidence. Neither number is a playtest measurement."
+    },
+    {
+      "q": "What does the store say you do?",
+      "a": "Get ready for an exciting Brain Puzzle game experience filled with creative challenges, tricky levels, and unexpected solutions."
+    }
+  ],
+  "aiAssisted": true
+}

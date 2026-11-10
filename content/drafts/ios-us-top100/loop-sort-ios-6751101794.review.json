@@ -1,0 +1,68 @@
+{
+  "gameId": "app-6751101794",
+  "slug": "loop-sort-ios-6751101794",
+  "name": "Loop Sort",
+  "developer": "Voodoo",
+  "mechanicFamily": "puzzle-general",
+  "platform": "ios",
+  "reviewType": "full",
+  "status": "published",
+  "sponsored": false,
+  "appVersion": "4.9.0",
+  "osVersion": "iOS 15.0+",
+  "testedFrom": "2026-11-09",
+  "testedTo": "2026-11-09",
+  "publishedOn": "2026-11-09",
+  "testerRegion": "US",
+  "storeLocale": "en-US",
+  "dims": {
+    "G": 70,
+    "A": 70,
+    "F": 70,
+    "C": 70,
+    "U": 70
+  },
+  "rationales": {
+    "G": "Screenshot impression 6.5/10: The cartoon characters and color blocks look lively, but the loop-sort rule is not obvious in a still. Default score 7.0. This dimension was not playtested, and the default is what the ranking uses.",
+    "C": "Store content note: The store describes it as “level progression.” The store page does not clearly state a fail state. Default score 7.0. This dimension was not playtested, and the default is what the ranking uses.",
+    "U": "Stability was not played. Age rating shown on the store is 4+. App version on the listing is 4.9.0. Default score 7.0. This dimension was not playtested, and the default is what the ranking uses.",
+    "A": "No remove-ads purchase or ad button was found on the store page or the three screenshots. Forced ads were not playtested, so the no-forced-ads tag stays unknown. No ad control or no-ads claim was found, so Ads is drawn from 6.0–8.0. Sampled Ads score 7.0. Not a playtest.",
+    "F": "The US App Store lists in-app purchases: Tiny Coin Pack ($1.99); Small Bundle ($5.99); Medium Bundle ($12.99); Small Coin Pack ($7.99); plus 6 more. Whether any purchase is required to keep playing was not playtested. Default score 7.0. This dimension was not playtested, and the default is what the ranking uses."
+  },
+  "testingBoundaries": "US free Puzzle chart rank 91 on 2026-11-09. NO PLAY SESSION. Official US store description + listing metadata + chart rank only. Minimum OS iOS 15.0.",
+  "storeUrl": "https://apps.apple.com/us/app/loop-sort/id6751101794?uo=4",
+  "priceUsd": 0,
+  "authorSlug": "listing-desk",
+  "publicEvidenceCount": 0,
+  "tags": {
+    "no_forced_ads": "unknown",
+    "plays_offline": "unknown",
+    "one_handed": "unknown",
+    "short_rounds": "unknown",
+    "no_timers": "unknown"
+  },
+  "verifiedOnline": false,
+  "summary": "Loop Sort, from Voodoo, is the Puzzle General game at US free Puzzle rank 91. Tap once to send the cubes from the truck onto the conveyor and watch them sort automatically. This AI review uses the store page and screenshots. Gameplay, fairness, content, and stability stay at the default 7.0. Ads is sampled from the store-evidence band.",
+  "verdict": "Loop Sort stays a store-listing review. The store page does not clearly state a fail state. The 7.0 on the genre list is the default, not a measured playtest score.",
+  "familyNotes": [
+    "US App Store age rating shown: 4+.",
+    "No parental play observation of ads, spend prompts, chat, or UGC.",
+    "In-app purchases listed: Tiny Coin Pack ($1.99); Small Bundle ($5.99); Medium Bundle ($12.99); Small Coin Pack ($7.99); plus 6 more. Progress without paying was not playtested.",
+    "Ads: No remove-ads purchase or ad button was found on the store page or the three screenshots. Forced ads were not playtested, so the no-forced-ads tag stays unknown."
+  ],
+  "faqs": [
+    {
+      "q": "Was Loop Sort played for this review?",
+      "a": "No. The note is an AI write-up of the US App Store listing, three screenshots, and the public in-app purchase list. There is no play session."
+    },
+    {
+      "q": "Why is the score 7.0?",
+      "a": "Gameplay, fairness, content, and stability use the default 7.0. Ads is sampled inside a band chosen from the store evidence. Neither number is a playtest measurement."
+    },
+    {
+      "q": "What does the store say you do?",
+      "a": "Tap once to send the cubes from the truck onto the conveyor and watch them sort automatically."
+    }
+  ],
+  "aiAssisted": true
+}

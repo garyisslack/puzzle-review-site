@@ -1,0 +1,68 @@
+{
+  "gameId": "app-6471045672",
+  "slug": "tasty-travels-merge-game-ios-6471045672",
+  "name": "Tasty Travels: Merge Game",
+  "developer": "Century Games Pte. Ltd.",
+  "mechanicFamily": "merge-decorate",
+  "platform": "ios",
+  "reviewType": "full",
+  "status": "published",
+  "sponsored": false,
+  "appVersion": "67.0",
+  "osVersion": "iOS 13.0+",
+  "testedFrom": "2026-11-09",
+  "testedTo": "2026-11-09",
+  "publishedOn": "2026-11-09",
+  "testerRegion": "US",
+  "storeLocale": "en-US",
+  "dims": {
+    "G": 70,
+    "A": 65,
+    "F": 70,
+    "C": 70,
+    "U": 70
+  },
+  "rationales": {
+    "G": "Screenshot impression 6.5/10: The tropical drink counter looks polished, but Launch reads as a mix of firing and merging. The core rule is not obvious in one frame. Default score 7.0. This dimension was not playtested, and the default is what the ranking uses.",
+    "C": "Store content note: The store describes it as “level progression, story framing.” The store page does not clearly state a fail state. Default score 7.0. This dimension was not playtested, and the default is what the ranking uses.",
+    "U": "Stability was not played. Age rating shown on the store is 9+. App version on the listing is 67.0. Default score 7.0. This dimension was not playtested, and the default is what the ranking uses.",
+    "A": "No remove-ads purchase or ad button was found on the store page or the three screenshots. Forced ads were not playtested, so the no-forced-ads tag stays unknown. No ad control or no-ads claim was found, so Ads is drawn from 6.0–8.0. Sampled Ads score 6.5. Not a playtest.",
+    "F": "The US App Store lists in-app purchases: Offer 2 ($1.99); Offer 5 ($4.99); Offer 3 ($2.99); Offer 4 ($3.99); plus 6 more. Whether any purchase is required to keep playing was not playtested. Default score 7.0. This dimension was not playtested, and the default is what the ranking uses."
+  },
+  "testingBoundaries": "US free Puzzle chart rank 19 on 2026-11-09. NO PLAY SESSION. Official US store description + listing metadata + chart rank only. Minimum OS iOS 13.0.",
+  "storeUrl": "https://apps.apple.com/us/app/tasty-travels-merge-game/id6471045672?uo=4",
+  "priceUsd": 0,
+  "authorSlug": "listing-desk",
+  "publicEvidenceCount": 0,
+  "tags": {
+    "no_forced_ads": "unknown",
+    "plays_offline": "unknown",
+    "one_handed": "unknown",
+    "short_rounds": "unknown",
+    "no_timers": "unknown"
+  },
+  "verifiedOnline": false,
+  "summary": "Tasty Travels: Merge Game is rated 9+ on the US App Store and filed as Merge Decorate. The store describes it as “level progression, story framing.” Not a pure fidget/relax mini-puzzle based on store text. Gameplay, fairness, content, and stability stay at the default 7.0. Ads is sampled from the store-evidence band.",
+  "verdict": "Tasty Travels: Merge Game reads as Merge Decorate in the store screenshot, which landed a 6.5/10 visual impression. The genre list uses the default 7.0 until someone plays it.",
+  "familyNotes": [
+    "US App Store age rating shown: 9+.",
+    "No parental play observation of ads, spend prompts, chat, or UGC.",
+    "In-app purchases listed: Offer 2 ($1.99); Offer 5 ($4.99); Offer 3 ($2.99); Offer 4 ($3.99); plus 6 more. Progress without paying was not playtested.",
+    "Ads: No remove-ads purchase or ad button was found on the store page or the three screenshots. Forced ads were not playtested, so the no-forced-ads tag stays unknown."
+  ],
+  "faqs": [
+    {
+      "q": "Was Tasty Travels: Merge Game played for this review?",
+      "a": "No. The note is an AI write-up of the US App Store listing, three screenshots, and the public in-app purchase list. There is no play session."
+    },
+    {
+      "q": "Why is the score 7.0?",
+      "a": "Gameplay, fairness, content, and stability use the default 7.0. Ads is sampled inside a band chosen from the store evidence. Neither number is a playtest measurement."
+    },
+    {
+      "q": "What did the screenshot impression notice?",
+      "a": "The tropical drink counter looks polished, but Launch reads as a mix of firing and merging. The core rule is not obvious in one frame."
+    }
+  ],
+  "aiAssisted": true
+}

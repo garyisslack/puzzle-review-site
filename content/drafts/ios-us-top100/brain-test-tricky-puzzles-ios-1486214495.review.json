@@ -1,0 +1,69 @@
+{
+  "gameId": "app-1486214495",
+  "slug": "brain-test-tricky-puzzles-ios-1486214495",
+  "name": "Brain Test: Tricky Puzzles",
+  "developer": "UNICO STUDIO",
+  "mechanicFamily": "puzzle-general",
+  "platform": "ios",
+  "reviewType": "full",
+  "status": "published",
+  "sponsored": false,
+  "appVersion": "2.776.0",
+  "osVersion": "iOS 15.0+",
+  "testedFrom": "2026-11-09",
+  "testedTo": "2026-11-09",
+  "publishedOn": "2026-11-09",
+  "testerRegion": "US",
+  "storeLocale": "en-US",
+  "dims": {
+    "G": 70,
+    "A": 45,
+    "F": 70,
+    "C": 70,
+    "U": 70
+  },
+  "rationales": {
+    "G": "Screenshot impression 7.5/10: The sketched kettle level and “Turn it off!” make the lateral-thinking goal clear. Default score 7.0. This dimension was not playtested, and the default is what the ranking uses.",
+    "C": "Store content note: The store describes it as “daily challenges, level progression.” Store claims low/no classic fail pressure: no timers. Default score 7.0. This dimension was not playtested, and the default is what the ranking uses.",
+    "U": "Stability was not played. Age rating shown on the store is 4+. App version on the listing is 2.776.0. Default score 7.0. This dimension was not playtested, and the default is what the ranking uses.",
+    "A": "The US App Store lists a remove-ads purchase: Remove Ads ($4.99); Remove Ads + 1000 bulb ($3.99); Remove Ads + 250 bulb ($4.99). The store description says a purchase “will unlock following features: ... no ads ...”. That was not playtested. Official screenshot_2 bottom filmstrip/play icon (likely rewarded entry). Store also lists Remove Ads IAP; forced ads untested. Forced ads were not playtested, so the no-forced-ads tag stays unknown. A store screenshot shows an ad or remove-ads control, so Ads is drawn from 4.0–5.5. Sampled Ads score 4.5. Not a playtest.",
+    "F": "The US App Store lists in-app purchases: VIP Package ($3.99); 250 Lamps ($1.99); Remove Ads ($4.99); 500 Lamps ($2.99); plus 6 more. Whether any purchase is required to keep playing was not playtested. Default score 7.0. This dimension was not playtested, and the default is what the ranking uses."
+  },
+  "testingBoundaries": "US free Puzzle chart rank 67 on 2026-11-09. NO PLAY SESSION. Official US store description + listing metadata + chart rank only. Minimum OS iOS 15.0.",
+  "storeUrl": "https://apps.apple.com/us/app/brain-test-tricky-puzzles/id1486214495?uo=4",
+  "priceUsd": 0,
+  "authorSlug": "listing-desk",
+  "publicEvidenceCount": 0,
+  "tags": {
+    "no_forced_ads": "unknown",
+    "plays_offline": "unknown",
+    "one_handed": "unknown",
+    "short_rounds": "unknown",
+    "no_timers": "unknown"
+  },
+  "verifiedOnline": false,
+  "summary": "Brain Test: Tricky Puzzles is rated 4+ on the US App Store and filed as Puzzle General. The store describes it as “daily challenges, level progression.” Store text reads closer to a session puzzle; relax quality still untested. Gameplay, fairness, content, and stability stay at the default 7.0. Ads is sampled from the store-evidence band.",
+  "verdict": "Brain Test: Tricky Puzzles reads as Puzzle General in the store screenshot, which landed a 7.5/10 visual impression. The genre list uses the default 7.0 until someone plays it.",
+  "familyNotes": [
+    "US App Store age rating shown: 4+.",
+    "No parental play observation of ads, spend prompts, chat, or UGC.",
+    "Description indicates IAP (including possible real-money purchase disclaimer) — store claim; not purchase-tested.",
+    "In-app purchases listed: VIP Package ($3.99); 250 Lamps ($1.99); Remove Ads ($4.99); 500 Lamps ($2.99); plus 6 more. Progress without paying was not playtested.",
+    "Ads: The US App Store lists a remove-ads purchase: Remove Ads ($4.99); Remove Ads + 1000 bulb ($3.99); Remove Ads + 250 bulb ($4.99). The store description says a purchase “will unlock following features: ... no ads ...”. That was not playtested. Official screenshot_2 bottom filmstrip/play icon (likely rewarded entry). Store also lists Remove Ads IAP; forced ads untested. Forced ads were not playtested, so the no-forced-ads tag stays unknown."
+  ],
+  "faqs": [
+    {
+      "q": "Was Brain Test: Tricky Puzzles played for this review?",
+      "a": "No. The note is an AI write-up of the US App Store listing, three screenshots, and the public in-app purchase list. There is no play session."
+    },
+    {
+      "q": "Why is the score 7.0?",
+      "a": "Gameplay, fairness, content, and stability use the default 7.0. Ads is sampled inside a band chosen from the store evidence. Neither number is a playtest measurement."
+    },
+    {
+      "q": "What did the screenshot impression notice?",
+      "a": "The sketched kettle level and “Turn it off!” make the lateral-thinking goal clear."
+    }
+  ],
+  "aiAssisted": true
+}

@@ -1,0 +1,68 @@
+{
+  "gameId": "app-6747560860",
+  "slug": "screw-out-3d-nut-sort-jam-ios-6747560860",
+  "name": "Screw Out 3D: Nut Sort Jam",
+  "developer": "UNICO STUDIO",
+  "mechanicFamily": "screw-nut-sort",
+  "platform": "ios",
+  "reviewType": "full",
+  "status": "published",
+  "sponsored": false,
+  "appVersion": "3.0",
+  "osVersion": "iOS 15.0+",
+  "testedFrom": "2026-11-09",
+  "testedTo": "2026-11-09",
+  "publishedOn": "2026-11-09",
+  "testerRegion": "US",
+  "storeLocale": "en-US",
+  "dims": {
+    "G": 70,
+    "A": 60,
+    "F": 70,
+    "C": 70,
+    "U": 70
+  },
+  "rationales": {
+    "G": "Screenshot impression 7.5/10: Colored screws on an ice cream twisting into matching slots, with “Twist & relax,” make the theme clear. Default score 7.0. This dimension was not playtested, and the default is what the ranking uses.",
+    "C": "Store content note: The store describes it as “daily challenges, level progression, offline claim.” Store claims low/no classic fail pressure: no timers, no pressure. Default score 7.0. This dimension was not playtested, and the default is what the ranking uses.",
+    "U": "Stability was not played. Age rating shown on the store is 4+. App version on the listing is 3.0. Default score 7.0. This dimension was not playtested, and the default is what the ranking uses.",
+    "A": "The US App Store lists a remove-ads purchase: No Ads Bundle ($9.99). Forced ads were not playtested, so the no-forced-ads tag stays unknown. The store lists a remove-ads purchase, so Ads is drawn from 4.5–6.5. Sampled Ads score 6.0. Not a playtest.",
+    "F": "The US App Store lists in-app purchases: Small Coins Pack ($1.99); Merge Pass ($3.99); Starter Bundle ($4.99); Fail Offer ($4.99); plus 6 more. Whether any purchase is required to keep playing was not playtested. Default score 7.0. This dimension was not playtested, and the default is what the ranking uses."
+  },
+  "testingBoundaries": "US free Puzzle chart rank 100 on 2026-11-09. NO PLAY SESSION. Official US store description + listing metadata + chart rank only. Minimum OS iOS 15.0.",
+  "storeUrl": "https://apps.apple.com/us/app/screw-out-3d-nut-sort-jam/id6747560860?uo=4",
+  "priceUsd": 0,
+  "authorSlug": "listing-desk",
+  "publicEvidenceCount": 0,
+  "tags": {
+    "no_forced_ads": "unknown",
+    "plays_offline": "unknown",
+    "one_handed": "unknown",
+    "short_rounds": "unknown",
+    "no_timers": "unknown"
+  },
+  "verifiedOnline": false,
+  "summary": "Screw Out 3D: Nut Sort Jam is rank 100 and filed as Screw Nut Sort. Screw Out 3D – Relax, Twist, Solve! The App Store screenshot impression is 7.5/10 (medium confidence). Gameplay, fairness, content, and stability stay at the default 7.0. Ads is sampled from the store-evidence band.",
+  "verdict": "The store pitch for Screw Out 3D: Nut Sort Jam is specific, and the screenshot impression is 7.5/10. 3D screw-twist plus tray sorting fantasy (store claim). This is not a hands-on session. The ranking number is the default 7.0.",
+  "familyNotes": [
+    "US App Store age rating shown: 4+.",
+    "No parental play observation of ads, spend prompts, chat, or UGC.",
+    "In-app purchases listed: Small Coins Pack ($1.99); Merge Pass ($3.99); Starter Bundle ($4.99); Fail Offer ($4.99); plus 6 more. Progress without paying was not playtested.",
+    "Ads: The US App Store lists a remove-ads purchase: No Ads Bundle ($9.99). Forced ads were not playtested, so the no-forced-ads tag stays unknown."
+  ],
+  "faqs": [
+    {
+      "q": "Was Screw Out 3D: Nut Sort Jam played for this review?",
+      "a": "No. The note is an AI write-up of the US App Store listing, three screenshots, and the public in-app purchase list. There is no play session."
+    },
+    {
+      "q": "Why is the score 7.0?",
+      "a": "Gameplay, fairness, content, and stability use the default 7.0. Ads is sampled inside a band chosen from the store evidence. Neither number is a playtest measurement."
+    },
+    {
+      "q": "What fail state is mentioned?",
+      "a": "Store claims low/no classic fail pressure: no timers, no pressure."
+    }
+  ],
+  "aiAssisted": true
+}

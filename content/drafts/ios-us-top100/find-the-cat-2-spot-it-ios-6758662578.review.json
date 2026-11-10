@@ -1,0 +1,68 @@
+{
+  "gameId": "app-6758662578",
+  "slug": "find-the-cat-2-spot-it-ios-6758662578",
+  "name": "Find The Cat 2 - Spot It!",
+  "developer": "Agave Games",
+  "mechanicFamily": "hidden-object",
+  "platform": "ios",
+  "reviewType": "full",
+  "status": "published",
+  "sponsored": false,
+  "appVersion": "1.20.0",
+  "osVersion": "iOS 15.0+",
+  "testedFrom": "2026-11-09",
+  "testedTo": "2026-11-09",
+  "publishedOn": "2026-11-09",
+  "testerRegion": "US",
+  "storeLocale": "en-US",
+  "dims": {
+    "G": 70,
+    "A": 65,
+    "F": 70,
+    "C": 70,
+    "U": 70
+  },
+  "rationales": {
+    "G": "Screenshot impression 7.0/10: Finding cats in the house and garden, with blue circle feedback and “Train your brain,” reads as a scanning puzzle. Default score 7.0. This dimension was not playtested, and the default is what the ranking uses.",
+    "C": "Store content note: The store describes it as “level progression.” The store page does not clearly state a fail state. Default score 7.0. This dimension was not playtested, and the default is what the ranking uses.",
+    "U": "Stability was not played. Age rating shown on the store is 4+. App version on the listing is 1.20.0. Default score 7.0. This dimension was not playtested, and the default is what the ranking uses.",
+    "A": "The US App Store lists a remove-ads purchase: No Ads ($8.99). Forced ads were not playtested, so the no-forced-ads tag stays unknown. The store lists a remove-ads purchase, so Ads is drawn from 4.5–6.5. Sampled Ads score 6.5. Not a playtest.",
+    "F": "The US App Store lists in-app purchases: Cat Club ($3.99); No Ads ($8.99); Cat Club Free Trial ($3.99). Whether any purchase is required to keep playing was not playtested. Default score 7.0. This dimension was not playtested, and the default is what the ranking uses."
+  },
+  "testingBoundaries": "US free Puzzle chart rank 76 on 2026-11-09. NO PLAY SESSION. Official US store description + listing metadata + chart rank only. Minimum OS iOS 15.0.",
+  "storeUrl": "https://apps.apple.com/us/app/find-the-cat-2-spot-it/id6758662578?uo=4",
+  "priceUsd": 0,
+  "authorSlug": "listing-desk",
+  "publicEvidenceCount": 0,
+  "tags": {
+    "no_forced_ads": "unknown",
+    "plays_offline": "unknown",
+    "one_handed": "unknown",
+    "short_rounds": "unknown",
+    "no_timers": "unknown"
+  },
+  "verifiedOnline": false,
+  "summary": "Find The Cat 2 - Spot It! is rated 4+ on the US App Store and filed as Hidden Object. The store describes it as “level progression.” Store text reads closer to a session puzzle; relax quality still untested. Gameplay, fairness, content, and stability stay at the default 7.0. Ads is sampled from the store-evidence band.",
+  "verdict": "Find The Cat 2 - Spot It! reads as Hidden Object in the store screenshot, which landed a 7.0/10 visual impression. The genre list uses the default 7.0 until someone plays it.",
+  "familyNotes": [
+    "US App Store age rating shown: 4+.",
+    "No parental play observation of ads, spend prompts, chat, or UGC.",
+    "In-app purchases listed: Cat Club ($3.99); No Ads ($8.99); Cat Club Free Trial ($3.99). Progress without paying was not playtested.",
+    "Ads: The US App Store lists a remove-ads purchase: No Ads ($8.99). Forced ads were not playtested, so the no-forced-ads tag stays unknown."
+  ],
+  "faqs": [
+    {
+      "q": "Was Find The Cat 2 - Spot It! played for this review?",
+      "a": "No. The note is an AI write-up of the US App Store listing, three screenshots, and the public in-app purchase list. There is no play session."
+    },
+    {
+      "q": "Why is the score 7.0?",
+      "a": "Gameplay, fairness, content, and stability use the default 7.0. Ads is sampled inside a band chosen from the store evidence. Neither number is a playtest measurement."
+    },
+    {
+      "q": "What did the screenshot impression notice?",
+      "a": "Finding cats in the house and garden, with blue circle feedback and “Train your brain,” reads as a scanning puzzle."
+    }
+  ],
+  "aiAssisted": true
+}

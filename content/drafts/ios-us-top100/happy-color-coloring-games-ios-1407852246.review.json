@@ -1,0 +1,69 @@
+{
+  "gameId": "app-1407852246",
+  "slug": "happy-color-coloring-games-ios-1407852246",
+  "name": "Happy Color® – Coloring Games",
+  "developer": "X-Flow",
+  "mechanicFamily": "puzzle-general",
+  "platform": "ios",
+  "reviewType": "full",
+  "status": "published",
+  "sponsored": false,
+  "appVersion": "1.21.1",
+  "osVersion": "iOS 15.0+",
+  "testedFrom": "2026-11-09",
+  "testedTo": "2026-11-09",
+  "publishedOn": "2026-11-09",
+  "testerRegion": "US",
+  "storeLocale": "en-US",
+  "dims": {
+    "G": 70,
+    "A": 65,
+    "F": 70,
+    "C": 70,
+    "U": 70
+  },
+  "rationales": {
+    "G": "Screenshot impression 8.0/10: The detailed coloring page and the 1–6 palette make the fill-in goal and finished-art feel strong. Default score 7.0. This dimension was not playtested, and the default is what the ranking uses.",
+    "C": "Store content note: The store describes it as “story framing.” The store page does not clearly state a fail state. Default score 7.0. This dimension was not playtested, and the default is what the ranking uses.",
+    "U": "Stability was not played. Age rating shown on the store is 17+. App version on the listing is 1.21.1. Default score 7.0. This dimension was not playtested, and the default is what the ranking uses.",
+    "A": "The US App Store lists a remove-ads purchase: Remove ads (hint ads stay) ($7.99); Remove ads ($7.99). Forced ads were not playtested, so the no-forced-ads tag stays unknown. The store lists a remove-ads purchase, so Ads is drawn from 4.5–6.5. Sampled Ads score 6.5. Not a playtest.",
+    "F": "The US App Store lists in-app purchases: Remove ads (hint ads stay) ($7.99); Remove ads ($7.99); Randy the Raccoon pack ($1.99); Color by Number Premium Month ($9.99); plus 1 more. Whether any purchase is required to keep playing was not playtested. Default score 7.0. This dimension was not playtested, and the default is what the ranking uses."
+  },
+  "testingBoundaries": "US free Puzzle chart rank 87 on 2026-11-09. NO PLAY SESSION. Official US store description + listing metadata + chart rank only. Minimum OS iOS 15.0.",
+  "storeUrl": "https://apps.apple.com/us/app/happy-color-coloring-games/id1407852246?uo=4",
+  "priceUsd": 0,
+  "authorSlug": "listing-desk",
+  "publicEvidenceCount": 0,
+  "tags": {
+    "no_forced_ads": "unknown",
+    "plays_offline": "unknown",
+    "one_handed": "unknown",
+    "short_rounds": "unknown",
+    "no_timers": "unknown"
+  },
+  "verifiedOnline": false,
+  "summary": "Happy Color® – Coloring Games is rank 87 and filed as Puzzle General. Featuring diverse categories, unique art styles, and pictures ranging from quick and simple to highly detailed, Happy Color makes it easy to find som… The App Store screenshot impression is 8.0/10 (medium confidence). Gameplay, fairness, content, and stability stay at the default 7.0. Ads is sampled from the store-evidence band.",
+  "verdict": "The store pitch for Happy Color® – Coloring Games is specific, and the screenshot impression is 8.0/10. No distinctive mechanical twist confidently evidenced beyond genre tropes in the store text. This is not a hands-on session. The ranking number is the default 7.0.",
+  "familyNotes": [
+    "US App Store age rating shown: 17+.",
+    "No parental play observation of ads, spend prompts, chat, or UGC.",
+    "Description indicates IAP (including possible real-money purchase disclaimer) — store claim; not purchase-tested.",
+    "In-app purchases listed: Remove ads (hint ads stay) ($7.99); Remove ads ($7.99); Randy the Raccoon pack ($1.99); Color by Number Premium Month ($9.99); plus 1 more. Progress without paying was not playtested.",
+    "Ads: The US App Store lists a remove-ads purchase: Remove ads (hint ads stay) ($7.99); Remove ads ($7.99). Forced ads were not playtested, so the no-forced-ads tag stays unknown."
+  ],
+  "faqs": [
+    {
+      "q": "Was Happy Color® – Coloring Games played for this review?",
+      "a": "No. The note is an AI write-up of the US App Store listing, three screenshots, and the public in-app purchase list. There is no play session."
+    },
+    {
+      "q": "Why is the score 7.0?",
+      "a": "Gameplay, fairness, content, and stability use the default 7.0. Ads is sampled inside a band chosen from the store evidence. Neither number is a playtest measurement."
+    },
+    {
+      "q": "What fail state is mentioned?",
+      "a": "The store page does not clearly state a fail state."
+    }
+  ],
+  "aiAssisted": true
+}

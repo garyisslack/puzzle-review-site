@@ -1,0 +1,68 @@
+{
+  "gameId": "app-6779167923",
+  "slug": "colony-flow-ios-6779167923",
+  "name": "Colony Flow!",
+  "developer": "ABI GLOBAL LTD.",
+  "mechanicFamily": "colony-flow",
+  "platform": "ios",
+  "reviewType": "full",
+  "status": "published",
+  "sponsored": false,
+  "appVersion": "1.1.55",
+  "osVersion": "iOS 15.0+",
+  "testedFrom": "2026-11-09",
+  "testedTo": "2026-11-09",
+  "publishedOn": "2026-11-09",
+  "testerRegion": "US",
+  "storeLocale": "en-US",
+  "dims": {
+    "G": 70,
+    "A": 65,
+    "F": 70,
+    "C": 70,
+    "U": 70
+  },
+  "rationales": {
+    "G": "Screenshot impression 7.5/10: The pipe colors above and the numbered color grid below show a flow. Level 512 suggests a lot of content, but one frame is a little abstract. Default score 7.0. This dimension was not playtested, and the default is what the ranking uses.",
+    "C": "Store content note: The store describes it as “level progression.” Store claims low/no classic fail pressure: no lives, no timers, no pressure, take as long as you like. Default score 7.0. This dimension was not playtested, and the default is what the ranking uses.",
+    "U": "Stability was not played. Age rating shown on the store is 12+. App version on the listing is 1.1.55. Default score 7.0. This dimension was not playtested, and the default is what the ranking uses.",
+    "A": "The US App Store lists a remove-ads purchase: No ADS ($7.99); NO ADS BUNDLE ($11.99). Forced ads were not playtested, so the no-forced-ads tag stays unknown. The store lists a remove-ads purchase, so Ads is drawn from 4.5–6.5. Sampled Ads score 6.5. Not a playtest.",
+    "F": "The US App Store lists in-app purchases: Coins Pack 1 ($1.99); FAIL OFFER ($5.99); SMALL BUNDLE ($9.99); Coins Pack 2 ($7.99); plus 6 more. Whether any purchase is required to keep playing was not playtested. Default score 7.0. This dimension was not playtested, and the default is what the ranking uses."
+  },
+  "testingBoundaries": "US free Puzzle chart rank 10 on 2026-11-09. NO PLAY SESSION. Official US store description + listing metadata + chart rank only. Minimum OS iOS 15.0.",
+  "storeUrl": "https://apps.apple.com/us/app/colony-flow/id6779167923?uo=4",
+  "priceUsd": 0,
+  "authorSlug": "listing-desk",
+  "publicEvidenceCount": 0,
+  "tags": {
+    "no_forced_ads": "unknown",
+    "plays_offline": "unknown",
+    "one_handed": "unknown",
+    "short_rounds": "unknown",
+    "no_timers": "unknown"
+  },
+  "verifiedOnline": false,
+  "summary": "Colony Flow! is rank 10 and filed as Colony Flow. Tap a box, watch the workers pour out, and send them marching up to the pixel picture to carry colorful blocks back to the nest, one busy trip at a t… The App Store screenshot impression is 7.5/10 (medium confidence). Gameplay, fairness, content, and stability stay at the default 7.0. Ads is sampled from the store-evidence band.",
+  "verdict": "The store pitch for Colony Flow! is specific, and the screenshot impression is 7.5/10. Slot-limited ant boxes feeding a pixel-art clear (store claim). This is not a hands-on session. The ranking number is the default 7.0.",
+  "familyNotes": [
+    "US App Store age rating shown: 12+.",
+    "No parental play observation of ads, spend prompts, chat, or UGC.",
+    "In-app purchases listed: Coins Pack 1 ($1.99); FAIL OFFER ($5.99); SMALL BUNDLE ($9.99); Coins Pack 2 ($7.99); plus 6 more. Progress without paying was not playtested.",
+    "Ads: The US App Store lists a remove-ads purchase: No ADS ($7.99); NO ADS BUNDLE ($11.99). Forced ads were not playtested, so the no-forced-ads tag stays unknown."
+  ],
+  "faqs": [
+    {
+      "q": "Was Colony Flow! played for this review?",
+      "a": "No. The note is an AI write-up of the US App Store listing, three screenshots, and the public in-app purchase list. There is no play session."
+    },
+    {
+      "q": "Why is the score 7.0?",
+      "a": "Gameplay, fairness, content, and stability use the default 7.0. Ads is sampled inside a band chosen from the store evidence. Neither number is a playtest measurement."
+    },
+    {
+      "q": "What fail state is mentioned?",
+      "a": "Store claims low/no classic fail pressure: no lives, no timers, no pressure, take as long as you like."
+    }
+  ],
+  "aiAssisted": true
+}

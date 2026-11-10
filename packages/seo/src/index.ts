@@ -1,8 +1,8 @@
-export { articleJsonLd, assertNoAggregateRating, breadcrumbJsonLd, itemListJsonLd, metaDescription, organizationJsonLd, reviewJsonLd, websiteJsonLd } from './jsonld.ts'
+export { articleJsonLd, assertNoAggregateRating, breadcrumbJsonLd, faqPageJsonLd, itemListJsonLd, metaDescription, organizationJsonLd, reviewJsonLd, websiteJsonLd } from './jsonld.ts'
 export type { ReviewJsonLdInput } from './jsonld.ts'
 export { canonicalPath, comparePair, rankingFilterHeaders, robotsFor } from './urls.ts'
 export type { RobotsDirective } from './urls.ts'
-export { robotsTxt, sitemapXml } from './sitemap.ts'
+export { robotsTxt, sitemapIndexXml, sitemapXml } from './sitemap.ts'
 export type { SitemapEntry } from './sitemap.ts'
 export {
   canGenerateCompare,

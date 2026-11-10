@@ -22,6 +22,8 @@ import {
   websiteJsonLd,
   robotsFor,
   sanitizeGuideMarkdown,
+  faqPageJsonLd,
+  sitemapIndexXml,
   sitemapXml,
 } from './index.ts'
 
@@ -149,6 +151,17 @@ describe('sitemap', () => {
     const xml = sitemapXml([{ loc: 'https://example.com/reviews/prism-pocket-sort/', lastmod: '2026-10-02' }])
     expect(xml).toContain('<lastmod>2026-10-02</lastmod>')
     expect(() => sitemapXml([{ loc: 'https://example.com/', lastmod: new Date().toISOString() }])).toThrow(/lastmod/)
+    const index = sitemapIndexXml([{ loc: 'https://example.com/sitemap-reviews.xml', lastmod: '2026-11-10' }])
+    expect(index).toContain('<sitemapindex')
+    expect(index).toContain('sitemap-reviews.xml')
+  })
+
+  it('FAQ 只收录页面上的问答', () => {
+    const node = faqPageJsonLd([{ q: 'Was it played?', a: 'No.' }, { q: ' ', a: 'skip' }])
+    expect(node?.mainEntity).toEqual([
+      { '@type': 'Question', name: 'Was it played?', acceptedAnswer: { '@type': 'Answer', text: 'No.' } },
+    ])
+    expect(faqPageJsonLd([])).toBeNull()
   })
 })
 

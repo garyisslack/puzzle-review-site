@@ -1,5 +1,5 @@
 ---
-import { comparePair } from '@puzzle/seo'
+import { comparePair, faqPageJsonLd } from '@puzzle/seo'
 import Base from '../../../layouts/Base.astro'
 import Icon from '../../../components/Icon.astro'
 import { articleHtml } from '../../../lib/article.ts'
@@ -34,12 +34,12 @@ const shots = listing && review.storeShots?.length
         { src: '/media/shot-3.jpg', label: `Ad break · ${review.platform}` },
       ]
     : []
-const jsonLd = [reviewJson(review.slug), crumbs([{ name: 'Home', path: '/' }, { name: 'Reviews', path: '/reviews/' }, { name: review.name, path: `/reviews/${review.slug}/` }])].filter(Boolean)
+const jsonLd = [reviewJson(review.slug), faqPageJsonLd(review.faqs), crumbs([{ name: 'Home', path: '/' }, { name: 'Reviews', path: '/reviews/' }, { name: review.name, path: `/reviews/${review.slug}/` }])].filter(Boolean)
 ---
-<Base title={`${review.name} review`} description={review.summary} path={`/reviews/${review.slug}/`} image={art.key || undefined} robots={review.sponsored ? 'noindex,follow' : 'index,follow'} jsonLd={jsonLd}>
+<Base title={review.seoTitle ?? `${review.name} review`} description={review.seoDescription ?? review.summary} path={`/reviews/${review.slug}/`} image={art.key || undefined} robots={review.sponsored ? 'noindex,follow' : 'index,follow'} jsonLd={jsonLd}>
   <main class="wrap">
     <figure class="key-art">
-      {art.key ? <img src={art.key} alt="" width="1312" height="240" fetchpriority="high" /> : <div class="placeholder"><Icon name="image" size={28} /></div>}
+      {art.key ? <img src={art.key} alt={`${review.name} official App Store screenshot`} width="1312" height="240" fetchpriority="high" /> : <div class="placeholder"><Icon name="image" size={28} /></div>}
       <figcaption>{listing ? 'Official App Store screenshot. Not a playtest capture.' : 'Key art from the official store listing · © its developer (mockup: AI-generated stand-in)'}</figcaption>
     </figure>
     <section class="review-top">
@@ -127,6 +127,7 @@ const jsonLd = [reviewJson(review.slug), crumbs([{ name: 'Home', path: '/' }, { 
         {scored && (
           <div>
             <h2>Scores, dimension by dimension</h2>
+            {review.defaultScore && <p class="meta">Gameplay, fairness, content, and stability use the default 7.0. Ads uses a store-evidence sample when one exists, otherwise the same default. None of these numbers is a playtest measurement.</p>}
             {dims.map((dim) => (
               <article class="dim-note">
                 <div class="mark" style={`color:var(--d${dim.key})`}>{dim.key}<div>{dim.displayed ?? '—'}</div></div>
@@ -144,7 +145,7 @@ const jsonLd = [reviewJson(review.slug), crumbs([{ name: 'Home', path: '/' }, { 
             <div class="shots">
               {shots.map((shot) => (
                 <figure class="shot">
-                  <img src={shot.src} alt="" width="640" height="360" />
+                  <img src={shot.src} alt={shot.alt ?? shot.label} width="640" height="360" />
                   <figcaption>{shot.label}</figcaption>
                 </figure>
               ))}

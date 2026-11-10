@@ -22,6 +22,7 @@ import {
   comparePair,
   reviewJsonLd,
   robotsTxt,
+  sitemapIndexXml,
   sitemapXml,
 } from '@puzzle/seo'
 import { authors, guides, needs, rankingDefinition, reviews } from '../data/catalog.ts'
@@ -185,12 +186,13 @@ export function needCards() {
 
 export function similarSlugs(slug: string) {
   const review = reviewBySlug(slug)
-  if (!review || review.reviewType !== 'full' || review.sponsored) return []
+  if (!review || review.reviewType !== 'full' || review.sponsored || review.defaultScore) return []
   const others = publishedReviews().filter(
     (item) =>
       item.slug !== slug &&
       item.reviewType === 'full' &&
       !item.sponsored &&
+      !item.defaultScore &&
       item.mechanicFamily === review.mechanicFamily &&
       item.platform === review.platform,
   )
@@ -198,7 +200,7 @@ export function similarSlugs(slug: string) {
 }
 
 export function comparePages() {
-  const pool = publishedReviews().filter((review) => review.reviewType === 'full' && !review.sponsored)
+  const pool = publishedReviews().filter((review) => review.reviewType === 'full' && !review.sponsored && !review.defaultScore)
   const pages: { slug: string; a: string; b: string }[] = []
   for (let i = 0; i < pool.length; i++) {
     for (let j = i + 1; j < pool.length; j++) {
@@ -246,7 +248,7 @@ export function reviewJson(slug: string) {
     platform: review.platform === 'ios' ? 'iOS' : 'Android',
     operatingSystem: review.platform === 'ios' ? 'iOS' : 'Android',
     priceUsd: review.priceUsd,
-    description: review.summary,
+    description: review.seoDescription || review.summary,
     authorName: author?.name ?? review.authorSlug,
     authorSlug: review.authorSlug,
     datePublished: review.publishedOn,
@@ -278,16 +280,9 @@ function latestContentDate() {
   return dates.reduce((latest, date) => (date > latest ? date : latest), '2026-11-08')
 }
 
-export function sitemapDocument() {
+export function sitemapSections() {
   const contentDate = latestContentDate()
-  const entries = [
-    { loc: `${SITE_URL}/`, lastmod: contentDate },
-    { loc: `${SITE_URL}/reviews/`, lastmod: contentDate },
-    { loc: `${SITE_URL}/how-we-test/`, lastmod: '2026-11-08' },
-    { loc: `${SITE_URL}/about/`, lastmod: '2026-11-08' },
-    { loc: `${SITE_URL}/editorial-independence/`, lastmod: '2026-11-08' },
-    { loc: `${SITE_URL}/contact/`, lastmod: '2026-11-08' },
-    { loc: `${SITE_URL}/privacy/`, lastmod: '2026-11-08' },
+  const reviews = [
     ...publishedReviews()
       .filter((review) => !review.sponsored)
       .map((review) => ({ loc: `${SITE_URL}/reviews/${review.slug}/`, lastmod: review.publishedOn })),
@@ -295,13 +290,43 @@ export function sitemapDocument() {
       if (review.sponsored || similarSlugs(review.slug).length < 2) return []
       return [{ loc: `${SITE_URL}/reviews/${review.slug}/similar/`, lastmod: review.publishedOn }]
     }),
-    ...rankingPages().map((page) => ({ loc: `${SITE_URL}/rankings/${page.definition.slug}/`, lastmod: contentDate })),
+  ]
+  const rankings = rankingPages().map((page) => ({ loc: `${SITE_URL}/rankings/${page.definition.slug}/`, lastmod: contentDate }))
+  const pages = [
+    { loc: `${SITE_URL}/`, lastmod: contentDate },
+    { loc: `${SITE_URL}/reviews/`, lastmod: contentDate },
+    { loc: `${SITE_URL}/how-we-test/`, lastmod: '2026-11-08' },
+    { loc: `${SITE_URL}/about/`, lastmod: '2026-11-08' },
+    { loc: `${SITE_URL}/editorial-independence/`, lastmod: '2026-11-08' },
+    { loc: `${SITE_URL}/contact/`, lastmod: '2026-11-08' },
+    { loc: `${SITE_URL}/privacy/`, lastmod: '2026-11-08' },
     ...comparePages().map((page) => ({ loc: `${SITE_URL}/compare/${page.slug}/`, lastmod: contentDate })),
     ...publishedGuides().map((guide) => ({ loc: `${SITE_URL}/guides/${guide.gameSlug}/${guide.slug}/`, lastmod: guide.modifiedOn })),
     ...guideIndexSlugs().map((slug) => ({ loc: `${SITE_URL}/guides/${slug}/`, lastmod: '2026-11-08' })),
     ...authors.map((author) => ({ loc: `${SITE_URL}/authors/${author.slug}/`, lastmod: '2026-11-08' })),
   ]
-  return sitemapXml(entries)
+  return { reviews, rankings, pages, contentDate }
+}
+
+export function sitemapDocument() {
+  const { contentDate } = sitemapSections()
+  return sitemapIndexXml([
+    { loc: `${SITE_URL}/sitemap-reviews.xml`, lastmod: contentDate },
+    { loc: `${SITE_URL}/sitemap-rankings.xml`, lastmod: contentDate },
+    { loc: `${SITE_URL}/sitemap-pages.xml`, lastmod: contentDate },
+  ])
+}
+
+export function sitemapReviewsDocument() {
+  return sitemapXml(sitemapSections().reviews)
+}
+
+export function sitemapRankingsDocument() {
+  return sitemapXml(sitemapSections().rankings)
+}
+
+export function sitemapPagesDocument() {
+  return sitemapXml(sitemapSections().pages)
 }
 
 export function rankingListJson(slug: string) {

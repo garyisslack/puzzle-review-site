@@ -5,6 +5,16 @@ export type SitemapEntry = {
 
 const DATE = /^\d{4}-\d{2}-\d{2}$/
 
+export function sitemapIndexXml(entries: readonly SitemapEntry[]): string {
+  const body = entries
+    .map((entry) => {
+      if (!DATE.test(entry.lastmod)) throw new Error(`lastmod must be YYYY-MM-DD from content, got ${entry.lastmod}`)
+      return `  <sitemap><loc>${entry.loc}</loc><lastmod>${entry.lastmod}</lastmod></sitemap>`
+    })
+    .join('\n')
+  return `<?xml version="1.0" encoding="UTF-8"?>\n<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${body}\n</sitemapindex>\n`
+}
+
 export function sitemapXml(entries: readonly SitemapEntry[]): string {
   const body = entries
     .map((entry) => {

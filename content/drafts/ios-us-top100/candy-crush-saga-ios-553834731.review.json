@@ -1,0 +1,68 @@
+{
+  "gameId": "app-553834731",
+  "slug": "candy-crush-saga-ios-553834731",
+  "name": "Candy Crush Saga",
+  "developer": "King",
+  "mechanicFamily": "match-3",
+  "platform": "ios",
+  "reviewType": "full",
+  "status": "published",
+  "sponsored": false,
+  "appVersion": "1.340.2.1",
+  "osVersion": "iOS 15.0+",
+  "testedFrom": "2026-11-09",
+  "testedTo": "2026-11-09",
+  "publishedOn": "2026-11-09",
+  "testerRegion": "US",
+  "storeLocale": "en-US",
+  "dims": {
+    "G": 70,
+    "A": 70,
+    "F": 70,
+    "C": 70,
+    "U": 70
+  },
+  "rationales": {
+    "G": "Screenshot impression 8.0/10: The candy board is dense but instantly recognizable. The Play Now overlay does not hide the match-3 grid. Default score 7.0. This dimension was not playtested, and the default is what the ranking uses.",
+    "C": "Store content note: daily challenges, endless/high-score mode, level progression, events, offline claim, leaderboards. The store describes it as “lives/hearts resource.” Default score 7.0. This dimension was not playtested, and the default is what the ranking uses.",
+    "U": "Stability was not played. Age rating shown on the store is 12+. App version on the listing is 1.340.2.1. Default score 7.0. This dimension was not playtested, and the default is what the ranking uses.",
+    "A": "The store description says “Ad-free fun means uninterrupted candy-matching bliss!”. The scope of that sentence was not playtested, and it does not prove there are no rewarded ads. Forced ads were not playtested, so the no-forced-ads tag stays unknown. The store claims little or no advertising. That claim was not playtested, so Ads is drawn from 7.0–8.5. Sampled Ads score 7.0. Not a playtest.",
+    "F": "The US App Store lists in-app purchases: XS Gold Bars Pack ($1.99); Extra Moves ($0.99); Extra Lives ($0.99); 10x Gold Bars package ($0.99); plus 4 more. Whether any purchase is required to keep playing was not playtested. Default score 7.0. This dimension was not playtested, and the default is what the ranking uses."
+  },
+  "testingBoundaries": "US free Puzzle chart rank 27 on 2026-11-09. NO PLAY SESSION. Official US store description + listing metadata + chart rank only. Minimum OS iOS 15.0.",
+  "storeUrl": "https://apps.apple.com/us/app/candy-crush-saga/id553834731?uo=4",
+  "priceUsd": 0,
+  "authorSlug": "listing-desk",
+  "publicEvidenceCount": 0,
+  "tags": {
+    "no_forced_ads": "unknown",
+    "plays_offline": "unknown",
+    "one_handed": "unknown",
+    "short_rounds": "unknown",
+    "no_timers": "unknown"
+  },
+  "verifiedOnline": false,
+  "summary": "Candy Crush Saga is rank 27 and filed as Match 3. Explore a world full of delicious match. The App Store screenshot impression is 8.0/10 (medium confidence). Gameplay, fairness, content, and stability stay at the default 7.0. Ads is sampled from the store-evidence band.",
+  "verdict": "The store pitch for Candy Crush Saga is specific, and the screenshot impression is 8.0/10. Daily puzzle plus endless/high-score structure (store claim). This is not a hands-on session. The ranking number is the default 7.0.",
+  "familyNotes": [
+    "US App Store age rating shown: 12+.",
+    "No parental play observation of ads, spend prompts, chat, or UGC.",
+    "In-app purchases listed: XS Gold Bars Pack ($1.99); Extra Moves ($0.99); Extra Lives ($0.99); 10x Gold Bars package ($0.99); plus 4 more. Progress without paying was not playtested.",
+    "Ads: The store description says “Ad-free fun means uninterrupted candy-matching bliss!”. The scope of that sentence was not playtested, and it does not prove there are no rewarded ads. Forced ads were not playtested, so the no-forced-ads tag stays unknown."
+  ],
+  "faqs": [
+    {
+      "q": "Was Candy Crush Saga played for this review?",
+      "a": "No. The note is an AI write-up of the US App Store listing, three screenshots, and the public in-app purchase list. There is no play session."
+    },
+    {
+      "q": "Why is the score 7.0?",
+      "a": "Gameplay, fairness, content, and stability use the default 7.0. Ads is sampled inside a band chosen from the store evidence. Neither number is a playtest measurement."
+    },
+    {
+      "q": "What fail state is mentioned?",
+      "a": "The store describes it as “lives/hearts resource.”"
+    }
+  ],
+  "aiAssisted": true
+}

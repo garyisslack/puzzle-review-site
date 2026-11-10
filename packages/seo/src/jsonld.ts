@@ -117,6 +117,20 @@ export function itemListJsonLd(input: {
   }
 }
 
+export function faqPageJsonLd(faqs: { q: string; a: string }[]): Record<string, unknown> | null {
+  const visible = faqs.filter((faq) => faq.q.trim() && faq.a.trim())
+  if (!visible.length) return null
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: visible.map((faq) => ({
+      '@type': 'Question',
+      name: faq.q,
+      acceptedAnswer: { '@type': 'Answer', text: faq.a },
+    })),
+  }
+}
+
 export function metaDescription(text: string, max = 160): string {
   const clean = text.replace(/\s+/g, ' ').trim()
   if (clean.length <= max) return clean

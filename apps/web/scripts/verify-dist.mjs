@@ -32,9 +32,13 @@ if (!read('guides/prism-pocket-sort/early-bottles/index.html').includes('"@type"
 if (!fs.existsSync(path.join(dist, 'guides/prism-pocket-sort/index.html'))) throw new Error('guide index missing')
 
 const sitemap = read('sitemap.xml')
-if (!sitemap.includes('<lastmod>2026-10-02</lastmod>')) throw new Error('sitemap lastmod is not the content date')
-if (sitemap.includes('/guides/submit/')) throw new Error('submit URL is in the sitemap')
-if (sitemap.includes('sponsored-sort-deluxe')) throw new Error('sponsored URL is in the sitemap')
+if (!sitemap.includes('<sitemapindex')) throw new Error('sitemap index missing')
+if (!sitemap.includes('/sitemap-reviews.xml')) throw new Error('review sitemap missing from index')
+const reviewSitemap = read('sitemap-reviews.xml')
+if (!reviewSitemap.includes('<lastmod>2026-10-02</lastmod>')) throw new Error('sitemap lastmod is not the content date')
+if (reviewSitemap.includes('/guides/submit/')) throw new Error('submit URL is in the sitemap')
+if (reviewSitemap.includes('sponsored-sort-deluxe')) throw new Error('sponsored URL is in the sitemap')
+if (!reviewSitemap.includes('/reviews/meowdoku-ios-6761760135/')) throw new Error('research review missing from sitemap')
 
 const sponsored = read('reviews/sponsored-sort-deluxe/index.html')
 if (sponsored.includes('"@type":"Review"')) throw new Error('sponsored page emitted Review schema')
