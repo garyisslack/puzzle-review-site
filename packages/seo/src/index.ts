@@ -1,4 +1,4 @@
-export { articleJsonLd, assertNoAggregateRating, breadcrumbJsonLd, reviewJsonLd } from './jsonld.ts'
+export { articleJsonLd, assertNoAggregateRating, breadcrumbJsonLd, itemListJsonLd, metaDescription, organizationJsonLd, reviewJsonLd, websiteJsonLd } from './jsonld.ts'
 export type { ReviewJsonLdInput } from './jsonld.ts'
 export { canonicalPath, comparePair, rankingFilterHeaders, robotsFor } from './urls.ts'
 export type { RobotsDirective } from './urls.ts'

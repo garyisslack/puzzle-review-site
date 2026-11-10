@@ -17,6 +17,7 @@ export {
   buildSnapshot,
   evaluateCandidate,
   keepLastGoodSnapshot,
+  rankBlocker,
   titleTopN,
 } from './rank.ts'
 export type {

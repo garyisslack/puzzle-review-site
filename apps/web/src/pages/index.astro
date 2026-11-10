@@ -1,22 +1,24 @@
 ---
 import Base from '../layouts/Base.astro'
 import Icon from '../components/Icon.astro'
-import { DIMENSIONS, METHODOLOGY_VERSION, colorSortSnapshot, crumbs, needCards, publishedReviews, rankingDefinition } from '../lib/site.ts'
-import { NEED_VISUAL, artFor, storeLabel } from '../lib/present.ts'
+import { organizationJsonLd, websiteJsonLd } from '@puzzle/seo'
+import { DIMENSIONS, METHODOLOGY_VERSION, SITE_NAME, SITE_URL, colorSortSnapshot, crumbs, needCards, primaryRankingSlug, publishedReviews, rankingDefinition, rankingPages } from '../lib/site.ts'
+import { NEED_VISUAL, artFor, impressionOutOf10, storeLabel } from '../lib/present.ts'
 
 const result = colorSortSnapshot()
 if (!result.ok) throw new Error('home ranking failed to build')
 const snapshot = result.snapshot
+const rankings = rankingPages()
+const allRanking = rankings.find((page) => page.definition.slug === primaryRankingSlug)
 const reviews = publishedReviews()
 const featured = snapshot.items.slice(0, 2).flatMap((item) => {
   const review = reviews.find((entry) => entry.gameId === item.gameId)
   return review ? [{ item, review }] : []
 })
-const latestSlugs = ['prism-pocket-sort', 'tile-path-daily', 'sample-initial-entry']
-const latest = latestSlugs.flatMap((slug) => {
-  const review = reviews.find((entry) => entry.slug === slug)
-  return review ? [review] : []
-})
+const latest = reviews
+  .filter((review) => review.origin === 'store-listing')
+  .sort((a, b) => (a.chartRank ?? 999) - (b.chartRank ?? 999))
+  .slice(0, 3)
 const homeBlurbs: Record<string, string> = {
   G: 'Rules, core loop, difficulty pacing',
   A: 'Interruption, timing, real opt-in',
@@ -24,7 +26,11 @@ const homeBlurbs: Record<string, string> = {
   C: 'Meaningful variety over time',
   U: 'Controls, crashes, resume',
 }
-const jsonLd = [crumbs([{ name: 'Home', path: '/' }])]
+const jsonLd = [
+  organizationJsonLd({ siteUrl: SITE_URL, name: SITE_NAME }),
+  websiteJsonLd({ siteUrl: SITE_URL, name: SITE_NAME }),
+  crumbs([{ name: 'Home', path: '/' }]),
+]
 ---
 <Base title="Find puzzle games worth playing" description="Independent editorial scores for US iOS and Android puzzle games." path="/" jsonLd={jsonLd}>
   <main>
@@ -34,7 +40,7 @@ const jsonLd = [crumbs([{ name: 'Home', path: '/' }])]
         <h1>Find puzzle games worth playing — before you download.</h1>
         <p class="lede">We play every game ourselves and score it on five things that matter: how fun it is, how annoying the ads are, whether it’s fair without paying, how much there is to do, and how smoothly it runs.</p>
         <div class="hero-ctas">
-          <a class="btn" href="/rankings/color-sort-ios/">Browse rankings <Icon name="arrow-right" size={16} /></a>
+          <a class="btn" href={`/rankings/${primaryRankingSlug}/`}>Browse rankings <Icon name="arrow-right" size={16} /></a>
           <a class="btn ghost" href="/how-we-test/">How we test</a>
         </div>
       </div>
@@ -157,14 +163,26 @@ const jsonLd = [crumbs([{ name: 'Home', path: '/' }])]
               <span class:list={['pill', review.reviewType === 'full' ? '' : 'muted']}>
                 <i class="dot"></i> {review.reviewType === 'full' ? 'FULL REVIEW' : 'INITIAL REVIEW'}
               </span>
-              <div class="score mid">{review.displayed ?? '—'}</div>
+              <div>
+                <div class="score mid">{review.displayed ?? '—'}</div>
+                {review.screenshotImpression && <p class="meta">Screenshot {impressionOutOf10(review.screenshotImpression.score100)}</p>}
+              </div>
             </article>
           )
         })}
-        <p class="ledger-note">Initial reviews show no composite score and never enter numeric rankings.</p>
+        <p class="ledger-note">These 500 notes are research write-ups, not playtests, and they have no editorial score.</p>
       </div>
       <aside class="genres">
         <div class="block-head"><h2>Browse genres</h2></div>
+        {allRanking && (
+          <div class="genre-row">
+            <div>
+              <a href={`/rankings/${allRanking.definition.slug}/`}><strong>All reviewed</strong></a>
+              <span>{allRanking.snapshot.qualifiedCount} full reviews</span>
+            </div>
+            <a href={`/rankings/${allRanking.definition.slug}/`} aria-label="All reviewed ranking"><Icon name="arrow-right" size={18} /></a>
+          </div>
+        )}
         <div class="genre-row">
           <div>
             <a href={`/rankings/${rankingDefinition.slug}/`}><strong>Color sort</strong></a>
@@ -172,10 +190,13 @@ const jsonLd = [crumbs([{ name: 'Home', path: '/' }])]
           </div>
           <a href={`/rankings/${rankingDefinition.slug}/`} aria-label="Color sort ranking"><Icon name="arrow-right" size={18} /></a>
         </div>
-        {['Block sort', 'Tile match', 'Screw / pin puzzle'].map((genre) => (
-          <div class="genre-row soon">
-            <div><strong>{genre}</strong><span>Coming after calibration</span></div>
-            <Icon name="clock" size={18} />
+        {rankings.filter((page) => page.definition.mechanicFamily && page.definition.slug !== rankingDefinition.slug).map((page) => (
+          <div class="genre-row">
+            <div>
+              <a href={`/rankings/${page.definition.slug}/`}><strong>{page.definition.mechanicFamily}{page.definition.platform === 'android' ? ' · Android' : ''}</strong></a>
+              <span>{page.snapshot.qualifiedCount} full reviews</span>
+            </div>
+            <a href={`/rankings/${page.definition.slug}/`} aria-label={`${page.definition.mechanicFamily} ranking`}><Icon name="arrow-right" size={18} /></a>
           </div>
         ))}
       </aside>

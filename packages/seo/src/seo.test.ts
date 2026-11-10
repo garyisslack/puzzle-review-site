@@ -15,7 +15,11 @@ import {
   hashIp,
   ipHashRetentionExpired,
   rankingFilterHeaders,
+  itemListJsonLd,
+  metaDescription,
+  organizationJsonLd,
   reviewJsonLd,
+  websiteJsonLd,
   robotsFor,
   sanitizeGuideMarkdown,
   sitemapXml,
@@ -65,6 +69,25 @@ describe('TC-SEO urls', () => {
 })
 
 describe('JSON-LD', () => {
+  it('首页组织信息和榜单列表不写 aggregateRating', () => {
+    const org = organizationJsonLd({ siteUrl: 'https://puzzlereviewlab.com', name: 'puzzlereviewlab' })
+    const site = websiteJsonLd({ siteUrl: 'https://puzzlereviewlab.com', name: 'puzzlereviewlab' })
+    const list = itemListJsonLd({
+      siteUrl: 'https://puzzlereviewlab.com',
+      path: '/rankings/sudoku-logic-ios/',
+      name: 'Sudoku Logic',
+      items: [{ name: 'Meowdoku!', path: '/reviews/meowdoku-ios-6761760135/' }],
+    })
+    expect(org).toMatchObject({ '@type': 'Organization', name: 'puzzlereviewlab' })
+    expect(site).toMatchObject({ '@type': 'WebSite', url: 'https://puzzlereviewlab.com/' })
+    expect(list).toMatchObject({ '@type': 'ItemList', numberOfItems: 1 })
+    assertNoAggregateRating(org)
+    assertNoAggregateRating(site)
+    assertNoAggregateRating(list)
+    expect(metaDescription('Short note.')).toBe('Short note.')
+    expect(metaDescription('Word '.repeat(80)).length).toBeLessThanOrEqual(160)
+  })
+
   it('评测用本站分数，不写 aggregateRating', () => {
     const node = reviewJsonLd({
       siteUrl: 'https://example.com',

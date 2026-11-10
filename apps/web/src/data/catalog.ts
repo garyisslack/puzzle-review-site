@@ -1,4 +1,5 @@
 import type { Dims, Platform, ReviewStatus, ReviewType, TagState } from '@puzzle/scoring'
+import { storeListings } from './store-listings.ts'
 
 export type CatalogReview = {
   gameId: string
@@ -30,6 +31,19 @@ export type CatalogReview = {
   verdict: string
   familyNotes: string[]
   faqs: { q: string; a: string }[]
+  origin?: 'demo' | 'store-listing'
+  chartRank?: number
+  aiAssisted?: boolean
+  analysisType?: 'player_review_digest' | 'store_listing_analysis'
+  cohort?: 'official_top100' | 'unranked_candidate'
+  bodyMarkdown?: string
+  screenshotImpression?: {
+    score100: number
+    confidence: 'low' | 'medium'
+    rationale: string
+  }
+  defaultScore?: boolean
+  storeShots?: { src: string; label: string }[]
 }
 
 const colorDims = {
@@ -54,9 +68,16 @@ export const authors = [
     role: 'Reviewer',
     bio: 'Plays mobile puzzle games on iOS and Android and writes the dimension notes for this site.',
   },
+  {
+    slug: 'listing-desk',
+    name: 'Listing desk',
+    role: 'Store research',
+    bio: 'Writes initial notes from the public US App Store listing. These notes are not playtests and have no editorial score.',
+  },
 ] as const
 
 export const reviews: CatalogReview[] = [
+  ...storeListings,
   {
     gameId: 'prism',
     slug: 'prism-pocket-sort',
@@ -67,6 +88,7 @@ export const reviews: CatalogReview[] = [
     reviewType: 'full',
     status: 'published',
     sponsored: false,
+    origin: 'demo',
     appVersion: '1.4.2',
     osVersion: 'iOS 18.6',
     testedFrom: '2026-09-28',
@@ -101,6 +123,7 @@ export const reviews: CatalogReview[] = [
     reviewType: 'full',
     status: 'published',
     sponsored: false,
+    origin: 'demo',
     appVersion: '2.0.1',
     osVersion: 'iOS 18.6',
     testedFrom: '2026-10-03',
@@ -132,6 +155,7 @@ export const reviews: CatalogReview[] = [
     reviewType: 'full',
     status: 'published',
     sponsored: false,
+    origin: 'demo',
     appVersion: '3.2.0',
     osVersion: 'iOS 18.6',
     testedFrom: '2026-10-04',
@@ -163,6 +187,7 @@ export const reviews: CatalogReview[] = [
     reviewType: 'full',
     status: 'published',
     sponsored: false,
+    origin: 'demo',
     appVersion: '1.1.0',
     osVersion: 'iOS 18.6',
     testedFrom: '2026-10-08',
@@ -194,6 +219,7 @@ export const reviews: CatalogReview[] = [
     reviewType: 'initial',
     status: 'published',
     sponsored: false,
+    origin: 'demo',
     appVersion: '1.0.0',
     osVersion: 'iOS 18.6',
     testedFrom: '2026-10-10',
@@ -225,6 +251,7 @@ export const reviews: CatalogReview[] = [
     reviewType: 'full',
     status: 'published',
     sponsored: true,
+    origin: 'demo',
     appVersion: '9.9.0',
     osVersion: 'iOS 18.6',
     testedFrom: '2026-10-11',
@@ -256,6 +283,7 @@ export const reviews: CatalogReview[] = [
     reviewType: 'full',
     status: 'published',
     sponsored: false,
+    origin: 'demo',
     appVersion: '1.4.1',
     osVersion: 'Android 15',
     testedFrom: '2026-10-12',

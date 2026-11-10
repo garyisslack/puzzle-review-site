@@ -1,26 +1,42 @@
 ---
 import Base from '../../layouts/Base.astro'
 import Icon from '../../components/Icon.astro'
-import { METHODOLOGY_VERSION, colorSortSnapshot, publishedReviews, rankingDefinition } from '../../lib/site.ts'
+import { METHODOLOGY_VERSION, crumbs, formatFamily, primaryRankingSlug, publishedReviews, rankingListJson, rankingPages, unrankedReviews } from '../../lib/site.ts'
 import { TAGS, artFor, exclusionCopy, shortDate, storeLabel } from '../../lib/present.ts'
 
 export function getStaticPaths() {
-  const snapshot = colorSortSnapshot()
-  if (!snapshot.ok) return []
-  return [{ params: { list: rankingDefinition.slug } }]
+  return rankingPages().map((page) => ({ params: { list: page.definition.slug } }))
 }
-const snapshot = colorSortSnapshot()
-if (!snapshot.ok) throw new Error(snapshot.code)
+const page = rankingPages().find((entry) => entry.definition.slug === Astro.params.list)
+if (!page) throw new Error('missing ranking')
+const { definition, snapshot } = page
 const reviews = publishedReviews()
-const items = snapshot.snapshot.items
+const items = snapshot.items
+const unranked = unrankedReviews().filter((item) => {
+  const review = reviews.find((entry) => entry.gameId === item.gameId)
+  if (!review || review.platform !== definition.platform) return false
+  if (definition.mechanicFamily && review.mechanicFamily !== definition.mechanicFamily) return false
+  return true
+})
+const scope = definition.mechanicFamily ? formatFamily(definition.mechanicFamily) : 'every genre'
+const platformLabel = definition.platform === 'ios' ? 'iOS' : 'Android'
+const jsonLd = [
+  rankingListJson(definition.slug),
+  crumbs([{ name: 'Home', path: '/' }, { name: 'Rankings', path: `/rankings/${primaryRankingSlug}/` }, { name: definition.title, path: `/rankings/${definition.slug}/` }]),
+].filter(Boolean)
+const ledgerNote = definition.slug === 'color-sort-ios' || definition.slug === 'color-sort-android'
+  ? 'Ties share a rank; the next rank is skipped. Hidden decimals never break ties. Scores are illustrative demo data for fictional games.'
+  : definition.mechanicFamily
+    ? 'Ties share a rank; the next rank is skipped. Hidden decimals never break ties.'
+    : 'Ties share a rank; the next rank is skipped. Hidden decimals never break ties. Research notes have no editorial score, so they stay off this list. Prism Pocket Sort, Marblesque, Tile Path Daily, and Hex Cascade are fictional demo scores.'
 ---
-<Base title={rankingDefinition.title} description="Games that passed a full review on one platform." path={`/rankings/${rankingDefinition.slug}/`}>
+<Base title={definition.title} description="Games that passed a full review on one platform." path={`/rankings/${definition.slug}/`} jsonLd={jsonLd}>
   <main>
     <section class="wrap page-head list-head">
       <div>
-        <p class="crumbs"><a href="/">Home</a> / Rankings / Color sort (iPhone)</p>
-        <h1>{rankingDefinition.title}</h1>
-        <p class="count"><strong>{snapshot.snapshot.qualifiedCount} qualified games</strong> <span>· a numbered best-of name waits until 10 games qualify</span></p>
+        <p class="crumbs"><a href="/">Home</a> / <a href={`/rankings/${primaryRankingSlug}/`}>Rankings</a> / {definition.mechanicFamily ?? 'All genres'}</p>
+        <h1>{definition.title}</h1>
+        <p class="count"><strong>{snapshot.qualifiedCount} qualified games</strong>{snapshot.qualifiedCount < 10 && <span> · a numbered best-of name waits until 10 games qualify</span>}</p>
       </div>
       <aside class="callout accent">
         <h2><Icon name="info" size={16} /> This is an editorial ranking</h2>
@@ -30,9 +46,9 @@ const items = snapshot.snapshot.items
     </section>
     <section class="rules">
       <div class="wrap rules-grid">
-        <div><span>HARD FILTERS</span><strong>Full review · color sort · iOS</strong></div>
+        <div><span>HARD FILTERS</span><strong>Full review · {scope} · {platformLabel}</strong></div>
         <div><span>SORTED BY</span><strong>Displayed score (1 decimal)</strong></div>
-        <div><span>SNAPSHOT</span><strong>{snapshot.snapshot.generatedAt.slice(0, 10)}</strong></div>
+        <div><span>SNAPSHOT</span><strong>{snapshot.generatedAt.slice(0, 10)}</strong></div>
         <div><span>METHOD</span><strong>{METHODOLOGY_VERSION}</strong></div>
         <div><span>STALE AFTER</span><strong>90 days or major update</strong></div>
       </div>
@@ -66,7 +82,7 @@ const items = snapshot.snapshot.items
                       {art.icon ? <img src={art.icon} alt="" width="48" height="48" /> : <span class="placeholder"><Icon name="image" size={18} /></span>}
                       <div>
                         <a href={`/reviews/${review?.slug}/`}>{item.name}</a>
-                        <small>{review?.developer} · Offline: {review?.tags.plays_offline === 'yes' ? 'yes' : review?.tags.plays_offline === 'no' ? 'no' : 'not verified'}</small>
+                        <small>{review?.developer}{!definition.mechanicFamily && review ? ` · ${formatFamily(review.mechanicFamily)}` : ''} · Offline: {review?.tags.plays_offline === 'yes' ? 'yes' : review?.tags.plays_offline === 'no' ? 'no' : 'not verified'}</small>
                       </div>
                     </div>
                   </td>
@@ -87,12 +103,12 @@ const items = snapshot.snapshot.items
           </tbody>
         </table>
       </div>
-      <p class="ledger-note">Ties share a rank; the next rank is skipped. Hidden decimals never break ties. Scores are illustrative demo data for fictional games.</p>
+      <p class="ledger-note">{ledgerNote}</p>
     </section>
     <section class="wrap" style="padding-bottom: 88px">
       <h2>Reviewed but not ranked here</h2>
-      <p class="lede">These games have pages on the site but don’t meet this list’s hard filters, so they get no rank.</p>
-      {snapshot.snapshot.excluded.map((item) => {
+      <p class="lede">These reviews have a page, but they can’t be placed on a ranking. A full review with every dimension scored is ranked.</p>
+      {unranked.map((item) => {
         const review = reviews.find((entry) => entry.gameId === item.gameId)
         const copy = exclusionCopy(item.reason)
         return (

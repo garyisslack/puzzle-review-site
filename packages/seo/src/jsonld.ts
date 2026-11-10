@@ -78,6 +78,54 @@ export function breadcrumbJsonLd(siteUrl: string, crumbs: { name: string; path: 
   }
 }
 
+export function organizationJsonLd(input: { siteUrl: string; name: string }): Record<string, unknown> {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: input.name,
+    url: input.siteUrl,
+  }
+}
+
+export function websiteJsonLd(input: { siteUrl: string; name: string }): Record<string, unknown> {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: input.name,
+    url: `${input.siteUrl}/`,
+  }
+}
+
+export function itemListJsonLd(input: {
+  siteUrl: string
+  path: string
+  name: string
+  items: { name: string; path: string }[]
+}): Record<string, unknown> {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: input.name,
+    url: `${input.siteUrl}${input.path}`,
+    numberOfItems: input.items.length,
+    itemListElement: input.items.map((item, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      name: item.name,
+      url: `${input.siteUrl}${item.path}`,
+    })),
+  }
+}
+
+export function metaDescription(text: string, max = 160): string {
+  const clean = text.replace(/\s+/g, ' ').trim()
+  if (clean.length <= max) return clean
+  const cut = clean.slice(0, max - 1)
+  const space = cut.lastIndexOf(' ')
+  const clipped = (space > 80 ? cut.slice(0, space) : cut).replace(/[.,;:]+$/, '')
+  return `${clipped}…`
+}
+
 export function assertNoAggregateRating(node: unknown): void {
   const json = JSON.stringify(node)
   if (json.includes('aggregateRating') || json.includes('AggregateRating')) {

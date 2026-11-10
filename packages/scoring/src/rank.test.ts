@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { assertDimensionNoted, assertTagVerification, buildSnapshot, keepLastGoodSnapshot } from './index.ts'
+import { assertDimensionNoted, assertTagVerification, buildSnapshot, keepLastGoodSnapshot, rankBlocker } from './index.ts'
 import type { RankCandidate, RankingDefinition } from './index.ts'
 
 const base = {
@@ -75,6 +75,25 @@ describe('TC-RANK', () => {
     expect(previous.ok).toBe(true)
     if (!previous.ok) return
     expect(keepLastGoodSnapshot(previous.snapshot, thin)).toEqual(previous.snapshot)
+  })
+
+  it('不限机制族时，能计分的完整评测都进榜', () => {
+    const result = buildSnapshot(
+      { ...definition, slug: 'reviewed-ios', title: "Puzzle games we've fully reviewed (iOS)", mechanicFamily: null },
+      [
+        ...games,
+        { ...base, gameId: 'screw', name: 'Screw Loose', mechanicFamily: 'screw-puzzle', dims: games[0]!.dims },
+        { ...base, gameId: 'initial', name: 'Sample Initial', reviewType: 'initial', dims: games[0]!.dims },
+        { ...base, gameId: 'android', name: 'Prism Android', platform: 'android', dims: games[0]!.dims },
+      ],
+      '2026-11-08',
+    )
+    expect(result.ok).toBe(true)
+    if (!result.ok) return
+    expect(result.snapshot.items.map((item) => item.gameId)).toEqual(['prism', 'screw', 'marblesque', 'tile', 'hex'])
+    expect(result.snapshot.excluded.map((item) => item.gameId).sort()).toEqual(['android', 'initial'])
+    expect(rankBlocker({ ...base, gameId: 'screw', name: 'Screw Loose', mechanicFamily: 'screw-puzzle', dims: games[0]!.dims })).toBeNull()
+    expect(rankBlocker({ ...base, gameId: 'initial', name: 'Sample Initial', reviewType: 'initial', dims: games[0]!.dims })).toBe('not_full_review')
   })
 
   it('TC-RANK-04 iOS 与 Android 分数不合并', () => {

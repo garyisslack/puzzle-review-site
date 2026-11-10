@@ -18,7 +18,8 @@ export type RankCandidate = {
 export type RankingDefinition = {
   slug: string
   title: string
-  mechanicFamily: string
+  /** `null` 表示不按机制族过滤，能计分的都进这张榜。 */
+  mechanicFamily: string | null
   platform: Platform
   /** 需求榜：只有该标签为 yes 才合格。 */
   requiredTag?: string
@@ -72,13 +73,26 @@ export function titleTopN(title: string): number | null {
   return Number(match[1])
 }
 
+/** 跟具体榜单无关：赞助、未发布、初测、缺维不能进任何榜。 */
+export function rankBlocker(candidate: RankCandidate): ExclusionReason | null {
+  if (candidate.sponsored) return 'sponsored'
+  if (candidate.status === 'expired') return 'expired'
+  if (candidate.status === 'withdrawn') return 'withdrawn'
+  if (candidate.status !== 'published') return 'not_published'
+  if (candidate.reviewType !== 'full') return 'not_full_review'
+  if (!composite(candidate.dims)) return 'missing_dimension'
+  return null
+}
+
 export function evaluateCandidate(
   definition: RankingDefinition,
   candidate: RankCandidate,
 ): { ok: true; displayedTenths: number } | { ok: false; reason: ExclusionReason } {
   if (candidate.sponsored) return { ok: false, reason: 'sponsored' }
   if (candidate.platform !== definition.platform) return { ok: false, reason: 'platform_mismatch' }
-  if (candidate.mechanicFamily !== definition.mechanicFamily) return { ok: false, reason: 'family_mismatch' }
+  if (definition.mechanicFamily !== null && candidate.mechanicFamily !== definition.mechanicFamily) {
+    return { ok: false, reason: 'family_mismatch' }
+  }
   if (candidate.status === 'expired') return { ok: false, reason: 'expired' }
   if (candidate.status === 'withdrawn') return { ok: false, reason: 'withdrawn' }
   if (candidate.status !== 'published') return { ok: false, reason: 'not_published' }

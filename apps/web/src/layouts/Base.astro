@@ -7,37 +7,54 @@ import '@fontsource/nunito-sans/700.css'
 import '@fontsource/nunito-sans/800.css'
 import '../styles/global.css'
 import Icon from '../components/Icon.astro'
-import { SITE_NAME, SITE_URL } from '../lib/site.ts'
+import { metaDescription } from '@puzzle/seo'
+import { SITE_NAME, SITE_URL, primaryRankingSlug } from '../lib/site.ts'
 
 interface Props {
   title: string
   description: string
   path: string
   robots?: string
+  image?: string
   jsonLd?: unknown[]
 }
-const { title, description, path, robots = 'index,follow', jsonLd = [] } = Astro.props
+const { title, description, path, robots = 'index,follow', image, jsonLd = [] } = Astro.props
 const canonical = new URL(path, SITE_URL).toString()
+const pageTitle = title.includes(SITE_NAME) ? title : `${title} · ${SITE_NAME}`
+const summary = metaDescription(description)
+const imageUrl = image ? new URL(image, SITE_URL).toString() : ''
 ---
 <html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{title}</title>
-    <meta name="description" content={description} />
+    <title>{pageTitle}</title>
+    <meta name="description" content={summary} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="canonical" href={canonical} />
     <meta name="robots" content={robots} />
+    <meta property="og:site_name" content={SITE_NAME} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={summary} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:type" content="website" />
+    {imageUrl && <meta property="og:image" content={imageUrl} />}
+    <meta name="twitter:card" content={imageUrl ? 'summary_large_image' : 'summary'} />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={summary} />
+    {imageUrl && <meta name="twitter:image" content={imageUrl} />}
     {jsonLd.map((node) => <script type="application/ld+json" set:html={JSON.stringify(node)} />)}
   </head>
   <body>
     <header class="nav">
       <div class="nav-row">
         <a class="brand" href="/">
-          <span class="wordmark">{SITE_NAME}</span>
+          <img class="mark" src="/mark.svg" alt="" width="32" height="32" />
+          <img class="wordmark" src="/wordmark.svg" alt={SITE_NAME} width="248" height="36" />
         </a>
         <nav class="nav-links" id="site-nav">
           <a href="/#needs">Discover</a>
-          <a href="/rankings/color-sort-ios/">Rankings</a>
+          <a href={`/rankings/${primaryRankingSlug}/`}>Rankings</a>
           <a href="/reviews/">Reviews</a>
           <a href="/guides/prism-pocket-sort/">Guides</a>
           <a href="/#updates">New & Updated</a>
@@ -57,7 +74,10 @@ const canonical = new URL(path, SITE_URL).toString()
       <div class="footer-inner">
         <div class="footer-row">
           <div>
-            <strong class="footer-brand">{SITE_NAME}</strong>
+            <div class="footer-brand-row">
+              <img class="mark" src="/mark.svg" alt="" width="28" height="28" />
+              <img class="wordmark" src="/wordmark-dark.svg" alt={SITE_NAME} width="214" height="31" />
+            </div>
             <p>Independent editorial scores for iOS & Android casual and puzzle games.</p>
           </div>
           <nav>

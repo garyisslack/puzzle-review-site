@@ -4,11 +4,15 @@ import {
   buildSnapshot,
   formatScore,
   prepareReviewVersion,
+  rankBlocker,
+  type ExclusionReason,
   type RankCandidate,
+  type RankingDefinition,
 } from '@puzzle/scoring'
 import {
   articleJsonLd,
   breadcrumbJsonLd,
+  itemListJsonLd,
   canGenerateCompare,
   canGenerateGuideIndex,
   canGenerateNeedList,
@@ -23,7 +27,8 @@ import {
 import { authors, guides, needs, rankingDefinition, reviews } from '../data/catalog.ts'
 
 export const SITE_URL = 'https://puzzlereviewlab.com'
-export const SITE_NAME = 'puzzlereviewlab.com'
+export const SITE_NAME = 'puzzlereviewlab'
+export const primaryRankingSlug = 'reviewed-ios'
 const GENERATED_AT = '2026-11-08T00:00:00.000Z'
 
 export function authorBySlug(slug: string) {
@@ -75,6 +80,71 @@ export function reviewBySlug(slug: string | undefined) {
 
 export function colorSortSnapshot() {
   return buildSnapshot(rankingDefinition, candidates(), GENERATED_AT)
+}
+
+export function formatFamily(family: string) {
+  return family.split('-').map((word) => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')
+}
+
+export function rankingDefinitions(): RankingDefinition[] {
+  const definitions: RankingDefinition[] = [
+    {
+      slug: primaryRankingSlug,
+      title: "Puzzle games we've fully reviewed (iOS)",
+      mechanicFamily: null,
+      platform: 'ios',
+      minQualified: 1,
+    },
+    rankingDefinition,
+  ]
+  const seen = new Set(definitions.flatMap((definition) => (
+    definition.mechanicFamily ? [`${definition.platform}:${definition.mechanicFamily}`] : []
+  )))
+  const families = new Map<string, Set<string>>()
+  for (const review of candidates()) {
+    if (rankBlocker(review)) continue
+    const set = families.get(review.platform) ?? new Set<string>()
+    set.add(review.mechanicFamily)
+    families.set(review.platform, set)
+  }
+  for (const platform of ['ios', 'android'] as const) {
+    for (const family of [...(families.get(platform) ?? [])].sort()) {
+      const key = `${platform}:${family}`
+      if (seen.has(key)) continue
+      seen.add(key)
+      definitions.push({
+        slug: `${family}-${platform}`,
+        title: `${formatFamily(family)} games we've fully reviewed (${platform === 'ios' ? 'iOS' : 'Android'})`,
+        mechanicFamily: family,
+        platform,
+        minQualified: 1,
+      })
+    }
+  }
+  return definitions
+}
+
+export function unrankedReviews(): { gameId: string; name: string; reason: ExclusionReason }[] {
+  return candidates()
+    .flatMap((review) => {
+      const reason = rankBlocker(review)
+      return reason ? [{ gameId: review.gameId, name: review.name, reason }] : []
+    })
+    .sort((a, b) => a.name.localeCompare(b.name, 'en'))
+}
+
+export function rankingPages() {
+  return rankingDefinitions().flatMap((definition) => {
+    const result = buildSnapshot(definition, candidates(), GENERATED_AT)
+    return result.ok ? [{ definition, snapshot: result.snapshot }] : []
+  })
+}
+
+export function rankFor(gameId: string, mechanicFamily: string, platform: 'ios' | 'android') {
+  const page = rankingPages().find((entry) => entry.definition.mechanicFamily === mechanicFamily && entry.definition.platform === platform)
+  const item = page?.snapshot.items.find((entry) => entry.gameId === gameId)
+  if (!page || !item) return null
+  return { rank: item.rank, slug: page.definition.slug, title: page.definition.title }
 }
 
 export function needSnapshots() {
@@ -139,8 +209,7 @@ export function comparePages() {
         continue
       }
       const pair = comparePair(left.slug, right.slug)
-      const [a, b] = pair.canonicalSlug.split('-vs-')
-      if (!a || !b) continue
+      const [a, b] = left.slug.localeCompare(right.slug, 'en') <= 0 ? [left.slug, right.slug] : [right.slug, left.slug]
       pages.push({ slug: pair.canonicalSlug, a, b })
     }
   }
@@ -150,9 +219,7 @@ export function comparePages() {
 export function compareRedirects(): Record<string, string> {
   const redirects: Record<string, string> = {}
   for (const page of comparePages()) {
-    const [a, b] = page.slug.split('-vs-')
-    if (!a || !b) continue
-    const reverse = comparePair(b, a)
+    const reverse = comparePair(page.b, page.a)
     if (reverse.redirectFrom) redirects[`/compare/${reverse.redirectFrom}`] = `/compare/${reverse.canonicalSlug}/`
   }
   return redirects
@@ -183,7 +250,7 @@ export function reviewJson(slug: string) {
     authorName: author?.name ?? review.authorSlug,
     authorSlug: review.authorSlug,
     datePublished: review.publishedOn,
-    displayedScore: review.displayed,
+    displayedScore: review.defaultScore ? null : review.displayed,
     sponsored: review.sponsored,
   })
 }
@@ -206,20 +273,49 @@ export function crumbs(items: { name: string; path: string }[]) {
   return breadcrumbJsonLd(SITE_URL, items)
 }
 
+function latestContentDate() {
+  const dates = publishedReviews().map((review) => review.publishedOn)
+  return dates.reduce((latest, date) => (date > latest ? date : latest), '2026-11-08')
+}
+
 export function sitemapDocument() {
+  const contentDate = latestContentDate()
   const entries = [
-    { loc: `${SITE_URL}/`, lastmod: '2026-11-08' },
+    { loc: `${SITE_URL}/`, lastmod: contentDate },
+    { loc: `${SITE_URL}/reviews/`, lastmod: contentDate },
     { loc: `${SITE_URL}/how-we-test/`, lastmod: '2026-11-08' },
+    { loc: `${SITE_URL}/about/`, lastmod: '2026-11-08' },
+    { loc: `${SITE_URL}/editorial-independence/`, lastmod: '2026-11-08' },
+    { loc: `${SITE_URL}/contact/`, lastmod: '2026-11-08' },
+    { loc: `${SITE_URL}/privacy/`, lastmod: '2026-11-08' },
     ...publishedReviews()
       .filter((review) => !review.sponsored)
       .map((review) => ({ loc: `${SITE_URL}/reviews/${review.slug}/`, lastmod: review.publishedOn })),
-    { loc: `${SITE_URL}/rankings/${rankingDefinition.slug}/`, lastmod: '2026-11-08' },
-    ...comparePages().map((page) => ({ loc: `${SITE_URL}/compare/${page.slug}/`, lastmod: '2026-11-08' })),
+    ...publishedReviews().flatMap((review) => {
+      if (review.sponsored || similarSlugs(review.slug).length < 2) return []
+      return [{ loc: `${SITE_URL}/reviews/${review.slug}/similar/`, lastmod: review.publishedOn }]
+    }),
+    ...rankingPages().map((page) => ({ loc: `${SITE_URL}/rankings/${page.definition.slug}/`, lastmod: contentDate })),
+    ...comparePages().map((page) => ({ loc: `${SITE_URL}/compare/${page.slug}/`, lastmod: contentDate })),
     ...publishedGuides().map((guide) => ({ loc: `${SITE_URL}/guides/${guide.gameSlug}/${guide.slug}/`, lastmod: guide.modifiedOn })),
     ...guideIndexSlugs().map((slug) => ({ loc: `${SITE_URL}/guides/${slug}/`, lastmod: '2026-11-08' })),
     ...authors.map((author) => ({ loc: `${SITE_URL}/authors/${author.slug}/`, lastmod: '2026-11-08' })),
   ]
   return sitemapXml(entries)
+}
+
+export function rankingListJson(slug: string) {
+  const page = rankingPages().find((entry) => entry.definition.slug === slug)
+  if (!page) return null
+  return itemListJsonLd({
+    siteUrl: SITE_URL,
+    path: `/rankings/${page.definition.slug}/`,
+    name: page.definition.title,
+    items: page.snapshot.items.flatMap((item) => {
+      const review = publishedReviews().find((entry) => entry.gameId === item.gameId && entry.platform === page.definition.platform)
+      return review ? [{ name: item.name, path: `/reviews/${review.slug}/` }] : []
+    }),
+  })
 }
 
 export function robotsDocument() {

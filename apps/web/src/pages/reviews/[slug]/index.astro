@@ -2,35 +2,45 @@
 import { comparePair } from '@puzzle/seo'
 import Base from '../../../layouts/Base.astro'
 import Icon from '../../../components/Icon.astro'
-import { colorSortSnapshot, crumbs, dimensionRows, publishedGuides, publishedReviews, reviewJson, similarSlugs } from '../../../lib/site.ts'
-import { DIM_ICON, TAGS, artFor, scoreBand, storeCta, tagIcon, tagStateLabel, testedRange, weightedFormula } from '../../../lib/present.ts'
+import { articleHtml } from '../../../lib/article.ts'
+import { crumbs, dimensionRows, publishedGuides, publishedReviews, rankFor, reviewJson, similarSlugs } from '../../../lib/site.ts'
+import { DIM_ICON, TAGS, artFor, impressionOutOf10, scoreBand, storeCta, tagIcon, tagStateLabel, testedRange, weightedFormula } from '../../../lib/present.ts'
 
 export function getStaticPaths() {
   return publishedReviews().map((review) => ({ params: { slug: review.slug } }))
 }
 const review = publishedReviews().find((item) => item.slug === Astro.params.slug)
 if (!review) throw new Error('missing review')
+const listing = review.origin === 'store-listing'
+const researchLabel = review.analysisType === 'player_review_digest'
+  ? 'REVIEW DIGEST'
+  : review.analysisType === 'store_listing_analysis'
+    ? 'LISTING ANALYSIS'
+    : ''
+const impression = review.screenshotImpression
+const scored = review.displayed !== null
 const dims = dimensionRows(review.dims, review.rationales)
 const similar = similarSlugs(review.slug).map((slug) => publishedReviews().find((item) => item.slug === slug)).filter((item) => item !== undefined)
 const gameGuides = publishedGuides().filter((guide) => guide.gameSlug === review.slug)
 const art = artFor(review.slug)
 const band = scoreBand(review.displayed)
-const snapshot = colorSortSnapshot()
-const ranked = snapshot.ok ? snapshot.snapshot.items.find((item) => item.gameId === review.gameId) : undefined
-const shots = review.publicEvidenceCount > 0
-  ? [
-      { src: '/media/shot-1.jpg', label: `Board · v${review.appVersion}` },
-      { src: '/media/shot-2.jpg', label: `Level · ${review.testedTo}` },
-      { src: '/media/shot-3.jpg', label: `Ad break · ${review.platform}` },
-    ]
-  : []
+const ranked = rankFor(review.gameId, review.mechanicFamily, review.platform)
+const shots = listing && review.storeShots?.length
+  ? review.storeShots
+  : review.publicEvidenceCount > 0
+    ? [
+        { src: '/media/shot-1.jpg', label: `Board · v${review.appVersion}` },
+        { src: '/media/shot-2.jpg', label: `Level · ${review.testedTo}` },
+        { src: '/media/shot-3.jpg', label: `Ad break · ${review.platform}` },
+      ]
+    : []
 const jsonLd = [reviewJson(review.slug), crumbs([{ name: 'Home', path: '/' }, { name: 'Reviews', path: '/reviews/' }, { name: review.name, path: `/reviews/${review.slug}/` }])].filter(Boolean)
 ---
-<Base title={`${review.name} review`} description={review.summary} path={`/reviews/${review.slug}/`} robots={review.sponsored ? 'noindex,follow' : 'index,follow'} jsonLd={jsonLd}>
+<Base title={`${review.name} review`} description={review.summary} path={`/reviews/${review.slug}/`} image={art.key || undefined} robots={review.sponsored ? 'noindex,follow' : 'index,follow'} jsonLd={jsonLd}>
   <main class="wrap">
     <figure class="key-art">
-      {art.key ? <img src={art.key} alt="" width="1312" height="240" /> : <div class="placeholder"><Icon name="image" size={28} /></div>}
-      <figcaption>Key art from the official store listing · © its developer (mockup: AI-generated stand-in)</figcaption>
+      {art.key ? <img src={art.key} alt="" width="1312" height="240" fetchpriority="high" /> : <div class="placeholder"><Icon name="image" size={28} /></div>}
+      <figcaption>{listing ? 'Official App Store screenshot. Not a playtest capture.' : 'Key art from the official store listing · © its developer (mockup: AI-generated stand-in)'}</figcaption>
     </figure>
     <section class="review-top">
       <div>
@@ -38,7 +48,9 @@ const jsonLd = [reviewJson(review.slug), crumbs([{ name: 'Home', path: '/' }, { 
         <div class="pills">
           <span class:list={['pill', review.reviewType === 'full' ? '' : 'muted']}><i class="dot"></i> {review.reviewType === 'full' ? 'FULL REVIEW' : 'INITIAL REVIEW'}</span>
           {review.sponsored && <span class="pill warn"><i class="dot"></i> SPONSORED</span>}
-          <span class="pill warn"><i class="dot"></i> FICTIONAL DEMO DATA</span>
+          {researchLabel && <span class="pill warn"><i class="dot"></i> {researchLabel}</span>}
+          {listing && !researchLabel && <span class="pill warn"><i class="dot"></i> STORE LISTING</span>}
+          {review.origin === 'demo' && <span class="pill warn"><i class="dot"></i> FICTIONAL DEMO DATA</span>}
         </div>
         <div class="title-row">
           {art.icon ? <img class="app-icon" src={art.icon} alt="" width="88" height="88" /> : <span class="app-icon placeholder"><Icon name="image" size={28} /></span>}
@@ -48,7 +60,7 @@ const jsonLd = [reviewJson(review.slug), crumbs([{ name: 'Home', path: '/' }, { 
         <div class="meta-grid">
           <div><span>PLATFORM</span><strong>{review.osVersion}</strong></div>
           <div><span>APP VERSION</span><strong>{review.appVersion}</strong></div>
-          <div><span>TESTED</span><strong>{testedRange(review.testedFrom, review.testedTo)}</strong></div>
+          <div><span>TESTED</span><strong>{listing ? 'Not playtested' : testedRange(review.testedFrom, review.testedTo)}</strong></div>
           <div><span>TESTER REGION</span><strong>{review.testerRegion}</strong></div>
           <div><span>STORE CHECKED</span><strong>{review.platform === 'ios' ? 'US App Store' : 'Google Play'}</strong></div>
         </div>
@@ -70,45 +82,64 @@ const jsonLd = [reviewJson(review.slug), crumbs([{ name: 'Home', path: '/' }, { 
             <span>score-model-v1</span>
           </div>
         </div>
-        <hr class="rule" />
-        {dims.map((dim) => (
-          <div class="dimbar">
-            <span style={`color:var(--d${dim.key})`}><Icon name={DIM_ICON[dim.key]} size={18} /></span>
-            <span class="label">{dim.label}</span>
-            <span class="weight">{dim.weight}%</span>
-            <span class="track"><span style={`width:${dim.width}%;background:var(--d${dim.key})`}></span></span>
-            <span class="value">{dim.displayed ?? '—'}</span>
+        {impression && (
+          <div class="impression">
+            <div class="k">SCREENSHOT IMPRESSION</div>
+            <p class="impression-score">{impressionOutOf10(impression.score100)} <span>out of 10 · screenshot only, not an editorial score</span></p>
+            <p>{impression.rationale}</p>
+            <p class="meta">{impression.confidence === 'low' ? 'Low confidence' : 'Medium confidence'} · one App Store screenshot</p>
           </div>
-        ))}
-        <hr class="rule" />
-        <p class="calc">{weightedFormula(dims, review.displayed)}</p>
+        )}
+        {scored && (
+          <>
+            <hr class="rule" />
+            {dims.map((dim) => (
+              <div class="dimbar">
+                <span style={`color:var(--d${dim.key})`}><Icon name={DIM_ICON[dim.key]} size={18} /></span>
+                <span class="label">{dim.label}</span>
+                <span class="weight">{dim.weight}%</span>
+                <span class="track"><span style={`width:${dim.width}%;background:var(--d${dim.key})`}></span></span>
+                <span class="value">{dim.displayed ?? '—'}</span>
+              </div>
+            ))}
+            <hr class="rule" />
+            <p class="calc">{weightedFormula(dims, review.displayed)}</p>
+          </>
+        )}
+        {!scored && <p class="calc">No editorial score. Placeholder 7/10 values from the research pack are not published.</p>}
         <p class="independence"><Icon name="shield-check" size={14} /> {review.sponsored ? 'Sponsored. This page is not a ranking and its numbers are excluded from every list.' : 'No sponsorship on this review. Ads never change scores.'}</p>
       </aside>
     </section>
     <section class="review-body">
       <div class="stack">
-        <div class="verdict">
-          <p class="eyebrow">VERDICT</p>
-          <p>{review.summary}</p>
-        </div>
+        {review.bodyMarkdown ? (
+          <div class="article" set:html={articleHtml(review.bodyMarkdown)} />
+        ) : (
+          <div class="verdict">
+            <p class="eyebrow">VERDICT</p>
+            <p>{review.summary}</p>
+          </div>
+        )}
         <div class="callout">
           <h2><Icon name="triangle-alert" size={18} /> Testing boundaries</h2>
           <p>{review.testingBoundaries}</p>
         </div>
-        <div>
-          <h2>Scores, dimension by dimension</h2>
-          {dims.map((dim) => (
-            <article class="dim-note">
-              <div class="mark" style={`color:var(--d${dim.key})`}>{dim.key}<div>{dim.displayed ?? '—'}</div></div>
-              <div>
-                <h3>{dim.label} <span>{dim.weight}%</span></h3>
-                <p>{dim.rationale || 'No rationale yet, so this dimension is not scored.'}</p>
-              </div>
-            </article>
-          ))}
-        </div>
+        {scored && (
+          <div>
+            <h2>Scores, dimension by dimension</h2>
+            {dims.map((dim) => (
+              <article class="dim-note">
+                <div class="mark" style={`color:var(--d${dim.key})`}>{dim.key}<div>{dim.displayed ?? '—'}</div></div>
+                <div>
+                  <h3>{dim.label} <span>{dim.weight}%</span></h3>
+                  <p>{dim.rationale || 'No rationale yet, so this dimension is not scored.'}</p>
+                </div>
+              </article>
+            ))}
+          </div>
+        )}
         <figure>
-          <div class="block-head"><h2>Screenshots from our test</h2></div>
+          <div class="block-head"><h2>{listing ? 'App Store screenshots' : 'Screenshots from our test'}</h2></div>
           {shots.length > 0 ? (
             <div class="shots">
               {shots.map((shot) => (
@@ -119,7 +150,7 @@ const jsonLd = [reviewJson(review.slug), crumbs([{ name: 'Home', path: '/' }, { 
               ))}
             </div>
           ) : <div class="thumb placeholder" style="width:100%;height:180px"><Icon name="image" size={22} /></div>}
-          <figcaption class="shot-caption">Design mockup: these are AI-generated stand-ins for a fictional game. Real reviews show in-game captures with platform, version and date, credited to the developer.</figcaption>
+          <figcaption class="shot-caption">{listing ? 'App Store screenshots. Not playtest captures.' : 'Design mockup: these are AI-generated stand-ins for a fictional game. Real reviews show in-game captures with platform, version and date, credited to the developer.'}</figcaption>
         </figure>
         <div>
           <h2>Quick answers</h2>
@@ -159,8 +190,8 @@ const jsonLd = [reviewJson(review.slug), crumbs([{ name: 'Home', path: '/' }, { 
         <div class="side-card">
           <h2>WHERE IT RANKS</h2>
           {ranked ? (
-            <p><strong>#{ranked.rank}</strong> on {snapshot.ok ? 'the iOS color-sort list' : 'this list'} · {review.displayed}</p>
-          ) : <p>Not on the numbered iOS color-sort list.</p>}
+            <p><strong>#{ranked.rank}</strong> on <a href={`/rankings/${ranked.slug}/`}>{ranked.title}</a> · {review.displayed}</p>
+          ) : <p>Not on a numbered list.</p>}
           <p class="meta">iOS and Android are never combined. A missing score cannot be ranked.</p>
         </div>
         {similar.length > 0 && (
@@ -177,6 +208,7 @@ const jsonLd = [reviewJson(review.slug), crumbs([{ name: 'Home', path: '/' }, { 
         <div>
           <h2>DISCLOSURE</h2>
           <p class="tag-note">Store links go to official listings only. We have no affiliate deal with this developer. Ads, affiliates and sponsorships never change scores or ranks.</p>
+          {listing && <p class="tag-note">{review.analysisType === 'player_review_digest' ? 'This note was drafted with AI from the US listing and saved player reviews. It was not playtested.' : 'This note was drafted with AI from the public store listing and was not playtested.'}</p>}
         </div>
       </aside>
     </section>

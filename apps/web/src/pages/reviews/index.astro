@@ -2,7 +2,7 @@
 import Base from '../../layouts/Base.astro'
 import Icon from '../../components/Icon.astro'
 import { publishedReviews } from '../../lib/site.ts'
-import { artFor } from '../../lib/present.ts'
+import { artFor, impressionOutOf10 } from '../../lib/present.ts'
 
 const reviews = publishedReviews()
 ---
@@ -20,7 +20,14 @@ const reviews = publishedReviews()
             <p class="version">{review.platform.toUpperCase()} · {review.reviewType === 'full' ? 'Full review' : 'Initial review'} · {review.publishedOn}</p>
           </div>
           <span class:list={['pill', review.reviewType === 'full' ? '' : 'muted']}><i class="dot"></i> {review.reviewType === 'full' ? 'FULL REVIEW' : 'INITIAL REVIEW'}</span>
-          <div class="score mid">{review.displayed ?? '—'}</div>
+          {review.analysisType === 'player_review_digest' && <span class="pill warn"><i class="dot"></i> REVIEW DIGEST</span>}
+          {review.analysisType === 'store_listing_analysis' && <span class="pill warn"><i class="dot"></i> LISTING ANALYSIS</span>}
+          {review.origin === 'store-listing' && !review.analysisType && <span class="pill warn"><i class="dot"></i> STORE LISTING</span>}
+          {review.origin === 'demo' && <span class="pill warn"><i class="dot"></i> FICTIONAL DEMO DATA</span>}
+          <div>
+            <div class="score mid">{review.displayed ?? '—'}</div>
+            {review.screenshotImpression && <p class="meta">Screenshot {impressionOutOf10(review.screenshotImpression.score100)}</p>}
+          </div>
         </article>
       )
     })}

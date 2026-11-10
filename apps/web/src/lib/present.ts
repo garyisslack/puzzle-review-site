@@ -1,3 +1,5 @@
+import { listingArt } from '../data/store-listings.ts'
+
 export const TAGS = [
   { key: 'no_forced_ads', label: 'No forced ads', filter: 'No forced ads', param: 'no_forced_ads' },
   { key: 'plays_offline', label: 'Offline play', filter: 'Offline', param: 'offline' },
@@ -32,7 +34,7 @@ const ART: Record<string, { icon: string; key: string }> = {
 }
 
 export function artFor(slug: string) {
-  return ART[slug] ?? { icon: '', key: '' }
+  return ART[slug] ?? listingArt[slug] ?? { icon: '', key: '' }
 }
 
 export function tagStateLabel(state: string) {
@@ -91,6 +93,10 @@ export function testedRange(from: string, to: string) {
 
 export function storeLabel(platform: string) {
   return platform === 'ios' ? 'App Store' : 'Google Play'
+}
+
+export function impressionOutOf10(score100: number) {
+  return (score100 / 10).toFixed(1)
 }
 
 export function storeCta(platform: string) {
