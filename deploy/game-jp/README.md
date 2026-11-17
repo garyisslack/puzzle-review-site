@@ -9,7 +9,7 @@
 | 静态前台 | `127.0.0.1:5210` | Caddy 托管 `apps/web/dist` |
 | Payload CMS | `127.0.0.1:3000` → Caddy `:5211` | 待装 Node 服务后启用 |
 
-文件目录：`/opt/dimpuzzle/current`
+初次部署目录：`/opt/dimpuzzle/current`；后续发布使用 `/opt/dimpuzzle/releases/{release_id}`，源站配置直接指向新 release，避免下线页面残留。
 
 ## 初次安装（game-jp）
 
@@ -26,6 +26,8 @@ ssh game-jp 'bash -s' < deploy/game-jp/install-remote.sh
 ```bash
 ./deploy/game-jp/sync-web.sh
 ```
+
+脚本先运行测试、前台类型检查与构建，再上传到独立 release，验证 Caddy 配置并切换服务。切换失败会恢复旧配置；旧文件保留用于回滚。HTTP/www 与 `index.html` 使用 301 规范化，演示评测及其衍生页返回 410。
 
 ## Tunnel
 

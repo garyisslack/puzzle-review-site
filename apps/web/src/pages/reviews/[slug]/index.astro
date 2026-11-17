@@ -3,7 +3,7 @@ import { comparePair, faqPageJsonLd } from '@puzzle/seo'
 import Base from '../../../layouts/Base.astro'
 import Icon from '../../../components/Icon.astro'
 import { articleHtml } from '../../../lib/article.ts'
-import { crumbs, dimensionRows, publishedGuides, publishedReviews, rankFor, reviewJson, similarSlugs } from '../../../lib/site.ts'
+import { crumbs, dimensionRows, publishedGuides, publishedReviews, rankFor, reviewJson, researchLabel, similarSlugs } from '../../../lib/site.ts'
 import { DIM_ICON, TAGS, artFor, impressionOutOf10, scoreBand, storeCta, tagIcon, tagStateLabel, testedRange, weightedFormula } from '../../../lib/present.ts'
 
 export function getStaticPaths() {
@@ -12,11 +12,6 @@ export function getStaticPaths() {
 const review = publishedReviews().find((item) => item.slug === Astro.params.slug)
 if (!review) throw new Error('missing review')
 const listing = review.origin === 'store-listing'
-const researchLabel = review.analysisType === 'player_review_digest'
-  ? 'REVIEW DIGEST'
-  : review.analysisType === 'store_listing_analysis'
-    ? 'LISTING ANALYSIS'
-    : ''
 const impression = review.screenshotImpression
 const scored = review.displayed !== null
 const dims = dimensionRows(review.dims, review.rationales)
@@ -46,15 +41,13 @@ const jsonLd = [reviewJson(review.slug), faqPageJsonLd(review.faqs), crumbs([{ n
       <div>
         <p class="crumbs"><a href="/">Home</a> / <a href="/reviews/">Reviews</a> / {review.mechanicFamily} / {review.name}</p>
         <div class="pills">
-          <span class:list={['pill', review.reviewType === 'full' ? '' : 'muted']}><i class="dot"></i> {review.reviewType === 'full' ? 'FULL REVIEW' : 'INITIAL REVIEW'}</span>
+          <span class:list={['pill', review.reviewType === 'full' ? '' : 'muted']}><i class="dot"></i> {researchLabel(review).toUpperCase()}</span>
           {review.sponsored && <span class="pill warn"><i class="dot"></i> SPONSORED</span>}
-          {researchLabel && <span class="pill warn"><i class="dot"></i> {researchLabel}</span>}
-          {listing && !researchLabel && <span class="pill warn"><i class="dot"></i> STORE LISTING</span>}
           {review.origin === 'demo' && <span class="pill warn"><i class="dot"></i> FICTIONAL DEMO DATA</span>}
         </div>
         <div class="title-row">
           {art.icon ? <img class="app-icon" src={art.icon} alt="" width="88" height="88" /> : <span class="app-icon placeholder"><Icon name="image" size={28} /></span>}
-          <h1>{review.name} review</h1>
+          <h1>{review.name} — {researchLabel(review).toLowerCase()}</h1>
         </div>
         <p class="dek">{review.verdict}</p>
         <div class="meta-grid">
@@ -74,12 +67,12 @@ const jsonLd = [reviewJson(review.slug), faqPageJsonLd(review.faqs), crumbs([{ n
         <div class="score-top">
           <div>
             <div class="k">EDITORIAL SCORE</div>
-            <div class="score big">{review.displayed ?? '—'}</div>
+            <div class:list={['score', review.displayed ? 'big' : 'unscored']}>{review.displayed ?? 'Unscored'}</div>
           </div>
           <div class="score-side">
             {band && <span class="band-pill">{band}</span>}
             <span>{review.displayed ? 'OUT OF 10' : 'No composite score'}</span>
-            <span>score-model-v1</span>
+            {scored && <span>score-model-v1</span>}
           </div>
         </div>
         {impression && (
@@ -106,7 +99,7 @@ const jsonLd = [reviewJson(review.slug), faqPageJsonLd(review.faqs), crumbs([{ n
             <p class="calc">{weightedFormula(dims, review.displayed)}</p>
           </>
         )}
-        {!scored && <p class="calc">No editorial score. Placeholder 7/10 values from the research pack are not published.</p>}
+        {!scored && <p class="calc">No editorial score. This research uses store information and player reports, not hands-on play. Research placeholders are excluded from scoring and rankings.</p>}
         <p class="independence"><Icon name="shield-check" size={14} /> {review.sponsored ? 'Sponsored. This page is not a ranking and its numbers are excluded from every list.' : 'No sponsorship on this review. Ads never change scores.'}</p>
       </aside>
     </section>
@@ -186,7 +179,7 @@ const jsonLd = [reviewJson(review.slug), faqPageJsonLd(review.faqs), crumbs([{ n
               return <li><span>{label}</span>{detail}</li>
             })}
           </ul>
-          <p>Facts we observed, not a kids’ app certification. Check the store listing and your device’s parental controls.</p>
+          <p>Source-based notes, not a kids’ app certification. Check the store listing and your device’s parental controls.</p>
         </div>
         <div class="side-card">
           <h2>WHERE IT RANKS</h2>

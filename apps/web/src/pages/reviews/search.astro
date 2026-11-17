@@ -1,0 +1,46 @@
+---
+import Base from '../../layouts/Base.astro'
+import { publishedReviews, researchLabel } from '../../lib/site.ts'
+const entries = publishedReviews().map((review) => ({ name: review.name, slug: review.slug, label: researchLabel(review), summary: review.seoDescription ?? review.summary }))
+---
+<Base title="Search game research" description="Search puzzle game store analyses and player-review digests by game name." path="/reviews/search/" robots="noindex,follow">
+  <main class="wrap section">
+    <h1>Search game research</h1>
+    <form action="/reviews/search/" method="get">
+      <label for="research-query">Game name</label>
+      <input id="research-query" name="q" type="search" required />
+      <button class="btn" type="submit">Search</button>
+    </form>
+    <p id="result-note" aria-live="polite">Enter a game name to search all research notes.</p>
+    <div id="search-results"></div>
+    <noscript><p>Search needs JavaScript. <a href="/reviews/">Browse the paginated research directory instead.</a></p></noscript>
+    <p><a class="text-link" href="/reviews/">Browse all research →</a></p>
+    <script id="research-index" type="application/json" set:html={JSON.stringify(entries).replace(/</g, '\\u003c')} />
+    <script>
+      const input = document.querySelector<HTMLInputElement>('#research-query')
+      const params = new URLSearchParams(location.search)
+      const query = params.get('q')?.trim() ?? ''
+      if (input) input.value = query
+      const entries: { name: string; slug: string; label: string; summary: string }[] = JSON.parse(document.querySelector('#research-index')?.textContent ?? '[]')
+      const results = query ? entries.filter((entry) => entry.name.toLowerCase().includes(query.toLowerCase())) : []
+      const note = document.querySelector('#result-note')
+      if (query && note) note.textContent = `${results.length} results for “${query}”.`
+      const container = document.querySelector('#search-results')
+      for (const entry of results) {
+        const article = document.createElement('article')
+        const heading = document.createElement('h2')
+        const link = document.createElement('a')
+        link.href = `/reviews/${entry.slug}/`
+        link.textContent = entry.name
+        heading.append(link)
+        const label = document.createElement('p')
+        label.className = 'meta'
+        label.textContent = entry.label
+        const summary = document.createElement('p')
+        summary.textContent = entry.summary
+        article.append(heading, label, summary)
+        container?.append(article)
+      }
+    </script>
+  </main>
+</Base>

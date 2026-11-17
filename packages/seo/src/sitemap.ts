@@ -29,7 +29,6 @@ export function robotsTxt(input: { siteUrl: string; allowAiTraining: boolean }):
   const lines = [
     'User-agent: *',
     'Allow: /',
-    'Disallow: /guides/submit/',
     '',
     'User-agent: Googlebot',
     'Allow: /',

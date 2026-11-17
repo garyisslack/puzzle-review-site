@@ -1,0 +1,31 @@
+---
+import Base from '../layouts/Base.astro'
+import ResearchRow from './ResearchRow.astro'
+import { crumbs, publishedReviews, reviewPage, reviewPageCount, reviewPagePath } from '../lib/site.ts'
+
+interface Props { page?: number }
+const { page = 1 } = Astro.props
+const total = reviewPageCount()
+const reviews = reviewPage(page)
+const title = page === 1 ? 'Puzzle game research' : `Puzzle game research — page ${page}`
+---
+<Base title={title} description={`Browse US puzzle game store analyses and player-review digests. Page ${page} of ${total}; research notes are not hands-on playtests.`} path={reviewPagePath(page)} jsonLd={[crumbs([{ name: 'Home', path: '/' }, { name: title, path: reviewPagePath(page) }])]}>
+  <main class="wrap section">
+    <h1>{title}</h1>
+    <p class="meta">{publishedReviews().length} game research notes · Page {page} of {total}</p>
+    <p>Store claims and player reports are labeled separately. Research notes have no editorial score and do not enter numeric rankings.</p>
+    {reviews.map((review) => <ResearchRow review={review} />)}
+    <nav class="pagination" aria-label="Research pages">
+      {page > 1 && <a class="text-link" href={reviewPagePath(page - 1)} rel="prev">← Previous</a>}
+      <span>Page {page} of {total}</span>
+      {page < total && <a class="text-link" href={reviewPagePath(page + 1)} rel="next">Next →</a>}
+    </nav>
+    <script>
+      const query = new URLSearchParams(location.search).get('q')?.trim()
+      if (query) location.replace(`/reviews/search/?q=${encodeURIComponent(query)}`)
+    </script>
+  </main>
+</Base>
+<style>
+  .pagination { display: flex; flex-wrap: wrap; align-items: center; gap: 24px; padding: 32px 0; }
+</style>

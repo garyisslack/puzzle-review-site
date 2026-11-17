@@ -3,49 +3,30 @@ import path from 'node:path'
 
 const dist = path.resolve(import.meta.dirname, '../dist')
 const read = (rel) => fs.readFileSync(path.join(dist, rel), 'utf8')
-
+const assert = (condition, message) => { if (!condition) throw new Error(message) }
 const home = read('index.html')
-if (!home.includes('list at 5 games')) throw new Error('need-list gate copy missing')
-if (!home.includes('7.5')) throw new Error('home score missing')
-
-const review = read('reviews/prism-pocket-sort/index.html')
-if (!review.includes('SoftwareApplication')) throw new Error('review JSON-LD missing')
-if (review.includes('aggregateRating')) throw new Error('aggregateRating leaked')
-if (!review.includes('7.5')) throw new Error('review score missing')
+assert(!home.includes('prism-pocket-sort') && !home.includes('We play every game ourselves'), '首页包含演示或实测误导')
+assert(home.includes('Browse game research'), '首页缺少研究内容入口')
+const review = read('reviews/meowdoku-ios-6761760135/index.html')
+assert(review.includes('SoftwareApplication') && !review.includes('ratingValue') && !review.includes('aggregateRating'), '研究页评分结构化数据错误')
+assert(review.includes('Unscored') && !review.includes('FULL REVIEW'), '资料分析冒充评分评测')
 for (const img of review.match(/<img\b[^>]*>/g) ?? []) {
-  if (!/\swidth=/.test(img) || !/\sheight=/.test(img)) throw new Error(`image missing dimensions: ${img}`)
+  assert(/\swidth=/.test(img) && /\sheight=/.test(img), `图片缺少尺寸: ${img}`)
 }
-
-const initial = read('reviews/sample-initial-entry/index.html')
-if (!initial.includes('No composite score')) throw new Error('initial review shows a number')
-
-const ranking = read('rankings/color-sort-ios/index.html')
-if (!ranking.includes('<td>2</td>') || !ranking.includes('<td>4</td>')) throw new Error('tie ranks missing')
-if (/top\s+10/i.test(ranking)) throw new Error('dishonest Top 10 title')
-if (fs.existsSync(path.join(dist, 'rankings/no-forced-ads/index.html'))) throw new Error('thin need list was published')
-
-const submit = read('guides/submit/index.html')
-if (!submit.includes('noindex,follow')) throw new Error('submit page is indexable')
-if (!read('guides/prism-pocket-sort/early-bottles/index.html').includes('"@type":"Article"')) {
-  throw new Error('guide JSON-LD missing')
-}
-if (!fs.existsSync(path.join(dist, 'guides/prism-pocket-sort/index.html'))) throw new Error('guide index missing')
-
-const sitemap = read('sitemap.xml')
-if (!sitemap.includes('<sitemapindex')) throw new Error('sitemap index missing')
-if (!sitemap.includes('/sitemap-reviews.xml')) throw new Error('review sitemap missing from index')
-const reviewSitemap = read('sitemap-reviews.xml')
-if (!reviewSitemap.includes('<lastmod>2026-10-02</lastmod>')) throw new Error('sitemap lastmod is not the content date')
-if (reviewSitemap.includes('/guides/submit/')) throw new Error('submit URL is in the sitemap')
-if (reviewSitemap.includes('sponsored-sort-deluxe')) throw new Error('sponsored URL is in the sitemap')
-if (!reviewSitemap.includes('/reviews/meowdoku-ios-6761760135/')) throw new Error('research review missing from sitemap')
-
-const sponsored = read('reviews/sponsored-sort-deluxe/index.html')
-if (sponsored.includes('"@type":"Review"')) throw new Error('sponsored page emitted Review schema')
-
-const redirects = read('_redirects')
-if (!redirects.includes('/compare/tile-path-daily-vs-prism-pocket-sort /compare/prism-pocket-sort-vs-tile-path-daily/ 301')) {
-  throw new Error('compare reverse URL is not a 301')
-}
-
-console.log('dist checks ok')
+assert(!fs.existsSync(path.join(dist, 'reviews/prism-pocket-sort/index.html')), '演示评测被发布')
+assert(!fs.existsSync(path.join(dist, 'guides/prism-pocket-sort/index.html')), '演示攻略被发布')
+assert(!fs.existsSync(path.join(dist, 'rankings/reviewed-ios/index.html')), '默认分榜单被发布')
+const directory = read('reviews/index.html')
+assert((directory.match(/class="review-row"/g) ?? []).length === 25, '目录第一页未分页')
+assert(directory.includes('/reviews/page/2/'), '分页缺少可抓取链接')
+const page2 = read('reviews/page/2/index.html')
+assert(page2.includes('rel="canonical" href="https://puzzlereviewlab.com/reviews/page/2/"'), '分页 canonical 错误')
+assert(read('reviews/page/20/index.html').includes('Page 20 of 20'), '最后一页缺失')
+assert(read('reviews/search/index.html').includes('name="robots" content="noindex,follow"'), '搜索页未禁止索引')
+assert(read('guides/submit/index.html').includes('noindex,follow'), '投稿页未禁止索引')
+const sitemap = read('sitemap-reviews.xml')
+assert((sitemap.match(/<url>/g) ?? []).length === 500, '研究 sitemap 数量错误')
+assert(!sitemap.includes('prism-pocket-sort') && !read('sitemap-pages.xml').includes('/compare/'), 'sitemap 泄漏演示内容')
+assert(!read('sitemap.xml').includes('sitemap-rankings.xml'), '空榜单仍提交至 sitemap 索引')
+assert(read('seo-redirects.caddy').includes('/reviews/page/1/ /reviews/ 301'), 'Caddy 缺少分页规范化')
+console.log('正式内容、分页与 SEO 构建检查通过')

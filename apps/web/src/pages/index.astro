@@ -1,226 +1,41 @@
 ---
 import Base from '../layouts/Base.astro'
+import ResearchRow from '../components/ResearchRow.astro'
 import Icon from '../components/Icon.astro'
 import { organizationJsonLd, websiteJsonLd } from '@puzzle/seo'
-import { DIMENSIONS, METHODOLOGY_VERSION, SITE_NAME, SITE_URL, colorSortSnapshot, crumbs, needCards, primaryRankingSlug, publishedReviews, rankingDefinition, rankingPages } from '../lib/site.ts'
-import { NEED_VISUAL, artFor, impressionOutOf10, storeLabel } from '../lib/present.ts'
+import { SITE_NAME, SITE_URL, crumbs, publishedReviews } from '../lib/site.ts'
 
-const result = colorSortSnapshot()
-if (!result.ok) throw new Error('home ranking failed to build')
-const snapshot = result.snapshot
-const rankings = rankingPages()
-const allRanking = rankings.find((page) => page.definition.slug === primaryRankingSlug)
 const reviews = publishedReviews()
-const featured = snapshot.items.slice(0, 2).flatMap((item) => {
-  const review = reviews.find((entry) => entry.gameId === item.gameId)
-  return review ? [{ item, review }] : []
-})
-const latest = reviews
-  .filter((review) => review.origin === 'store-listing')
-  .sort((a, b) => (a.chartRank ?? 999) - (b.chartRank ?? 999))
-  .slice(0, 3)
-const homeBlurbs: Record<string, string> = {
-  G: 'Rules, core loop, difficulty pacing',
-  A: 'Interruption, timing, real opt-in',
-  F: 'Progress without paying',
-  C: 'Meaningful variety over time',
-  U: 'Controls, crashes, resume',
-}
-const jsonLd = [
-  organizationJsonLd({ siteUrl: SITE_URL, name: SITE_NAME }),
-  websiteJsonLd({ siteUrl: SITE_URL, name: SITE_NAME }),
-  crumbs([{ name: 'Home', path: '/' }]),
-]
+const latest = [...reviews].sort((a, b) => b.publishedOn.localeCompare(a.publishedOn) || (a.chartRank ?? 999) - (b.chartRank ?? 999)).slice(0, 6)
+const jsonLd = [organizationJsonLd({ siteUrl: SITE_URL, name: SITE_NAME }), websiteJsonLd({ siteUrl: SITE_URL, name: SITE_NAME }), crumbs([{ name: 'Home', path: '/' }])]
 ---
-<Base title="Find puzzle games worth playing" description="Independent editorial scores for US iOS and Android puzzle games." path="/" jsonLd={jsonLd}>
+<Base title="Puzzle game research before you download" description="Explore US puzzle game store analyses and player-review digests. Clearly labeled sources, ad reports and evidence limits, without untested editorial scores." path="/" jsonLd={jsonLd}>
   <main>
     <section class="hero">
       <div class="hero-copy">
-        <p class="hero-kicker"><i></i> INDEPENDENT EDITORIAL SCORES · iOS & ANDROID</p>
+        <p class="hero-kicker"><i></i> PUZZLE GAME RESEARCH · iOS & ANDROID</p>
         <h1>Find puzzle games worth playing — before you download.</h1>
-        <p class="lede">We play every game ourselves and score it on five things that matter: how fun it is, how annoying the ads are, whether it’s fair without paying, how much there is to do, and how smoothly it runs.</p>
+        <p class="lede">Explore US store listings and player-review digests. We separate published claims from player reports and clearly label what has not been playtested.</p>
         <div class="hero-ctas">
-          <a class="btn" href={`/rankings/${primaryRankingSlug}/`}>Browse rankings <Icon name="arrow-right" size={16} /></a>
-          <a class="btn ghost" href="/how-we-test/">How we test</a>
+          <a class="btn" href="/reviews/">Browse game research <Icon name="arrow-right" size={16} /></a>
+          <a class="btn ghost" href="/how-we-test/">Our evidence</a>
         </div>
       </div>
     </section>
-
-    <section class="band" id="needs">
-      <div class="wrap">
-        <h2>What matters to you?</h2>
-        <div class="need-grid">
-          {needCards().map((need) => {
-            const visual = NEED_VISUAL[need.tag]
-            return (
-              <a class="need" href={`/rankings/${rankingDefinition.slug}/`} style={`background:${visual.bg}`}>
-                <span class="need-icon" style={`color:${visual.color}`}><Icon name={visual.icon} size={24} /></span>
-                <h3>{need.title}</h3>
-                <p>{need.blurb}</p>
-                <p class="status">{need.reviewed} reviewed · list at 5 games</p>
-              </a>
-            )
-          })}
-        </div>
-      </div>
-    </section>
-
-    <section class="wrap feature">
-      <div>
-        <p class="eyebrow">FEATURED RANKING</p>
-        <h2>{rankingDefinition.title}</h2>
-        <p class="why">Only {snapshot.qualifiedCount} games have passed the full-review threshold so far, so this list is not called a Top 10. Ranks come from the displayed one-decimal score.</p>
-        <dl class="stat-list">
-          <div><dt>QUALIFIED GAMES</dt><dd>{snapshot.qualifiedCount}</dd></div>
-          <div><dt>SNAPSHOT</dt><dd>{snapshot.generatedAt.slice(0, 10)}</dd></div>
-          <div><dt>METHOD</dt><dd>{snapshot.methodologyVersion}</dd></div>
-        </dl>
-        <a class="text-link" href={`/rankings/${rankingDefinition.slug}/`}>See the full ranking <Icon name="arrow-right" size={16} /></a>
-      </div>
-      <div class="ledger">
-        <div class="ledger-head">
-          <span>RANK</span><span></span><span>GAME</span><span>G A F C U</span><span>SCORE</span><span></span>
-        </div>
-        {featured.map(({ item, review }) => {
-          const art = artFor(review.slug)
-          const yesTags = [
-            ['no_forced_ads', 'No forced ads'],
-            ['plays_offline', 'Offline'],
-          ].filter(([key]) => review.tags[key] === 'yes')
-          return (
-            <article class="ledger-row">
-              <div class="rank-num">{item.rank}</div>
-              {art.icon ? <img class="game-icon" src={art.icon} alt="" width="64" height="64" /> : <span class="game-icon placeholder"><Icon name="image" size={22} /></span>}
-              <div>
-                <div class="name-row">
-                  <a class="game-name" href={`/reviews/${review.slug}/`}>{item.name}</a>
-                  <span class="fictional">FICTIONAL</span>
-                </div>
-                <p class="version">{review.platform === 'ios' ? 'iOS' : 'Android'} · App v{review.appVersion} · {review.reviewType === 'full' ? 'Full review' : 'Initial review'} · Tested {review.testedTo}</p>
-                <div class="mini-tags">
-                  {yesTags.map(([, label]) => <span><Icon name="check" size={14} /> {label}</span>)}
-                </div>
-              </div>
-              <div class="vbars" aria-hidden="true">
-                {DIMENSIONS.map((dimension) => {
-                  const tenths = review.dims[dimension.key]
-                  const height = tenths == null ? 0 : tenths
-                  return (
-                    <span class="vbar">
-                      <b><i style={`height:${height}%;background:var(--d${dimension.key})`}></i></b>
-                      <em>{dimension.key}</em>
-                    </span>
-                  )
-                })}
-              </div>
-              <div class="score">{(item.displayedTenths / 10).toFixed(1)}</div>
-              <div class="row-actions">
-                <a class="store sm" href={review.storeUrl}>{storeLabel(review.platform)} <Icon name="arrow-up-right" size={16} /></a>
-                <a class="text-link" href={`/reviews/${review.slug}/`}>Read review →</a>
-              </div>
-            </article>
-          )
-        })}
-        <p class="ledger-note">Ties share a rank; the next rank is skipped. Scores are illustrative demo data for fictional games, not real reviews.</p>
-      </div>
-    </section>
-
-    <section class="method">
-      <div class="wrap method-grid">
-        <div>
-          <p class="eyebrow">HOW SCORING WORKS</p>
-          <h2>S = .30G + .20A + .20F + .15C + .15U</h2>
-          <p>Every full review scores five dimensions from 0 to 10. If any one is missing, there is no composite score and the game stays out of numeric rankings — we never fill gaps with 0 or 10.</p>
-        </div>
-        <div class="dim-cols">
-          {DIMENSIONS.map((dimension) => (
-            <article class="dim-col">
-              <span class="code" style={`color:var(--d${dimension.key})`}>{dimension.key}</span>
-              <strong>{dimension.label} — {dimension.question}</strong>
-              <span class="w">{dimension.weight}%</span>
-              <p>{homeBlurbs[dimension.key]}</p>
-            </article>
-          ))}
-        </div>
-      </div>
-    </section>
-
     <section class="wrap latest">
       <div>
-        <div class="block-head">
-          <h2>Latest reviews</h2>
-          <a class="text-link" href="/reviews/">All reviews →</a>
-        </div>
-        {latest.map((review) => {
-          const art = artFor(review.slug)
-          return (
-            <article class="review-row">
-              {art.key ? <img class="thumb" src={art.key} alt="" width="144" height="88" /> : <span class="thumb placeholder"><Icon name="image" size={22} /></span>}
-              <div>
-                <h3><a href={`/reviews/${review.slug}/`}>{review.name}</a></h3>
-                <p class="version">{review.developer} · {review.osVersion} · v{review.appVersion} · {review.publishedOn}</p>
-              </div>
-              <span class:list={['pill', review.reviewType === 'full' ? '' : 'muted']}>
-                <i class="dot"></i> {review.reviewType === 'full' ? 'FULL REVIEW' : 'INITIAL REVIEW'}
-              </span>
-              <div>
-                <div class="score mid">{review.displayed ?? '—'}</div>
-                {review.screenshotImpression && <p class="meta">Screenshot {impressionOutOf10(review.screenshotImpression.score100)}</p>}
-              </div>
-            </article>
-          )
-        })}
-        <p class="ledger-note">Research notes use the default score 7.0 and enter their genre list. Ads may use a store sample. The number is not a playtest.</p>
+        <div class="block-head"><h2>Latest game research</h2><a class="text-link" href="/reviews/">All research →</a></div>
+        {latest.map((review) => <ResearchRow review={review} />)}
+        <p class="ledger-note">Research notes do not receive an editorial score or enter numeric rankings.</p>
       </div>
       <aside class="genres">
-        <div class="block-head"><h2>Browse genres</h2></div>
-        {allRanking && (
-          <div class="genre-row">
-            <div>
-              <a href={`/rankings/${allRanking.definition.slug}/`}><strong>All reviewed</strong></a>
-              <span>{allRanking.snapshot.qualifiedCount} full reviews</span>
-            </div>
-            <a href={`/rankings/${allRanking.definition.slug}/`} aria-label="All reviewed ranking"><Icon name="arrow-right" size={18} /></a>
-          </div>
-        )}
-        <div class="genre-row">
-          <div>
-            <a href={`/rankings/${rankingDefinition.slug}/`}><strong>Color sort</strong></a>
-            <span>{snapshot.qualifiedCount} full reviews</span>
-          </div>
-          <a href={`/rankings/${rankingDefinition.slug}/`} aria-label="Color sort ranking"><Icon name="arrow-right" size={18} /></a>
-        </div>
-        {rankings.filter((page) => page.definition.mechanicFamily && page.definition.slug !== rankingDefinition.slug).map((page) => (
-          <div class="genre-row">
-            <div>
-              <a href={`/rankings/${page.definition.slug}/`}><strong>{page.definition.mechanicFamily}{page.definition.platform === 'android' ? ' · Android' : ''}</strong></a>
-              <span>{page.snapshot.qualifiedCount} full reviews</span>
-            </div>
-            <a href={`/rankings/${page.definition.slug}/`} aria-label={`${page.definition.mechanicFamily} ranking`}><Icon name="arrow-right" size={18} /></a>
-          </div>
-        ))}
+        <div class="block-head"><h2>Before you download</h2></div>
+        <div class="genre-row"><div><a href="/reviews/"><strong>Browse all research</strong></a><span>{reviews.length} game research notes</span></div></div>
+        <div class="genre-row"><div><a href="/how-we-test/"><strong>Our evidence</strong></a><span>Store claims and player reports</span></div></div>
+        <div class="genre-row"><div><strong>Hands-on testing</strong><span>No published playtests yet</span></div></div>
+        <div class="genre-row"><div><a href="/how-we-test/#formula"><strong>Scoring method</strong></a><span>Reserved for hands-on reviews</span></div></div>
+        <div class="genre-row"><div><a href="/editorial-independence/"><strong>Editorial independence</strong></a><span>How we handle sponsorship</span></div></div>
       </aside>
-    </section>
-
-    <section class="wrap" id="updates">
-      <p class="eyebrow">NEW & UPDATED</p>
-      <div class="updates">
-        <article>
-          <time>NOV 08</time>
-          <h3><a href="/how-we-test/">Method page published</a></h3>
-          <p>{METHODOLOGY_VERSION}: weights, anchors, tie rule and what we can’t verify.</p>
-        </article>
-        <article>
-          <time>NOV 03</time>
-          <h3><a href="/reviews/prism-pocket-sort/">Retest queued: Prism Pocket Sort</a></h3>
-          <p>Store notes mention a new energy system. The current score stays until a new review version ships.</p>
-        </article>
-        <article>
-          <time>OCT 30</time>
-          <h3><a href="/rankings/color-sort-ios/">Two full reviews added</a></h3>
-          <p>Color-sort calibration set: {snapshot.qualifiedCount} of 10 games completed.</p>
-        </article>
-      </div>
     </section>
   </main>
 </Base>

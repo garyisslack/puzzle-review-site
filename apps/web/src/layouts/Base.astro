@@ -8,7 +8,7 @@ import '@fontsource/nunito-sans/800.css'
 import '../styles/global.css'
 import Icon from '../components/Icon.astro'
 import { metaDescription } from '@puzzle/seo'
-import { SITE_NAME, SITE_URL, primaryRankingSlug } from '../lib/site.ts'
+import { SITE_NAME, SITE_URL, primaryRankingSlug, rankingPages, guideIndexSlugs } from '../lib/site.ts'
 
 interface Props {
   title: string
@@ -53,13 +53,13 @@ const imageUrl = image ? new URL(image, SITE_URL).toString() : ''
           <img class="wordmark" src="/wordmark.svg" alt={SITE_NAME} width="248" height="36" />
         </a>
         <nav class="nav-links" id="site-nav">
-          <a href="/#needs">Discover</a>
-          <a href={`/rankings/${primaryRankingSlug}/`}>Rankings</a>
-          <a href="/reviews/">Reviews</a>
-          <a href="/guides/prism-pocket-sort/">Guides</a>
-          <a href="/#updates">New & Updated</a>
+          <a href="/">Discover</a>
+          {rankingPages().length > 0 && <a href={`/rankings/${primaryRankingSlug}/`}>Rankings</a>}
+          <a href="/reviews/">Research</a>
+          {guideIndexSlugs().length > 0 && <a href={`/guides/${guideIndexSlugs()[0]}/`}>Guides</a>}
+          <a href="/how-we-test/">Our evidence</a>
         </nav>
-        <form class="search" action="/reviews/" method="get">
+        <form class="search" action="/reviews/search/" method="get">
           <Icon name="search" size={16} />
           <input name="q" type="search" placeholder="Search games" aria-label="Search games" />
         </form>
@@ -78,7 +78,7 @@ const imageUrl = image ? new URL(image, SITE_URL).toString() : ''
               <img class="mark" src="/mark.svg" alt="" width="28" height="28" />
               <img class="wordmark" src="/wordmark-dark.svg" alt={SITE_NAME} width="214" height="31" />
             </div>
-            <p>Independent editorial scores for iOS & Android casual and puzzle games.</p>
+            <p>Puzzle game research from US store listings and player reviews.</p>
           </div>
           <nav>
             <a href="/how-we-test/">How We Test</a>
@@ -89,7 +89,7 @@ const imageUrl = image ? new URL(image, SITE_URL).toString() : ''
           </nav>
         </div>
         <hr class="footer-rule" />
-        <p class="footer-note">Editorial rankings are not US App Store or Google Play download charts. Ads, affiliates and sponsorships never change scores or ranks.</p>
+        <p class="footer-note">Research notes are not hands-on reviews. Store charts and editorial rankings are different. Ads, affiliates and sponsorships never change our findings.</p>
       </div>
     </footer>
     <script>

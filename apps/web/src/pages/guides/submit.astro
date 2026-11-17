@@ -1,7 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro'
-import { reviews } from '../../data/catalog.ts'
-const games = [...new Map(reviews.map((review) => [review.slug, review.name])).entries()]
+import { publishedReviews } from '../../lib/site.ts'
+const games = [...new Map(publishedReviews().map((review) => [review.slug, review.name])).entries()]
 ---
 <Base title="Submit a guide" description="Send a guide for an editor to check." path="/guides/submit/" robots="noindex,follow">
   <main class="wrap submit-layout">

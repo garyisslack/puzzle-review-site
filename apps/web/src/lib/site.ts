@@ -37,7 +37,7 @@ export function authorBySlug(slug: string) {
 }
 
 export function candidates(): RankCandidate[] {
-  return reviews.map((review) => ({
+  return reviews.filter((review) => review.origin !== 'demo' && !review.defaultScore && review.status === 'published').map((review) => ({
     gameId: review.gameId,
     name: review.name,
     platform: review.platform,
@@ -52,6 +52,7 @@ export function candidates(): RankCandidate[] {
 
 export function publishedReviews() {
   return reviews.flatMap((review) => {
+    if (review.origin === 'demo' || review.status !== 'published') return []
     const prepared = prepareReviewVersion(review)
     const gate = canPublishReview({
       reviewType: review.reviewType,
@@ -67,12 +68,33 @@ export function publishedReviews() {
     const author = authorBySlug(review.authorSlug)
     return [{
       ...review,
-      compositeTenths: prepared.compositeTenths,
-      displayed: formatScore(prepared.compositeTenths),
+      compositeTenths: review.defaultScore ? null : prepared.compositeTenths,
+      displayed: review.defaultScore ? null : formatScore(prepared.compositeTenths),
       authorName: author?.name ?? review.authorSlug,
       warnings: gate.warnings,
     }]
   })
+}
+
+export const REVIEW_PAGE_SIZE = 25
+
+export function reviewPageCount() {
+  return Math.max(1, Math.ceil(publishedReviews().length / REVIEW_PAGE_SIZE))
+}
+
+export function reviewPagePath(page: number) {
+  return page === 1 ? '/reviews/' : `/reviews/page/${page}/`
+}
+
+export function reviewPage(page: number) {
+  if (!Number.isInteger(page) || page < 1 || page > reviewPageCount()) throw new Error('invalid review page')
+  return publishedReviews().slice((page - 1) * REVIEW_PAGE_SIZE, page * REVIEW_PAGE_SIZE)
+}
+
+export function researchLabel(review: { analysisType?: string; origin?: string; reviewType: string }) {
+  if (review.analysisType === 'player_review_digest') return 'Player-review digest'
+  if (review.origin === 'store-listing') return 'Store-listing analysis'
+  return review.reviewType === 'full' ? 'Hands-on review' : 'Initial review'
 }
 
 export function reviewBySlug(slug: string | undefined) {
@@ -80,7 +102,7 @@ export function reviewBySlug(slug: string | undefined) {
 }
 
 export function colorSortSnapshot() {
-  return buildSnapshot(rankingDefinition, candidates(), GENERATED_AT)
+  return buildSnapshot({ ...rankingDefinition, minQualified: 5 }, candidates(), GENERATED_AT)
 }
 
 export function formatFamily(family: string) {
@@ -94,9 +116,9 @@ export function rankingDefinitions(): RankingDefinition[] {
       title: "Puzzle games we've fully reviewed (iOS)",
       mechanicFamily: null,
       platform: 'ios',
-      minQualified: 1,
+      minQualified: 5,
     },
-    rankingDefinition,
+    { ...rankingDefinition, minQualified: 5 },
   ]
   const seen = new Set(definitions.flatMap((definition) => (
     definition.mechanicFamily ? [`${definition.platform}:${definition.mechanicFamily}`] : []
@@ -118,7 +140,7 @@ export function rankingDefinitions(): RankingDefinition[] {
         title: `${formatFamily(family)} games we've fully reviewed (${platform === 'ios' ? 'iOS' : 'Android'})`,
         mechanicFamily: family,
         platform,
-        minQualified: 1,
+        minQualified: 5,
       })
     }
   }
@@ -152,6 +174,7 @@ export function needSnapshots() {
   return needs.flatMap((need) => {
     const yesCount = reviews.filter(
       (review) =>
+        review.origin !== 'demo' && !review.defaultScore && review.status === 'published' &&
         review.platform === 'ios' &&
         review.mechanicFamily === 'color-sort' &&
         review.reviewType === 'full' &&
@@ -178,7 +201,7 @@ export function needSnapshots() {
 export function needCards() {
   return needs.map((need) => {
     const reviewed = reviews.filter(
-      (review) => review.reviewType === 'full' && !review.sponsored && review.platform === 'ios' && review.tags[need.tag] === 'yes',
+      (review) => review.origin !== 'demo' && !review.defaultScore && review.status === 'published' && review.reviewType === 'full' && !review.sponsored && review.platform === 'ios' && review.tags[need.tag] === 'yes',
     ).length
     return { ...need, reviewed, ready: canGenerateNeedList(reviewed) }
   })
@@ -228,7 +251,7 @@ export function compareRedirects(): Record<string, string> {
 }
 
 export function publishedGuides() {
-  return guides.filter((guide) => canPublishGuide(guide, []).errors.length === 0 && guide.status === 'verified')
+  return guides.filter((guide) => reviewBySlug(guide.gameSlug) && canPublishGuide(guide, []).errors.length === 0 && guide.status === 'verified')
 }
 
 export function guideIndexSlugs() {
@@ -276,7 +299,7 @@ export function crumbs(items: { name: string; path: string }[]) {
 }
 
 function latestContentDate() {
-  const dates = publishedReviews().map((review) => review.publishedOn)
+  const dates = [...publishedReviews().map((review) => review.publishedOn), ...publishedGuides().map((guide) => guide.modifiedOn), '2026-11-17']
   return dates.reduce((latest, date) => (date > latest ? date : latest), '2026-11-08')
 }
 
@@ -293,26 +316,27 @@ export function sitemapSections() {
   ]
   const rankings = rankingPages().map((page) => ({ loc: `${SITE_URL}/rankings/${page.definition.slug}/`, lastmod: contentDate }))
   const pages = [
-    { loc: `${SITE_URL}/`, lastmod: contentDate },
+    { loc: `${SITE_URL}/`, lastmod: contentDate > '2026-11-17' ? contentDate : '2026-11-17' },
     { loc: `${SITE_URL}/reviews/`, lastmod: contentDate },
-    { loc: `${SITE_URL}/how-we-test/`, lastmod: '2026-11-08' },
-    { loc: `${SITE_URL}/about/`, lastmod: '2026-11-08' },
+    { loc: `${SITE_URL}/how-we-test/`, lastmod: '2026-11-17' },
+    { loc: `${SITE_URL}/about/`, lastmod: '2026-11-17' },
     { loc: `${SITE_URL}/editorial-independence/`, lastmod: '2026-11-08' },
     { loc: `${SITE_URL}/contact/`, lastmod: '2026-11-08' },
     { loc: `${SITE_URL}/privacy/`, lastmod: '2026-11-08' },
     ...comparePages().map((page) => ({ loc: `${SITE_URL}/compare/${page.slug}/`, lastmod: contentDate })),
     ...publishedGuides().map((guide) => ({ loc: `${SITE_URL}/guides/${guide.gameSlug}/${guide.slug}/`, lastmod: guide.modifiedOn })),
     ...guideIndexSlugs().map((slug) => ({ loc: `${SITE_URL}/guides/${slug}/`, lastmod: '2026-11-08' })),
-    ...authors.map((author) => ({ loc: `${SITE_URL}/authors/${author.slug}/`, lastmod: '2026-11-08' })),
+    ...authors.filter((author) => publishedReviews().some((review) => review.authorSlug === author.slug)).map((author) => ({ loc: `${SITE_URL}/authors/${author.slug}/`, lastmod: contentDate })),
+    ...Array.from({ length: reviewPageCount() - 1 }, (_, index) => ({ loc: `${SITE_URL}${reviewPagePath(index + 2)}`, lastmod: contentDate })),
   ]
   return { reviews, rankings, pages, contentDate }
 }
 
 export function sitemapDocument() {
-  const { contentDate } = sitemapSections()
+  const { contentDate, rankings } = sitemapSections()
   return sitemapIndexXml([
     { loc: `${SITE_URL}/sitemap-reviews.xml`, lastmod: contentDate },
-    { loc: `${SITE_URL}/sitemap-rankings.xml`, lastmod: contentDate },
+    ...(rankings.length ? [{ loc: `${SITE_URL}/sitemap-rankings.xml`, lastmod: contentDate }] : []),
     { loc: `${SITE_URL}/sitemap-pages.xml`, lastmod: contentDate },
   ])
 }

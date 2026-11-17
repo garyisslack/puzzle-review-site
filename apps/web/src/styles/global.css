@@ -235,6 +235,7 @@ tr[data-tied="yes"] td:first-child::after {
 .vbar i { display: block; width: 100%; }
 .vbar em { font-style: normal; color: var(--muted); font-size: 13px; font-weight: 700; }
 .score { font-family: var(--display); font-weight: 800; font-size: 48px; letter-spacing: -0.6px; line-height: 1; }
+.score.unscored { font-size: 32px; }
 .score.big { font-size: 96px; letter-spacing: -1.5px; }
 .score.mid { font-size: 34px; }
 .score.sm { font-size: 36px; }
@@ -262,9 +263,9 @@ tr[data-tied="yes"] td:first-child::after {
   border-top: 1px solid var(--line);
 }
 .review-row { grid-template-columns: 144px 1fr auto auto; }
-.review-row h3 { font-size: 22px; }
-.review-row h3 a { color: var(--ink); }
-.review-row h3 a:hover { text-decoration: none; color: var(--accent); }
+.review-row :is(h2, h3) { font-size: 22px; }
+.review-row :is(h2, h3) a { color: var(--ink); }
+.review-row :is(h2, h3) a:hover { text-decoration: none; color: var(--accent); }
 .genres .genre-row { grid-template-columns: 1fr auto; padding: 20px 0; }
 .genre-row strong { font-size: 17px; font-weight: 700; }
 .genre-row span, .genre-row small { display: block; color: var(--muted); font-size: 13px; font-weight: 700; }

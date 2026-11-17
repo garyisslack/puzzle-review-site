@@ -7,7 +7,7 @@ const body = `${'Move the red bottle onto the empty slot, then clear the top row
 const input: SubmissionInput = {
   birthYear: 1990,
   birthMonth: 4,
-  gameSlug: 'prism-pocket-sort',
+  gameSlug: 'meowdoku-ios-6761760135',
   platform: 'ios',
   appVersion: '1.4.2',
   levelRange: 'Levels 1-20',
@@ -32,7 +32,7 @@ describe('投稿接口', () => {
   })
 
   it('通过校验后只把笔名和正文交给保存，图片必须已去 EXIF 的标记由上游负责', async () => {
-    const save = vi.fn(async () => {})
+    const save = vi.fn<Parameters<typeof handleGuidePost>[1]['save']>(async () => {})
     const result = await handleGuidePost(input, {
       now: new Date('2026-11-08T00:00:00.000Z'),
       submissionsToday: 0,

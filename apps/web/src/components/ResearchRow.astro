@@ -1,0 +1,24 @@
+---
+import Icon from './Icon.astro'
+import { artFor } from '../lib/present.ts'
+import { researchLabel, type publishedReviews } from '../lib/site.ts'
+
+interface Props {
+  review: ReturnType<typeof publishedReviews>[number]
+}
+const { review } = Astro.props
+const art = artFor(review.slug)
+---
+<article class="review-row">
+  {art.key ? <img class="thumb" src={art.key} alt="" width="144" height="88" loading="lazy" /> : <span class="thumb placeholder"><Icon name="image" size={22} /></span>}
+  <div>
+    <h2><a href={`/reviews/${review.slug}/`}>{review.name}</a></h2>
+    <p class="version">{review.platform.toUpperCase()} · {review.publishedOn} · {review.origin === 'store-listing' ? 'Not playtested' : 'Hands-on review'}</p>
+  </div>
+  <span class="pill muted">{researchLabel(review)}</span>
+  <span class="meta research-score">{review.displayed ?? 'Unscored'}</span>
+</article>
+
+<style>
+  @media (max-width: 760px) { .research-score { grid-column: 2; } }
+</style>

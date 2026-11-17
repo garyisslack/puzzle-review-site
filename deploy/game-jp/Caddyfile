@@ -8,11 +8,34 @@
 	root * /opt/dimpuzzle/current
 	encode gzip zstd
 
-	@static path *.css *.js *.woff2 *.png *.webp *.avif *.ico *.txt *.xml
+	# Tunnel 到源站始终为 HTTP，使用 Cloudflare 传递的原始协议判断。
+	@alternateHost host www.puzzlereviewlab.com
+	redir @alternateHost https://puzzlereviewlab.com{uri} 301
+	@insecure header X-Forwarded-Proto http
+	redir @insecure https://puzzlereviewlab.com{uri} 301
+
+	@indexHtml path_regexp indexHtml ^(.*)/index\.html$
+	redir @indexHtml https://puzzlereviewlab.com{re.indexHtml.1}/ 301
+	import /opt/dimpuzzle/current/seo-redirects.caddy
+
+	# 部署配置不是公开资源。
+	@private path /seo-redirects.caddy /_redirects /_headers /Caddyfile
+	respond @private 404
+
+	@static path *.css *.js *.woff2 *.png *.jpg *.jpeg *.webp *.avif *.ico
 	handle @static {
 		header Cache-Control "public, max-age=31536000, immutable"
 		file_server
 	}
+
+	@sitemap path /sitemap.xml /sitemap-reviews.xml /sitemap-rankings.xml /sitemap-pages.xml /robots.txt
+	handle @sitemap {
+		header Cache-Control "public, max-age=3600"
+		file_server
+	}
+
+	@query expression `{http.request.uri.query} != ""`
+	header @query X-Robots-Tag "noindex, follow"
 
 	handle {
 		try_files {path} {path}/ {path}/index.html
