@@ -11,7 +11,7 @@ pnpm --filter @puzzle/web build
 release_id="$(date -u +%Y%m%dT%H%M%SZ)-$$"
 release_dir="/opt/dimpuzzle/releases/$release_id"
 ssh game-jp "mkdir -p '$release_dir'"
-tar czf - -C apps/web/dist . | ssh game-jp "tar xzf - -C '$release_dir'"
+COPYFILE_DISABLE=1 tar --no-xattrs -czf - -C apps/web/dist . | ssh game-jp "tar xzf - -C '$release_dir'"
 sed "s|/opt/dimpuzzle/current|$release_dir|g" deploy/game-jp/Caddyfile | ssh game-jp "cat > '$release_dir/Caddyfile'"
 ssh game-jp bash -s -- "$release_dir" <<'REMOTE'
 set -euo pipefail

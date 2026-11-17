@@ -16,7 +16,9 @@ for (const a of demos) {
 const caddy = [
   ...Object.entries(redirects).map(([from, to]) => `redir ${from} ${to} 301`),
   `@retiredDemo path ${retired.join(' ')}`,
-  'header @retiredDemo X-Robots-Tag "noindex, follow"',
-  'respond @retiredDemo "This demonstration page has been retired." 410',
+  'handle @retiredDemo {',
+  '  header X-Robots-Tag "noindex, follow"',
+  '  respond "This demonstration page has been retired." 410',
+  '}',
 ]
 writeFileSync(new URL('../public/seo-redirects.caddy', import.meta.url), `${caddy.join('\n')}\n`)

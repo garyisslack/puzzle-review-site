@@ -20,7 +20,9 @@
 
 	# 部署配置不是公开资源。
 	@private path /seo-redirects.caddy /_redirects /_headers /Caddyfile
-	respond @private 404
+	handle @private {
+		respond 404
+	}
 
 	@static path *.css *.js *.woff2 *.png *.jpg *.jpeg *.webp *.avif *.ico
 	handle @static {
