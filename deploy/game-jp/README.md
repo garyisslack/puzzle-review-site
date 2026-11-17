@@ -43,3 +43,5 @@ ssh game-jp 'bash -s' < deploy/game-jp/install-remote.sh
 ## 与 Cloudflare Pages
 
 Pages 项目 `dimpuzzle` 可保留作预览；生产以 **game-jp + Tunnel** 为准后，可拆除 Pages 自定义域以免冲突。
+
+GitHub 的 `.github/workflows/deploy.yml` 仅用于手动 Pages 预览，不随 `main` 推送自动运行。手动运行前需配置 `CLOUDFLARE_API_TOKEN` 和 `CLOUDFLARE_ACCOUNT_ID`；生产发布仍使用上面的 game-jp 脚本。
